@@ -112,6 +112,7 @@ def main():
     home = home.replace("  <footer>", "  " + links_block("Popular places", popular) + "\n\n  <footer>", 1)
     open(os.path.join(DIST, "index.html"), "w").write(home)
     shutil.copy(os.path.join(ROOT, "thanks.html"), DIST)
+    shutil.copytree(os.path.join(ROOT, "shop"), os.path.join(DIST, "shop"))
     urls = [f"{SITE}/", f"{SITE}/suburbs/"]
     for sub in subs:
         d = os.path.join(DIST, "dog-walk", sub["slug"])
