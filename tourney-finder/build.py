@@ -12,85 +12,111 @@ DIST = os.path.join(ROOT, "dist")
 E = html.escape
 
 CSS = """
-/* Match-night look: floodlit pitch header, LED scoreboard countdown, ticket-style cards. Deliberately one dark theme. */
-:root{--bg:#0b1410;--card:#13211a;--card2:#182a21;--ink:#eef6ef;--muted:#9db3a5;--line:#24382c;
---pitch:#1d6b3c;--pitch2:#1a5f35;--chalk:rgba(255,255,255,.55);--led:#ffd84d;--accent:#3ee07f;--pitch-ink:#0b1410;
---ok:#3ee07f;--ok-soft:rgba(62,224,127,.14);--exp:#ffd84d;--exp-soft:rgba(255,216,77,.14);--tba:#9db3a5;--tba-soft:rgba(157,179,165,.14);
---football:#3ee07f;--futsal:#ff9a3d;--touch:#4dc3ff;--oztag:#ff6fae;--cricket:#f5f0c8;--basketball:#ff7b3a;--afl:#ffd84d;--badminton:#c59bff;
---display:"Barlow Condensed",system-ui,sans-serif;--body:"Barlow",system-ui,-apple-system,sans-serif;--mono:"Share Tech Mono",ui-monospace,monospace;color-scheme:dark}
+/* Broadcast-grade tournament look: midnight navy, gold hairlines, expanded caps, fixture rows grouped by month. One deliberate dark theme. */
+:root{--bg:#070b1f;--bg2:#0c1330;--panel:#101a3d;--panel2:#152150;--ink:#f3efe4;--muted:#a9b0cc;--faint:#6d76a0;--line:rgba(201,165,76,.22);--hair:rgba(243,239,228,.09);
+--gold:#c9a54c;--gold2:#e6c97a;--goldink:#1a1404;
+--ok:#7fd6a4;--exp:#e6c97a;--tba:#a9b0cc;
+--football:#2e9e6a;--futsal:#d98b3a;--cricket:#d8cfa8;--basketball:#c8693a;--afl:#c9a54c;--badminton:#9d8ce0;--touch:#5aa9d6;--oztag:#d46a8f;
+--display:"Archivo",system-ui,sans-serif;--body:"Hanken Grotesk",system-ui,-apple-system,sans-serif;color-scheme:dark}
 *{box-sizing:border-box}html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
-a{color:var(--accent)}
-.top{background:rgba(11,20,16,.92);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5;backdrop-filter:blur(6px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--gold2)}
+.eyebrow{font-family:var(--display);font-stretch:125%;font-weight:700;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:rgba(7,11,31,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.top .in,.wrap,.hero .in{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.top .in{padding-block:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.logo{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:.04em;color:var(--ink);text-decoration:none;text-transform:uppercase}
-.logo span{color:var(--accent)}
-.top a.btn{background:var(--accent);color:var(--pitch-ink);text-decoration:none;font-weight:700;padding:8px 14px;border-radius:999px;font-size:14px}
-.hero{position:relative;overflow:hidden;background:
- radial-gradient(ellipse 60% 70% at 15% -10%,rgba(255,255,230,.28),transparent 60%),
- radial-gradient(ellipse 60% 70% at 85% -10%,rgba(255,255,230,.22),transparent 60%),
- repeating-linear-gradient(90deg,var(--pitch) 0 70px,var(--pitch2) 70px 140px);border-bottom:3px solid var(--chalk)}
-.hero::before{content:"";position:absolute;left:50%;top:50%;width:260px;height:260px;border:3px solid var(--chalk);border-radius:50%;transform:translate(-50%,-50%);opacity:.5}
-.hero::after{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:3px solid var(--chalk);opacity:.5}
-.hero .in{position:relative;z-index:1;padding-block:40px 34px;display:grid;gap:14px}
-h1,h2{font-family:var(--display);font-weight:800;margin:0;line-height:1;text-wrap:balance;text-transform:uppercase}
-h1{font-size:clamp(44px,11vw,84px);letter-spacing:.01em;text-shadow:0 3px 0 rgba(0,0,0,.25)}
-h2{font-size:26px;letter-spacing:.02em}
-.hero p{max-width:560px;font-size:17px;color:#e3f1e6}
-.board{justify-self:start;background:#050806;border:3px solid #2b2b2b;border-radius:14px;padding:12px 16px;display:grid;gap:6px;box-shadow:0 10px 30px rgba(0,0,0,.45);max-width:100%}
-.board .lbl{font-family:var(--display);font-weight:800;letter-spacing:.12em;font-size:13px;color:#8fa;text-transform:uppercase}
-.board .nm{font-weight:700;font-size:15px;color:#fff;min-width:0}
-.digits{display:flex;gap:8px;flex-wrap:wrap}
-.digits div{display:grid;justify-items:center;background:#111;border-radius:8px;padding:6px 10px;min-width:60px}
-.digits b{font-family:var(--mono);font-size:34px;line-height:1;color:var(--led);text-shadow:0 0 12px rgba(255,216,77,.6);font-variant-numeric:tabular-nums}
-.digits small{font-size:10px;letter-spacing:.14em;color:#889;text-transform:uppercase}
-.wrap{padding-block:24px 56px;display:grid;gap:22px}
-p{margin:0}.muted{color:var(--muted)}
-.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
-.chip{flex:none;font:inherit;font-weight:700;font-size:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer;display:flex;gap:6px;align-items:center}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.chip .dot{width:9px;height:9px;border-radius:50%;background:var(--c,var(--accent))}
-.chip .n{font-size:12px;opacity:.7}
-.months{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(62px,1fr);gap:6px;overflow-x:auto;padding-bottom:4px}
-.mo{font:inherit;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 4px;cursor:pointer;display:grid;justify-items:center;gap:2px}
-.mo b{font-family:var(--display);font-size:18px;text-transform:uppercase;letter-spacing:.04em}
-.mo small{font-size:11px;color:var(--muted)}
-.mo i{display:block;width:70%;height:6px;border-radius:3px;background:var(--line)}
-.mo i span{display:block;height:100%;border-radius:3px;background:var(--accent)}
-.mo[aria-pressed="true"]{border-color:var(--accent);background:var(--card2)}
-.mo:disabled{opacity:.35;cursor:default}
-.rowlabel{font-family:var(--display);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--muted)}
+.in{max-width:1000px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.top .in{padding-block:12px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+.brand svg{width:38px;height:38px;flex:none}
+.brand b{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:17px;letter-spacing:.16em;text-transform:uppercase;line-height:1}
+.brand small{display:block;font-size:10px;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-top:4px}
+.btn-gold{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--gold2);border:1px solid var(--gold);padding:9px 16px;border-radius:2px;transition:background .2s,color .2s}
+.btn-gold:hover{background:var(--gold);color:var(--goldink)}
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);background:
+ radial-gradient(ellipse 70% 90% at 80% 0%,rgba(201,165,76,.18),transparent 60%),
+ radial-gradient(ellipse 60% 80% at 0% 100%,rgba(46,80,200,.25),transparent 60%),
+ linear-gradient(180deg,var(--bg2),var(--bg))}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(243,239,228,.035) 0 1px,transparent 1px 28px);pointer-events:none}
+.hero .in{position:relative;padding-block:64px 56px;display:grid;gap:20px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+h1{font-stretch:125%;font-weight:800;font-size:clamp(38px,8.5vw,78px);line-height:.98;letter-spacing:-.01em;text-transform:uppercase}
+h1 em{font-style:normal;color:var(--gold2)}
+.lede{max-width:600px;color:var(--muted);font-size:18px}
+.next{justify-self:start;max-width:100%;display:grid;gap:12px;padding:18px 20px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(16,26,61,.85),rgba(12,19,48,.85));border-radius:4px}
+.next a{color:var(--ink);text-decoration:none;font-weight:600;font-size:16px}
+.next a:hover{color:var(--gold2)}
+.digits{display:flex;gap:0;align-items:stretch}
+.digits div{display:grid;justify-items:center;padding:0 18px;border-left:1px solid var(--hair)}
+.digits div:first-child{border-left:0;padding-left:0}
+.digits b{font-family:var(--display);font-stretch:100%;font-weight:300;font-size:46px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.digits small{font-family:var(--display);font-stretch:125%;font-size:10px;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-top:6px}
+main.in{padding-block:44px 64px;display:grid;gap:28px}
+.sechead{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px}
+h2{font-stretch:125%;font-weight:800;font-size:clamp(24px,4vw,32px);text-transform:uppercase;letter-spacing:.02em}
 .count{font-size:14px;color:var(--muted)}
-.list{display:grid;gap:14px}
-.ev{position:relative;background:var(--card);border-radius:16px;display:grid;grid-template-columns:96px 1fr;text-decoration:none;color:var(--ink);overflow:hidden;border-left:6px solid var(--c,var(--accent));transition:transform .15s ease}
-.ev:hover{transform:translateY(-2px);background:var(--card2)}
-.ev::before,.ev::after{content:"";position:absolute;left:84px;width:22px;height:22px;border-radius:50%;background:var(--bg)}
-.ev::before{top:-11px}.ev::after{bottom:-11px}
-.date{border-right:2px dashed var(--line);display:grid;place-items:center;align-content:center;text-align:center;padding:14px 6px;font-family:var(--display);font-weight:800;line-height:1}
-.date .m{font-size:16px;text-transform:uppercase;color:var(--c,var(--accent));letter-spacing:.06em}
-.date .d{font-size:36px}.date .y{font-size:13px;color:var(--muted);font-weight:600}
-.ev .body{padding:14px 16px;min-width:0;display:grid;gap:6px}
-.ev h3{margin:0;font-size:19px;line-height:1.2;font-weight:700}
-.meta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:14px;color:var(--muted)}
-.tag{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--c,var(--accent))}
-.pill{font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
-.pill.confirmed{background:var(--ok-soft);color:var(--ok)}.pill.expected{background:var(--exp-soft);color:var(--exp)}.pill.tba{background:var(--tba-soft);color:var(--tba)}
-.s-football{--c:var(--football)}.s-futsal{--c:var(--futsal)}.s-touch{--c:var(--touch)}.s-oztag{--c:var(--oztag)}.s-cricket{--c:var(--cricket)}.s-basketball{--c:var(--basketball)}.s-afl{--c:var(--afl)}.s-badminton{--c:var(--badminton)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px}
-.cta{background:linear-gradient(135deg,var(--pitch),var(--pitch2));border-radius:16px;padding:20px;display:grid;gap:10px}
-button,.button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:12px 16px;background:var(--accent);color:var(--pitch-ink);cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
-.cta .button{justify-self:start;background:#fff;color:var(--pitch)}
-select,input,textarea{font:inherit;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--card2);color:var(--ink);width:100%}
-select:focus,input:focus,textarea:focus{outline:none;border-color:var(--accent)}
-label{font-size:13px;font-weight:700;color:var(--muted);display:grid;gap:4px}
-dl{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;margin:0}dt{font-weight:700;color:var(--muted)}dd{margin:0;min-width:0}
-form{display:grid;gap:12px}.hidden{display:none!important}
-footer{font-size:13px;color:var(--muted);display:grid;gap:6px}
-:focus-visible{outline:3px solid var(--led);outline-offset:2px}
-@media (max-width:480px){.ev{grid-template-columns:76px 1fr}.ev::before,.ev::after{left:65px}.date .d{font-size:30px}dl{grid-template-columns:1fr}.digits div{min-width:52px;padding:6px 8px}.digits b{font-size:28px}}
-@media (prefers-reduced-motion:reduce){.ev{transition:none}}
+.months{display:flex;overflow-x:auto;border-bottom:1px solid var(--hair);scrollbar-width:none}
+.months::-webkit-scrollbar{display:none}
+.mo{flex:1 0 64px;font:inherit;background:none;border:0;border-bottom:2px solid transparent;color:var(--ink);padding:10px 4px 12px;cursor:pointer;display:grid;justify-items:center;gap:2px;transition:border-color .2s,color .2s}
+.mo b{font-family:var(--display);font-stretch:125%;font-weight:700;font-size:14px;letter-spacing:.14em}
+.mo small{font-size:11px;color:var(--faint)}
+.mo .n{font-family:var(--display);font-weight:300;font-size:22px;line-height:1.1;color:var(--gold2)}
+.mo:hover{border-bottom-color:var(--hair)}
+.mo[aria-pressed="true"]{border-bottom-color:var(--gold)}
+.mo:disabled{opacity:.3;cursor:default}
+.filters{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg-l{font-family:var(--display);font-stretch:125%;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);margin-right:4px;align-self:center}
+.chip{font:inherit;font-size:14px;font-weight:600;background:transparent;color:var(--muted);border:1px solid var(--hair);border-radius:999px;padding:6px 13px;cursor:pointer;display:flex;gap:7px;align-items:center;transition:all .2s}
+.chip:hover{color:var(--ink);border-color:var(--line)}
+.chip[aria-pressed="true"]{color:var(--goldink);background:var(--gold2);border-color:var(--gold2)}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--c,var(--gold))}
+.list{display:grid}
+.mhead{font-family:var(--display);font-stretch:125%;font-weight:700;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);padding:26px 0 10px;border-bottom:1px solid var(--line)}
+.ev{display:grid;grid-template-columns:76px 46px 1fr auto;gap:18px;align-items:center;padding:18px 6px;border-bottom:1px solid var(--hair);text-decoration:none;color:var(--ink);position:relative;transition:background .2s}
+.ev::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:2px;background:var(--gold);transform:scaleY(0);transition:transform .25s}
+.ev:hover{background:linear-gradient(90deg,rgba(201,165,76,.07),transparent 70%)}
+.ev:hover::before{transform:scaleY(1)}
+.date{display:grid;justify-items:center;line-height:1;font-family:var(--display)}
+.date .d{font-weight:300;font-size:38px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.date .m{font-stretch:125%;font-weight:700;font-size:11px;letter-spacing:.22em;color:var(--gold);margin-top:6px;text-transform:uppercase}
+.date .tbc{font-weight:300;font-size:22px;color:var(--muted)}
+.crest{width:46px;height:46px}
+.crest circle.o{fill:none;stroke:var(--c,var(--gold));stroke-width:1.5}
+.crest circle.i{fill:color-mix(in srgb,var(--c,var(--gold)) 16%,transparent)}
+.crest text{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:13px;letter-spacing:.06em;fill:var(--ink)}
+.ev .body{min-width:0;display:grid;gap:4px}
+.ev h3{font-family:var(--body);font-weight:700;font-size:18px;line-height:1.3}
+.meta{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:14px;color:var(--muted)}
+.meta .sp{color:var(--c,var(--gold));font-weight:700;letter-spacing:.04em}
+.st{display:flex;align-items:center;gap:14px;font-size:12px;font-family:var(--display);font-stretch:112%;font-weight:600;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.st .confirmed{color:var(--ok)}.st .expected{color:var(--exp)}.st .tba{color:var(--tba)}
+.st i{font-style:normal;color:var(--faint);font-size:18px;transition:transform .2s,color .2s}
+.ev:hover .st i{transform:translateX(4px);color:var(--gold2)}
+.s-football{--c:var(--football)}.s-futsal{--c:var(--futsal)}.s-cricket{--c:var(--cricket)}.s-basketball{--c:var(--basketball)}.s-afl{--c:var(--afl)}.s-badminton{--c:var(--badminton)}.s-touch{--c:var(--touch)}.s-oztag{--c:var(--oztag)}
+.panel{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:4px;padding:26px;display:grid;gap:14px}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.muted{color:var(--muted)}p{margin:0}
+button,.button{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--gold2);border-radius:2px;padding:13px 20px;background:var(--gold2);color:var(--goldink);cursor:pointer;text-decoration:none;display:inline-block;text-align:center;transition:background .2s,color .2s}
+button:hover,.button:hover{background:transparent;color:var(--gold2)}
+.button.ghost{background:transparent;color:var(--gold2)}
+.button.ghost:hover{background:var(--gold2);color:var(--goldink)}
+input,select,textarea{font:inherit;padding:12px 14px;border-radius:2px;border:1px solid var(--hair);background:rgba(7,11,31,.6);color:var(--ink);width:100%}
+input::placeholder,textarea::placeholder{color:var(--faint)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+label{font-family:var(--display);font-stretch:112%;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:grid;gap:6px}
+form{display:grid;gap:14px}.hidden{display:none!important}
+.back{font-family:var(--display);font-stretch:125%;font-size:12px;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;color:var(--gold)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));border-top:1px solid var(--line)}
+.facts div{padding:16px 0;border-bottom:1px solid var(--hair);display:grid;gap:4px;padding-right:16px}
+.facts dt{font-family:var(--display);font-stretch:125%;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+.facts dd{margin:0;font-size:17px;min-width:0}
+.facts dl{display:contents}
+footer{border-top:1px solid var(--line);margin-top:8px}
+footer .in{padding-block:28px 40px;display:grid;gap:8px;font-size:13px;color:var(--faint)}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
+@media (max-width:640px){.ev{grid-template-columns:58px 1fr;gap:6px 14px}.ev .crest{display:none}.top .in{flex-wrap:nowrap}.brand b{font-size:14px;letter-spacing:.12em}.brand small{letter-spacing:.2em}.btn-gold{font-size:11px;padding:8px 10px;letter-spacing:.08em;white-space:nowrap}.st{grid-column:2}.date .d{font-size:32px}.digits b{font-size:36px}.digits div{padding:0 12px}.hero .in{padding-block:44px 40px}}
+@media (max-width:420px){.wide{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 """
 
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -109,29 +135,38 @@ def head(title, desc, path):
 <meta name="description" content="{E(desc)}">
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website">
 <link rel="canonical" href="{SITE}{path}">
-<meta name="theme-color" content="#0b1410">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%231f7a43'/%3E%3Cpolygon points='32,18 44,27 39,41 25,41 20,27' fill='white'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#070b1f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23070b1f'/%3E%3Cpath d='M20 4 34 9v11c0 8-6 13-14 16C12 33 6 28 6 20V9Z' fill='none' stroke='%23c9a54c' stroke-width='2'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800&family=Barlow:wght@400;600;700&family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..800&family=Hanken+Grotesk:wght@400;600;700&display=swap">
 <style>{CSS}</style></head><body>
-<div class="top"><div class="in"><a class="logo" href="/">⚽ Tourney<span>Finder</span></a><a class="btn" href="/add/">+ Add your tournament</a></div></div>
+<header class="top"><div class="in"><a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8Z" fill="none" stroke="#c9a54c" stroke-width="1.5"/><path d="M20 6 32 10.5V20c0 7-5.4 11.8-12 14.2C13.4 31.8 8 27 8 20v-9.5Z" fill="#c9a54c" fill-opacity=".12"/><text x="20" y="24.5" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="800" font-size="11" letter-spacing="1" fill="#e6c97a">TF</text></svg><span><b>Tourney Finder</b><small>NSW · QLD · Season 26/27</small></span></a><a class="btn-gold" href="/add/">List<span class="wide"> a tournament</span></a></div></header>
 <!--HERO-->
-<div class="wrap">"""
+<main class="in">"""
 
 
-FOOT = """<footer><p>Tourney Finder lists football, futsal and junior sports tournaments in Australia, starting with NSW and Queensland. Dates come from organisers' own websites. Always confirm with the organiser before you book travel.</p>
-<p>Spotted a mistake or a missing tournament? <a href="/add/">Tell us</a>. Made in Australia by YaLegendCo.</p></footer>
-</div></body></html>"""
+FOOT = """</main><footer><div class="in"><p>Tourney Finder lists football, futsal, cricket, basketball, AFL, badminton, touch and Oztag tournaments in Australia, starting with NSW and Queensland. Dates come from organisers' own websites. Always confirm with the organiser before you book travel.</p>
+<p>Spotted a mistake or a missing tournament? <a href="/add/">Tell us</a>. © 2026 Tourney Finder · Made in Australia by YaLegendCo.</p></div></footer>
+</body></html>"""
 
 
 def date_box(ev):
     if ev["start"]:
         d = datetime.strptime(ev["start"], "%Y-%m-%d")
-        return f'<div class="date"><span class="m">{MONTHS[d.month-1]}</span><span class="d">{d.day}</span><span class="y">{d.year}</span></div>'
+        return f'<div class="date"><span class="d">{d.day:02d}</span><span class="m">{MONTHS[d.month-1]}</span></div>'
     if ev["month"]:
         y, m = ev["month"].split("-")
-        return f'<div class="date"><span class="m">{MONTHS[int(m)-1]}</span><span class="d">~</span><span class="y">{y}</span></div>'
-    return '<div class="date"><span class="m">TBA</span><span class="d">?</span><span class="y">&nbsp;</span></div>'
+        return f'<div class="date"><span class="tbc">TBC</span><span class="m">{MONTHS[int(m)-1]}</span></div>'
+    return '<div class="date"><span class="tbc">TBA</span><span class="m">2027</span></div>'
+
+
+ABBR = {"Football": "FB", "Futsal": "FS", "Cricket": "CR", "Basketball": "BB", "AFL": "AFL", "Badminton": "BD", "Touch": "TF", "Oztag": "OZ"}
+
+
+def crest(sport):
+    a = ABBR.get(sport, sport[:2].upper())
+    return (f'<svg class="crest" viewBox="0 0 46 46" aria-hidden="true"><circle class="i" cx="23" cy="23" r="19"/><circle class="o" cx="23" cy="23" r="21"/>'
+            f'<text x="23" y="27.5" text-anchor="middle">{a}</text></svg>')
 
 
 def when(ev):
@@ -164,9 +199,11 @@ def ics(ev):
 
 
 def card(ev):
+    lab = {"confirmed": "Confirmed", "expected": "Expected", "tba": "TBA"}[ev["status"]]
     return (f'<a class="ev s-{slugify(ev["sport"])}" href="/t/{ev["slug"]}/" data-sport="{E(ev["sport"])}" data-state="{ev["state"]}" data-month="{ev["month"]}">'
-            f'{date_box(ev)}<div class="body"><span class="tag">{E(ev["sport"])} · {ev["state"]}</span><h3>{E(ev["name"])}</h3><div class="meta"><span>📍 {E(ev["place"])}</span>'
-            f'<span>{E(ev["ages"])}</span></div><div><span class="pill {ev["status"]}">{STATUS[ev["status"]]}</span></div></div></a>')
+            f'{date_box(ev)}{crest(ev["sport"])}<div class="body"><h3>{E(ev["name"])}</h3>'
+            f'<div class="meta"><span class="sp">{E(ev["sport"])}</span><span>{E(ev["place"])}, {ev["state"]}</span><span>{E(ev["ages"])}</span></div></div>'
+            f'<div class="st"><span class="{ev["status"]}">{lab}</span><i>→</i></div></a>')
 
 
 def index(evs):
@@ -182,42 +219,52 @@ def index(evs):
         if m == 13: y, m = y + 1, 1
     mx = max(mcount.values()) if mcount else 1
     nxt = next((e for e in evs if e["start"] and e["start"] >= date.today().isoformat()), None)
-    sport_chips = '<button class="chip" type="button" data-f="sport" data-v="" aria-pressed="true">All sports</button>' + "".join(
-        f'<button class="chip s-{slugify(k)}" type="button" data-f="sport" data-v="{E(k)}" aria-pressed="false"><span class="dot"></span>{E(k)} <span class="n">{n}</span></button>'
+    sport_chips = '<span class="seg-l">Sport</span><button class="chip" type="button" data-f="sport" data-v="" aria-pressed="true">All</button>' + "".join(
+        f'<button class="chip s-{slugify(k)}" type="button" data-f="sport" data-v="{E(k)}" aria-pressed="false"><span class="dot"></span>{E(k)}</button>'
         for k, n in sorted(sports.items(), key=lambda x: -x[1]))
-    state_chips = '<button class="chip" type="button" data-f="state" data-v="" aria-pressed="true">All states</button>' + "".join(
-        f'<button class="chip" type="button" data-f="state" data-v="{k}" aria-pressed="false">{k} <span class="n">{n}</span></button>'
+    state_chips = '<span class="seg-l">State</span><button class="chip" type="button" data-f="state" data-v="" aria-pressed="true">All</button>' + "".join(
+        f'<button class="chip" type="button" data-f="state" data-v="{k}" aria-pressed="false">{k}</button>'
         for k, n in sorted(states.items(), key=lambda x: -x[1]))
     month_btns = "".join(
         f'<button class="mo" type="button" data-f="month" data-v="{mo}" aria-pressed="false"{"" if mcount.get(mo) else " disabled"}>'
-        f'<b>{MONTHS[int(mo[5:])-1]}</b><small>{mo[2:4]}</small><i><span style="width:{int(100*mcount.get(mo,0)/mx)}%"></span></i><small>{mcount.get(mo,0) or "–"}</small></button>'
+        f'<b>{MONTHS[int(mo[5:])-1].upper()}</b><span class="n">{mcount.get(mo,0) or "·"}</span><small>{mo[:4]}</small></button>'
         for mo in allm)
     board = ""
     if nxt:
-        board = (f'<div class="board" id="board" data-start="{nxt["start"]}"><span class="lbl">Next kick-off</span>'
-                 f'<a class="nm" href="/t/{nxt["slug"]}/" style="color:#fff;text-decoration:none">{E(nxt["name"])} · {E(nxt["place"])}</a>'
-                 '<div class="digits"><div><b id="cd">--</b><small>days</small></div><div><b id="ch">--</b><small>hrs</small></div><div><b id="cm">--</b><small>min</small></div><div><b id="cs">--</b><small>sec</small></div></div></div>')
-    hero = f"""<section class="hero"><div class="in"><h1>Find your<br>next tournament</h1>
-<p>Football, futsal, cricket, basketball, AFL, badminton, touch and Oztag tournaments across NSW and Queensland. One place, every date, straight to the organiser.</p>{board}</div></section>"""
+        board = (f'<div class="next" id="board" data-start="{nxt["start"]}"><span class="eyebrow">Next fixture</span>'
+                 f'<a href="/t/{nxt["slug"]}/">{E(nxt["name"])} · {E(nxt["place"])}</a>'
+                 '<div class="digits"><div><b id="cd">--</b><small>Days</small></div><div><b id="ch">--</b><small>Hours</small></div><div><b id="cm">--</b><small>Mins</small></div><div><b id="cs">--</b><small>Secs</small></div></div></div>')
+    hero = f"""<section class="hero"><div class="in"><span class="eyebrow">The 2026/27 season · NSW &amp; Queensland</span>
+<h1>Every tournament.<br><em>One calendar.</em></h1>
+<p class="lede">Football, futsal, cricket, basketball, AFL, badminton, touch and Oztag tournaments, with dates, age groups and the organiser's official link.</p>{board}</div></section>"""
     s = head("Tourney Finder: football, futsal and junior sports tournaments in NSW and QLD",
-             "Find football, futsal, touch and Oztag tournaments and carnivals in NSW and Queensland. Dates, age groups and official links in one place.", "/").replace("<!--HERO-->", hero)
-    s += f"""<div class="rowlabel">Pick a month</div><div class="months" id="months">{month_btns}</div>
-<div class="chips" id="sports">{sport_chips}</div>
-<div class="chips" id="states">{state_chips}</div>
-<div class="count" id="count" role="status">{len(evs)} tournaments</div>
-<div class="list" id="list">{''.join(card(e) for e in evs)}</div>
-<div class="cta"><h2>Running a tournament?</h2><p>List it free. Coaches and parents across NSW and Queensland use Tourney Finder to plan their season.</p><a class="button" href="/add/">Add your tournament</a></div>
-<div class="card"><h2>New tournaments in your inbox</h2><p class="muted">One short email a month with new tournaments for your sport and area. Free, unsubscribe any time.</p>
+             "Find football, futsal, cricket, basketball, AFL, touch and Oztag tournaments in NSW and Queensland. Dates, age groups and official links in one place.", "/").replace("<!--HERO-->", hero)
+    groups, cur = [], None
+    for e in evs:
+        key = e["month"] or "tba"
+        if key != cur:
+            lab = (["January","February","March","April","May","June","July","August","September","October","November","December"][int(key[5:])-1] + " " + key[:4]) if key != "tba" else "Dates to be announced"
+            groups.append(f'<div class="mhead" data-g="{key}">{lab}</div>')
+            cur = key
+        groups.append(card(e).replace('<a class="ev', f'<a data-g="{key}" class="ev', 1))
+    s += f"""<section style="display:grid;gap:22px"><div class="sechead"><h2>Fixtures</h2><div class="count" id="count" role="status">{len(evs)} tournaments</div></div>
+<div class="months" id="months">{month_btns}</div>
+<div class="filters"><div class="seg">{sport_chips}</div><div class="seg">{state_chips}</div></div>
+<div class="list" id="list">{''.join(groups)}</div></section>
+<div class="split"><div class="panel"><span class="eyebrow">For organisers</span><h2>List your tournament</h2><p class="muted">Free listing for clubs and associations. Coaches and parents across NSW and Queensland use Tourney Finder to plan their season.</p><a class="button" href="/add/" style="justify-self:start">Add a tournament</a></div>
+<div class="panel"><span class="eyebrow">Season alerts</span><h2>New fixtures, monthly</h2><p class="muted">One short email a month with new tournaments for your sport and area.</p>
 <form name="tourney-alerts" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
 <input type="hidden" name="form-name" value="tourney-alerts"><p class="hidden"><label>Leave empty <input name="bot-field"></label></p>
 <input id="aEmail" type="email" name="email" placeholder="Your email" required aria-label="Email">
-<input id="aWhat" type="text" name="interest" placeholder="Sport, age group and area, e.g. U12 football, Brisbane" aria-label="What you're looking for">
-<button type="submit">Send me new tournaments</button></form></div>
-<script>
+<input id="aWhat" type="text" name="interest" placeholder="e.g. U12 football, Brisbane" aria-label="Sport, age group and area">
+<button type="submit">Subscribe</button></form></div></div>
+"""
+    s += f"""<script>
 (function(){{
 var f={{sport:'',state:'',month:''}},c=document.getElementById('count');
 var items=[].slice.call(document.querySelectorAll('#list .ev'));
 function run(){{var n=0;items.forEach(function(e){{var ok=(!f.sport||e.dataset.sport===f.sport)&&(!f.state||e.dataset.state===f.state)&&(!f.month||e.dataset.month===f.month);e.classList.toggle('hidden',!ok);if(ok)n++;}});
+[].forEach.call(document.querySelectorAll('.mhead'),function(h){{var g=h.dataset.g;h.classList.toggle('hidden',!items.some(function(e){{return e.dataset.g===g&&!e.classList.contains('hidden');}}));}});
 c.textContent=n+(n===1?' tournament':' tournaments')+(n===0?'. Try another filter, or add one you know about.':'');}}
 [].forEach.call(document.querySelectorAll('[data-f]'),function(b){{b.addEventListener('click',function(){{
 var k=b.dataset.f,v=b.dataset.v;if(k==='month'&&f.month===v)v='';f[k]=v;
@@ -240,26 +287,29 @@ def page(ev):
     yr = "2027" if "2027" in (ev["start"] or ev["month"]) and "2027" not in ev["name"] else ""
     title = f"{ev['name']} {yr}".strip() + f" · {ev['place']}, {st} · Tourney Finder"
     desc = f"{ev['name']} in {ev['place']}, {st}: {when(ev)}. {ev['ages']}. {ev['about']}"[:300]
-    s = head(title, desc, f"/t/{ev['slug']}/").replace("<!--HERO-->", "")
+    s = head(title, desc, f"/t/{ev['slug']}/")
     cal = f'<a class="button" href="/t/{ev["slug"]}/event.ics">Add to calendar</a>' if ev["start"] else ""
-    s += f"""<p><a href="/">← All tournaments</a></p>
-<header style="display:grid;gap:10px"><h1 style="font-size:clamp(28px,6vw,40px)">{E(ev['name'])}</h1>
-<div class="meta"><span class="pill {ev['status']}">{STATUS[ev['status']]}</span></div></header>
-<div class="card"><dl>
-<dt>When</dt><dd>{E(when(ev))}</dd><dt>Where</dt><dd>{E(ev['place'])}, {st}</dd>
-<dt>Sport</dt><dd>{E(ev['sport'])}</dd><dt>Ages</dt><dd>{E(ev['ages'])}</dd><dt>Who can enter</dt><dd>{E(ev['who'])}</dd>
-<dt>About</dt><dd>{E(ev['about'])}</dd>
-<dt>Official info</dt><dd><a href="{E(ev['src'])}" rel="noopener" target="_blank">{E(ev['src_name'])}</a></dd></dl>
-<div style="display:flex;gap:10px;flex-wrap:wrap">{cal}<a class="button" href="{E(ev['src'])}" rel="noopener" target="_blank" style="background:var(--chalk);color:var(--ink)">Organiser's page</a></div></div>
-<div class="cta"><h2>Is this your tournament?</h2><p>Send us the latest dates, entry link and fees, and we'll update this page for free.</p><a class="button" href="/add/">Update this listing</a></div>"""
+    lab = {"confirmed": "Dates confirmed", "expected": "Expected, based on last year", "tba": "Dates to be announced"}[ev["status"]]
+    hero = f"""<section class="hero"><div class="in"><a class="back" href="/">← All fixtures</a>
+<div style="display:flex;gap:18px;align-items:center" class="s-{slugify(ev['sport'])}">{crest(ev['sport'])}<span class="eyebrow">{E(ev['sport'])} · {st} · {lab}</span></div>
+<h1 style="font-size:clamp(32px,6.5vw,60px)">{E(ev['name'])}</h1>
+<p class="lede">{E(when(ev))} · {E(ev['place'])}, {st}</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap">{cal}<a class="button ghost" href="{E(ev['src'])}" rel="noopener" target="_blank">Organiser's page</a></div></div></section>"""
+    s = s.replace("<!--HERO-->", hero)
+    s += f"""<section style="display:grid;gap:18px"><div class="sechead"><h2>Tournament details</h2></div>
+<dl class="facts"><div><dt>When</dt><dd>{E(when(ev))}</dd></div><div><dt>Where</dt><dd>{E(ev['place'])}, {st}</dd></div>
+<div><dt>Sport</dt><dd>{E(ev['sport'])}</dd></div><div><dt>Age groups</dt><dd>{E(ev['ages'])}</dd></div>
+<div><dt>Who can enter</dt><dd>{E(ev['who'])}</dd></div><div><dt>Official source</dt><dd><a href="{E(ev['src'])}" rel="noopener" target="_blank">{E(ev['src_name'])}</a></dd></div></dl>
+<p class="muted" style="max-width:680px;font-size:17px">{E(ev['about'])}</p></section>
+<div class="panel"><span class="eyebrow">For organisers</span><h2>Is this your tournament?</h2><p class="muted">Send the latest dates, entry link and fees, and we'll update this page for free.</p><a class="button" href="/add/" style="justify-self:start">Update this listing</a></div>
+"""
     return s + FOOT
 
 
 def add_page():
-    s = head("Add your tournament · Tourney Finder", "List your football, futsal or junior sports tournament free on Tourney Finder.", "/add/")
-    s += """<p><a href="/">← All tournaments</a></p><h1>Add your tournament</h1>
-<p class="muted">Free listing for clubs, associations and organisers. We check every entry and usually publish within a few days.</p>
-<div class="card"><form name="add-tournament" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+    s = head("Add your tournament · Tourney Finder", "List your football, futsal or junior sports tournament free on Tourney Finder.", "/add/").replace("<!--HERO-->", """<section class="hero"><div class="in"><a class="back" href="/">← All fixtures</a><span class="eyebrow">For organisers</span><h1 style="font-size:clamp(34px,7vw,64px)">List your<br><em>tournament</em></h1>
+<p class="lede">Free for clubs, associations and organisers. We check every entry and usually publish within a few days.</p></div></section>""")
+    s += """<div class="panel" style="max-width:720px"><form name="add-tournament" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
 <input type="hidden" name="form-name" value="add-tournament"><p class="hidden"><label>Leave empty <input name="bot-field"></label></p>
 <label for="tName">Tournament name<input id="tName" name="name" required></label>
 <label for="tSport">Sport<select id="tSport" name="sport"><option>Football</option><option>Futsal</option><option>AFL</option><option>Cricket</option><option>Basketball</option><option>Badminton</option><option>Tennis</option><option>Touch</option><option>Oztag</option><option>Netball</option><option>Other</option></select></label>
@@ -275,8 +325,7 @@ def add_page():
 
 
 def thanks():
-    s = head("Thanks · Tourney Finder", "Thanks for your submission.", "/thanks/")
-    s += '<h1>Thanks!</h1><p>We\'ve got it. New tournaments are usually live within a few days.</p><p><a class="button" href="/">Back to all tournaments</a></p>'
+    s = head("Thanks · Tourney Finder", "Thanks for your submission.", "/thanks/").replace("<!--HERO-->", """<section class="hero"><div class="in"><span class="eyebrow">Received</span><h1>Thank <em>you</em></h1><p class="lede">We've got it. New tournaments are usually live within a few days.</p><a class="button" href="/" style="justify-self:start">Back to all fixtures</a></div></section>""")
     return s + FOOT
 
 
