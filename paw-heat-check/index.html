@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Paw Heat Check – Is it too hot to walk my dog?</title>
+<meta name="description" content="Type your suburb and see, hour by hour, when the footpath is too hot for your dog's paws. Free Australian paw-heat forecast with the best walk times today.">
+<meta property="og:title" content="Paw Heat Check – Is it too hot to walk my dog?">
+<meta property="og:description" content="Hour-by-hour footpath heat forecast for your suburb, with the safest walk times today.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f26a1b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='40' r='14' fill='%23f26a1b'/%3E%3Ccircle cx='14' cy='24' r='7' fill='%23f26a1b'/%3E%3Ccircle cx='26' cy='13' r='7' fill='%23f26a1b'/%3E%3Ccircle cx='38' cy='13' r='7' fill='%23f26a1b'/%3E%3Ccircle cx='50' cy='24' r='7' fill='%23f26a1b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Nunito+Sans:wght@400;600;800&display=swap">
+<style>
+/* Layout: one column, phone first. Verdict card on top, walk windows, hourly heat strip, alert sign-up. */
+:root{
+  --bg:#fbf6ef; --card:#ffffff; --ink:#2a1d14; --muted:#7a6656; --line:#eadfd2;
+  --accent:#f26a1b; --accent-ink:#ffffff;
+  --safe:#2e8b57; --safe-soft:#e2f3e8; --warm:#c98a00; --warm-soft:#fff3d6; --hot:#d1352a; --hot-soft:#fde4e1;
+  --display:"Fraunces",Georgia,serif; --body:"Nunito Sans",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#1a130e; --card:#251b14; --ink:#f6ebe0; --muted:#bba796; --line:#3a2c21;
+  --accent:#ff8a45; --accent-ink:#1a130e;
+  --safe:#6fd49a; --safe-soft:#173326; --warm:#ffc94d; --warm-soft:#3a2d0e; --hot:#ff7a6e; --hot-soft:#43191a; color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:20px}
+h1,h2{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.1}
+h1{font-size:clamp(30px,8vw,44px);font-weight:900;letter-spacing:-.01em}
+h1 span{color:var(--accent)}
+h2{font-size:21px;font-weight:700}
+p{margin:0}
+.lede{color:var(--muted)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;color:var(--muted)}
+.brand svg{width:22px;height:22px}
+form.search{display:flex;gap:8px;flex-wrap:wrap}
+.search input{flex:1 1 200px;min-width:0;font:inherit;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+.search input:focus{outline:none;border-color:var(--accent)}
+button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 16px;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.primary{background:var(--accent);color:var(--accent-ink)}
+.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.matches{display:flex;flex-wrap:wrap;gap:8px}
+.matches button{background:var(--card);border:2px solid var(--line);color:var(--ink);font-weight:600;padding:8px 12px}
+.status{color:var(--muted);font-size:14px;min-height:1.5em}
+.verdict{border-radius:20px;padding:20px;display:grid;gap:8px;background:var(--card);border:2px solid var(--line)}
+.verdict.safe{background:var(--safe-soft);border-color:var(--safe)}
+.verdict.warm{background:var(--warm-soft);border-color:var(--warm)}
+.verdict.hot{background:var(--hot-soft);border-color:var(--hot)}
+.verdict .where{font-weight:800;font-size:14px;color:var(--muted)}
+.verdict .big{font-family:var(--display);font-weight:900;font-size:clamp(28px,7vw,38px);line-height:1.05}
+.verdict.safe .big{color:var(--safe)} .verdict.warm .big{color:var(--warm)} .verdict.hot .big{color:var(--hot)}
+.temps{display:flex;gap:18px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.temps b{font-size:24px;display:block}
+.temps small{color:var(--muted);font-size:13px}
+.windows{display:grid;gap:10px}
+.win{display:flex;justify-content:space-between;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-variant-numeric:tabular-nums}
+.win .t{font-weight:800}
+.win .n{color:var(--muted);font-size:14px;text-align:right}
+.daytabs{display:flex;gap:8px}
+.daytabs button{background:var(--card);border:2px solid var(--line);color:var(--ink);padding:8px 14px}
+.daytabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.strip{overflow-x:auto;padding-bottom:6px}
+.bars{display:grid;grid-auto-flow:column;grid-auto-columns:38px;gap:4px;align-items:end;height:190px;padding-top:22px}
+.bar{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;font-size:11px;font-variant-numeric:tabular-nums}
+.bar i{display:block;width:100%;border-radius:8px 8px 4px 4px}
+.bar .v{font-weight:800}
+.bar .h{color:var(--muted)}
+.bar.safe i{background:var(--safe)} .bar.warm i{background:var(--warm)} .bar.hot i{background:var(--hot)}
+.bar.now .h{color:var(--accent);font-weight:800}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:12px}
+.alert form{display:grid;gap:10px}
+.alert input{font:inherit;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.tips{margin:0;padding-left:20px;display:grid;gap:6px}
+.share{display:flex;gap:8px;flex-wrap:wrap}
+footer{font-size:13px;color:var(--muted);display:grid;gap:6px}
+footer a{color:inherit}
+.hidden{display:none!important}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:height .4s ease}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="40" r="14" fill="#f26a1b"/><circle cx="14" cy="24" r="7" fill="#f26a1b"/><circle cx="26" cy="13" r="7" fill="#f26a1b"/><circle cx="38" cy="13" r="7" fill="#f26a1b"/><circle cx="50" cy="24" r="7" fill="#f26a1b"/></svg>Paw Heat Check</div>
+
+  <header style="display:grid;gap:10px">
+    <h1>Is it too hot to <span>walk the dog?</span></h1>
+    <p class="lede">On a 25°C day, sunny asphalt can reach about 50°C. That's hot enough to burn paws. Type your suburb to see the footpath heat hour by hour and the safest times to walk.</p>
+  </header>
+
+  <form class="search" id="searchForm" autocomplete="off">
+    <input id="q" name="q" type="search" placeholder="Your suburb, e.g. Parramatta" aria-label="Suburb or town">
+    <button class="primary" type="submit">Check</button>
+    <button class="ghost" type="button" id="locBtn">Use my location</button>
+  </form>
+  <div class="matches" id="matches"></div>
+  <div class="status" id="status" role="status"></div>
+
+  <section id="result" class="hidden" style="display:grid;gap:20px">
+    <div class="verdict" id="verdict">
+      <div class="where" id="where"></div>
+      <div class="big" id="big"></div>
+      <p id="advice"></p>
+      <div class="temps">
+        <div><b id="tPave">–</b><small>footpath (est.)</small></div>
+        <div><b id="tAir">–</b><small>air</small></div>
+        <div><b id="tUv">–</b><small>UV index</small></div>
+      </div>
+    </div>
+
+    <div style="display:grid;gap:10px">
+      <h2>Best walk times</h2>
+      <div class="windows" id="windows"></div>
+    </div>
+
+    <div style="display:grid;gap:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2>Footpath heat by hour</h2>
+        <div class="daytabs" id="daytabs"></div>
+      </div>
+      <div class="strip"><div class="bars" id="bars"></div></div>
+      <div class="legend">
+        <span style="--c:var(--safe)">Under 40°C: paws OK</span>
+        <span style="--c:var(--warm)">40–50°C: short walk, stay on grass</span>
+        <span style="--c:var(--hot)">Over 50°C: too hot</span>
+      </div>
+    </div>
+
+    <div class="share">
+      <button class="ghost" type="button" id="shareBtn">Share with a dog owner</button>
+    </div>
+  </section>
+
+  <section class="card alert">
+    <h2>Get a heatwave paw alert</h2>
+    <p class="lede">We'll email you the evening before a day when footpaths in your suburb get too hot for paws. Free, and you can unsubscribe any time.</p>
+    <form name="paw-alerts" method="POST" action="/thanks.html" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="paw-alerts">
+      <p class="hidden"><label>Leave empty <input name="bot-field"></label></p>
+      <input id="alertEmail" type="email" name="email" placeholder="Your email" required aria-label="Email">
+      <input id="alertSuburb" type="text" name="suburb" placeholder="Your suburb" required aria-label="Suburb">
+      <input id="alertDog" type="text" name="dog" placeholder="Dog's name (optional)" aria-label="Dog's name">
+      <button class="primary" type="submit">Send me alerts</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Quick paw safety tips</h2>
+    <ul class="tips">
+      <li><b>Do the 7-second test.</b> Put the back of your hand on the footpath. If you can't hold it for 7 seconds, it's too hot for paws.</li>
+      <li>Walk early (before 8am) or late, after the ground has cooled. Footpaths stay hot for hours after sunset.</li>
+      <li>Stick to grass and shade. Avoid asphalt, metal covers and hot beach sand.</li>
+      <li>Flat-faced breeds, puppies, old dogs and dark-coated dogs overheat faster. Bring water.</li>
+      <li>Signs of burnt paws are limping, licking the feet, blisters or dark patches. See your vet.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Footpath temperatures are estimates from the weather forecast (air temperature, sunshine and wind) for asphalt in full sun. Shade, grass and concrete are cooler. Always do the hand test. This is general information, not veterinary advice.</p>
+    <p>Weather data by <a href="https://open-meteo.com/" rel="noopener" target="_blank">Open-Meteo</a>. Made in Australia by YaLegendCo.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+  var state = { place:null, data:null, day:0 };
+
+  // Footpath (asphalt in sun) estimate. Calibrated so 25°C air + strong sun ~ 50°C.
+  // Uses lagged sunshine so footpaths stay warm after the sun drops.
+  function pavement(air, sw, swPrev1, swPrev2, wind){
+    var eff = Math.max(sw, 0.65*swPrev1, 0.4*swPrev2);
+    var t = air + 0.028*eff - 0.6*Math.max(0, wind-2);
+    return Math.max(air, t);
+  }
+  function level(t){ return t >= 50 ? "hot" : (t >= 40 ? "warm" : "safe"); }
+  function hourLabel(h){ var ap = h < 12 ? "am" : "pm"; var x = h % 12; if (x === 0) x = 12; return x + ap; }
+
+  function setStatus(msg){ $("status").textContent = msg || ""; }
+
+  function geocode(q){
+    var url = "https://geocoding-api.open-meteo.com/v1/search?count=6&language=en&countryCode=AU&name=" + encodeURIComponent(q);
+    return fetch(url).then(function(r){ if(!r.ok) throw new Error("geo"); return r.json(); }).then(function(j){ return j.results || []; });
+  }
+  function forecast(lat, lon){
+    var url = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon +
+      "&hourly=temperature_2m,shortwave_radiation,wind_speed_10m,uv_index&timezone=auto&forecast_days=3&wind_speed_unit=ms";
+    return fetch(url).then(function(r){ if(!r.ok) throw new Error("wx"); return r.json(); });
+  }
+
+  function build(j){
+    var h = j.hourly, rows = [];
+    for (var i=0;i<h.time.length;i++){
+      var sw = h.shortwave_radiation[i] || 0;
+      var p1 = i>0 ? (h.shortwave_radiation[i-1]||0) : sw;
+      var p2 = i>1 ? (h.shortwave_radiation[i-2]||0) : p1;
+      var air = h.temperature_2m[i];
+      var pv = pavement(air, sw, p1, p2, h.wind_speed_10m[i]||0);
+      rows.push({ time:h.time[i], date:h.time[i].slice(0,10), hour:parseInt(h.time[i].slice(11,13),10),
+        air:air, uv:(h.uv_index ? h.uv_index[i] : null), pave:pv, lvl:level(pv) });
+    }
+    return rows;
+  }
+
+  function nowIndex(rows, j){
+    // Local "now" in the place's timezone via utc_offset_seconds.
+    var off = j.utc_offset_seconds || 0;
+    var d = new Date(Date.now() + off*1000);
+    var key = d.toISOString().slice(0,13);
+    for (var i=0;i<rows.length;i++){ if (rows[i].time.slice(0,13) === key) return i; }
+    return 0;
+  }
+
+  function windowsFor(dayRows, fromHour){
+    // Walkable hours between 5am and 9pm that are under 40°C, grouped into runs.
+    var out = [], cur = null;
+    dayRows.forEach(function(r){
+      var ok = r.hour >= 5 && r.hour <= 21 && r.hour >= fromHour && r.lvl === "safe";
+      if (ok){ if (!cur){ cur = {start:r.hour, end:r.hour, max:r.pave}; } else { cur.end = r.hour; cur.max = Math.max(cur.max, r.pave); } }
+      else if (cur){ out.push(cur); cur = null; }
+    });
+    if (cur) out.push(cur);
+    return out;
+  }
+
+  function render(){
+    var rows = state.rows, j = state.data, idx = state.now;
+    var now = rows[idx];
+    var dates = []; rows.forEach(function(r){ if (dates.indexOf(r.date) < 0) dates.push(r.date); });
+    state.dates = dates;
+
+    $("where").textContent = state.place.label + " · now";
+    var v = $("verdict"); v.className = "verdict " + now.lvl;
+    var big = { safe:"Paws are OK right now", warm:"Careful: footpath is warm", hot:"Too hot for paws right now" }[now.lvl];
+    var adv = { safe:"Good time for a walk. Still do the 7-second hand test if it's been sunny.",
+                warm:"Keep it short, walk on grass or in shade, and test the ground with your hand first.",
+                hot:"Skip the footpath. Wait for a cooler time below, or play inside or on shaded grass." }[now.lvl];
+    $("big").textContent = big; $("advice").textContent = adv;
+    $("tPave").textContent = Math.round(now.pave) + "°C";
+    $("tAir").textContent = Math.round(now.air) + "°C";
+    $("tUv").textContent = now.uv == null ? "–" : Math.round(now.uv);
+
+    // Windows: rest of today, then tomorrow.
+    var w = $("windows"); w.innerHTML = "";
+    [0,1].forEach(function(di){
+      var dr = rows.filter(function(r){ return r.date === dates[di]; });
+      var from = di === 0 ? now.hour : 0;
+      var wins = windowsFor(dr, from);
+      var label = di === 0 ? "Today" : "Tomorrow";
+      if (!wins.length){
+        var hottest = dr.reduce(function(m,r){ return r.pave > m ? r.pave : m; }, 0);
+        addWin(label, di === 0 && from > 21 ? "No more walks today" : "No cool window", di === 0 && from > 21 ? "" : "Footpaths up to " + Math.round(hottest) + "°C. Walk on grass at dawn.");
+      } else {
+        wins.slice(0,3).forEach(function(x){
+          addWin(label, hourLabel(x.start) + " – " + hourLabel((x.end+1)%24), "footpath up to " + Math.round(x.max) + "°C");
+        });
+      }
+    });
+    function addWin(day, t, n){
+      var d = document.createElement("div"); d.className = "win";
+      d.innerHTML = '<div><div class="n"></div><div class="t"></div></div><div class="n"></div>';
+      d.children[0].children[0].textContent = day;
+      d.children[0].children[1].textContent = t;
+      d.children[1].textContent = n;
+      w.appendChild(d);
+    }
+
+    // Day tabs
+    var tabs = $("daytabs"); tabs.innerHTML = "";
+    ["Today","Tomorrow"].forEach(function(lbl, di){
+      var b = document.createElement("button"); b.type = "button"; b.textContent = lbl;
+      b.setAttribute("aria-pressed", String(state.day === di));
+      b.onclick = function(){ state.day = di; render(); };
+      tabs.appendChild(b);
+    });
+
+    // Bars 5am..10pm
+    var bars = $("bars"); bars.innerHTML = "";
+    var dayRows = rows.filter(function(r){ return r.date === dates[state.day] && r.hour >= 5 && r.hour <= 22; });
+    var maxT = 70;
+    dayRows.forEach(function(r){
+      var el = document.createElement("div");
+      var isNow = state.day === 0 && r.time === now.time;
+      el.className = "bar " + r.lvl + (isNow ? " now" : "");
+      var hgt = Math.max(8, Math.min(100, (r.pave / maxT) * 100));
+      el.innerHTML = '<span class="v"></span><i></i><span class="h"></span>';
+      el.children[0].textContent = Math.round(r.pave) + "°";
+      el.children[1].style.height = (hgt * 1.2) + "px";
+      el.children[2].textContent = isNow ? "now" : hourLabel(r.hour);
+      el.title = hourLabel(r.hour) + ": footpath about " + Math.round(r.pave) + "°C, air " + Math.round(r.air) + "°C";
+      bars.appendChild(el);
+    });
+
+    $("result").classList.remove("hidden");
+    var as = $("alertSuburb"); if (!as.dataset.edited && state.place.name !== "Your location") as.value = state.place.name;
+    document.title = (now.lvl === "hot" ? "Too hot" : now.lvl === "warm" ? "Careful" : "Paws OK") + " in " + state.place.name + " · Paw Heat Check";
+  }
+
+  function load(place){
+    state.place = place; state.day = 0;
+    setStatus("Checking the footpaths in " + place.label + "…");
+    $("matches").innerHTML = "";
+    forecast(place.lat, place.lon).then(function(j){
+      state.data = j; state.rows = build(j); state.now = nowIndex(state.rows, j);
+      setStatus(""); render();
+      try { localStorage.setItem("phc_place", JSON.stringify(place)); } catch(e){}
+      try { history.replaceState(null, "", "#" + place.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")); } catch(e){}
+    }).catch(function(){ setStatus("Couldn't load the forecast. Check your connection and try again."); });
+  }
+
+  function labelFor(r){ return r.name + (r.admin1 ? ", " + stateAbbr(r.admin1) : ""); }
+  function stateAbbr(s){
+    var m = {"New South Wales":"NSW","Victoria":"VIC","Queensland":"QLD","Western Australia":"WA","South Australia":"SA","Tasmania":"TAS","Australian Capital Territory":"ACT","Northern Territory":"NT"};
+    return m[s] || s;
+  }
+
+  function search(q){
+    q = (q||"").trim(); if (!q) return;
+    setStatus("Finding " + q + "…");
+    geocode(q).then(function(res){
+      if (!res.length){ setStatus("Couldn't find \"" + q + "\" in Australia. Try a nearby suburb or town."); return; }
+      var places = res.map(function(r){ return { name:r.name, label:labelFor(r), lat:r.latitude, lon:r.longitude }; });
+      if (places.length === 1 || places[0].name.toLowerCase() === q.toLowerCase() && (places.length < 2 || places[1].name.toLowerCase() !== q.toLowerCase())){
+        load(places[0]); return;
+      }
+      setStatus("Which one?");
+      var m = $("matches"); m.innerHTML = "";
+      places.forEach(function(p){
+        var b = document.createElement("button"); b.type = "button"; b.textContent = p.label;
+        b.onclick = function(){ load(p); };
+        m.appendChild(b);
+      });
+    }).catch(function(){ setStatus("Couldn't search right now. Check your connection and try again."); });
+  }
+
+  $("alertSuburb").addEventListener("input", function(){ this.dataset.edited = "1"; });
+  $("searchForm").addEventListener("submit", function(e){ e.preventDefault(); search($("q").value); });
+  $("locBtn").addEventListener("click", function(){
+    if (!navigator.geolocation){ setStatus("Location isn't available. Type your suburb instead."); return; }
+    setStatus("Finding you…");
+    navigator.geolocation.getCurrentPosition(function(pos){
+      load({ name:"Your location", label:"Your location", lat:pos.coords.latitude.toFixed(3), lon:pos.coords.longitude.toFixed(3) });
+    }, function(){ setStatus("Couldn't get your location. Type your suburb instead."); }, { timeout:10000 });
+  });
+  $("shareBtn").addEventListener("click", function(){
+    var text = state.place ? ("Footpath heat for dogs in " + state.place.name + " today. Check before your walk:") : "Is it too hot to walk the dog? Check your suburb:";
+    var url = location.href;
+    if (navigator.share){ navigator.share({ title:"Paw Heat Check", text:text, url:url }).catch(function(){}); }
+    else if (navigator.clipboard){ navigator.clipboard.writeText(text + " " + url).then(function(){ $("shareBtn").textContent = "Link copied"; }).catch(function(){}); }
+  });
+
+  // Start: suburb from link (#parramatta), else last place, else Sydney.
+  var start = null;
+  if (location.hash.length > 1){ var hq = decodeURIComponent(location.hash.slice(1)).replace(/-/g, " "); if (hq !== "your location"){ $("q").value = hq; search(hq); start = true; } }
+  if (!start){
+    var saved = null; try { saved = JSON.parse(localStorage.getItem("phc_place") || "null"); } catch(e){}
+    load(saved || { name:"Sydney", label:"Sydney, NSW", lat:-33.868, lon:151.209 });
+  }
+})();
+</script>
+</body>
+</html>
