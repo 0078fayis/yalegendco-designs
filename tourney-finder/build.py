@@ -127,7 +127,7 @@ def slugify(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")[:70]
 
 
-GA_ID = os.environ.get("GA_ID", "")
+GA_ID = os.environ.get("GA_ID", "G-MR8R1Y96GP")
 
 
 def ga():
