@@ -136,6 +136,8 @@ def head(title, desc, path):
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website">
 <link rel="canonical" href="{SITE}{path}">
 <meta name="theme-color" content="#070b1f">
+<meta name="google-site-verification" content="Gwq6BwauJ3oWrqJBQLNV-pmNyu8_st0YB2Ha4SraKXQ" />
+<meta name="google-site-verification" content="moVUIrIGxKMaJrlwkLTXLseoJm8-S9sDBxLsyKo_2r4" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23070b1f'/%3E%3Cpath d='M20 4 34 9v11c0 8-6 13-14 16C12 33 6 28 6 20V9Z' fill='none' stroke='%23c9a54c' stroke-width='2'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..800&family=Hanken+Grotesk:wght@400;600;700&display=swap">
