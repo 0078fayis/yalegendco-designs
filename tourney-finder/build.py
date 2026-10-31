@@ -94,6 +94,15 @@ h2{font-stretch:125%;font-weight:800;font-size:clamp(24px,4vw,32px);text-transfo
 .ev:hover .st i{transform:translateX(4px);color:var(--gold2)}
 .s-football{--c:var(--football)}.s-futsal{--c:var(--futsal)}.s-cricket{--c:var(--cricket)}.s-basketball{--c:var(--basketball)}.s-afl{--c:var(--afl)}.s-badminton{--c:var(--badminton)}.s-touch{--c:var(--touch)}.s-oztag{--c:var(--oztag)}
 .panel{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:4px;padding:26px;display:grid;gap:14px}
+.shop{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.prod{display:grid;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:10px;text-decoration:none;color:var(--ink);transition:border-color .2s,transform .2s}
+.prod:hover{border-color:var(--gold);transform:translateY(-2px)}
+.prod img{width:100%;height:auto;aspect-ratio:5/6;object-fit:cover;border-radius:2px;background:#141414}
+.prod b{font-family:var(--display);font-stretch:112%;font-size:14px;letter-spacing:.04em;text-transform:uppercase;line-height:1.25}
+.prod span{color:var(--gold2);font-weight:700;font-size:14px}
+.navlink{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--ink);margin-right:18px}
+.navlink:hover{color:var(--gold2)}
+.hdr-r{display:flex;align-items:center}
 .split{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
 .muted{color:var(--muted)}p{margin:0}
 button,.button{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--gold2);border-radius:2px;padding:13px 20px;background:var(--gold2);color:var(--goldink);cursor:pointer;text-decoration:none;display:inline-block;text-align:center;transition:background .2s,color .2s}
@@ -114,7 +123,7 @@ form{display:grid;gap:14px}.hidden{display:none!important}
 footer{border-top:1px solid var(--line);margin-top:8px}
 footer .in{padding-block:28px 40px;display:grid;gap:8px;font-size:13px;color:var(--faint)}
 :focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
-@media (max-width:640px){.ev{grid-template-columns:58px 1fr;gap:6px 14px}.ev .crest{display:none}.top .in{flex-wrap:nowrap}.brand b{font-size:14px;letter-spacing:.12em}.brand small{letter-spacing:.2em}.btn-gold{font-size:11px;padding:8px 10px;letter-spacing:.08em;white-space:nowrap}.st{grid-column:2}.date .d{font-size:32px}.digits b{font-size:36px}.digits div{padding:0 12px}.hero .in{padding-block:44px 40px}}
+@media (max-width:640px){.ev{grid-template-columns:58px 1fr;gap:6px 14px}.ev .crest{display:none}.top .in{flex-wrap:nowrap}.brand b{font-size:14px;letter-spacing:.12em}.brand small{letter-spacing:.2em}.navlink{font-size:11px;margin-right:10px;letter-spacing:.08em}.btn-gold{font-size:11px;padding:8px 10px;letter-spacing:.08em;white-space:nowrap}.st{grid-column:2}.date .d{font-size:32px}.digits b{font-size:36px}.digits div{padding:0 12px}.hero .in{padding-block:44px 40px}}
 @media (max-width:420px){.wide{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 """
@@ -152,7 +161,7 @@ def head(title, desc, path):
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..800&family=Hanken+Grotesk:wght@400;600;700&display=swap">
 <style>{CSS}</style></head><body>
-<header class="top"><div class="in"><a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8Z" fill="none" stroke="#c9a54c" stroke-width="1.5"/><path d="M20 6 32 10.5V20c0 7-5.4 11.8-12 14.2C13.4 31.8 8 27 8 20v-9.5Z" fill="#c9a54c" fill-opacity=".12"/><text x="20" y="24.5" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="800" font-size="11" letter-spacing="1" fill="#e6c97a">TF</text></svg><span><b>Tourney Finder</b><small>NSW · QLD · Season 26/27</small></span></a><a class="btn-gold" href="/add/">List<span class="wide"> a tournament</span></a></div></header>
+<header class="top"><div class="in"><a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8Z" fill="none" stroke="#c9a54c" stroke-width="1.5"/><path d="M20 6 32 10.5V20c0 7-5.4 11.8-12 14.2C13.4 31.8 8 27 8 20v-9.5Z" fill="#c9a54c" fill-opacity=".12"/><text x="20" y="24.5" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="800" font-size="11" letter-spacing="1" fill="#e6c97a">TF</text></svg><span><b>Tourney Finder</b><small>NSW · QLD · Season 26/27</small></span></a><span class="hdr-r"><a class="navlink" href="/shop/">Shop</a><a class="btn-gold" href="/add/">List<span class="wide"> a tournament</span></a></span></div></header>
 <!--HERO-->
 <main class="in">"""
 
@@ -263,7 +272,7 @@ def index(evs):
 <div class="months" id="months">{month_btns}</div>
 <div class="filters"><div class="seg">{sport_chips}</div><div class="seg">{state_chips}</div></div>
 <div class="list" id="list">{''.join(groups)}</div></section>
-<div class="split"><div class="panel"><span class="eyebrow">For organisers</span><h2>List your tournament</h2><p class="muted">Free listing for clubs and associations. Coaches and parents across NSW and Queensland use Tourney Finder to plan their season.</p><a class="button" href="/add/" style="justify-self:start">Add a tournament</a></div>
+""" + shop_strip(PRODUCTS[:4]) + f"""<div class="split"><div class="panel"><span class="eyebrow">For organisers</span><h2>List your tournament</h2><p class="muted">Free listing for clubs and associations. Coaches and parents across NSW and Queensland use Tourney Finder to plan their season.</p><a class="button" href="/add/" style="justify-self:start">Add a tournament</a></div>
 <div class="panel"><span class="eyebrow">Season alerts</span><h2>New fixtures, monthly</h2><p class="muted">One short email a month with new tournaments for your sport and area.</p>
 <form name="tourney-alerts" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
 <input type="hidden" name="form-name" value="tourney-alerts"><p class="hidden"><label>Leave empty <input name="bot-field"></label></p>
@@ -313,8 +322,45 @@ def page(ev):
 <div><dt>Sport</dt><dd>{E(ev['sport'])}</dd></div><div><dt>Age groups</dt><dd>{E(ev['ages'])}</dd></div>
 <div><dt>Who can enter</dt><dd>{E(ev['who'])}</dd></div><div><dt>Official source</dt><dd><a href="{E(ev['src'])}" rel="noopener" target="_blank">{E(ev['src_name'])}</a></dd></div></dl>
 <p class="muted" style="max-width:680px;font-size:17px">{E(ev['about'])}</p></section>
-<div class="panel"><span class="eyebrow">For organisers</span><h2>Is this your tournament?</h2><p class="muted">Send the latest dates, entry link and fees, and we'll update this page for free.</p><a class="button" href="/add/" style="justify-self:start">Update this listing</a></div>
+""" + shop_strip(PRODUCTS[:3], "Gear for the weekend") + """<div class="panel"><span class="eyebrow">For organisers</span><h2>Is this your tournament?</h2><p class="muted">Send the latest dates, entry link and fees, and we'll update this page for free.</p><a class="button" href="/add/" style="justify-self:start">Update this listing</a></div>
 """
+    return s + FOOT
+
+
+ETSY = "https://yalegendco.etsy.com"
+PRODUCTS = [
+    ("tournament-weekend-survivor", "Tournament Weekend Survivor tee", "A$42.95"),
+    ("half-time-oranges", "Half-Time Oranges tee", "A$42.95"),
+    ("sideline-coach", "Sideline Coach tee", "A$42.95"),
+    ("match-day-taxi-service", "Match Day Taxi Service tee", "A$42.95"),
+    ("nutmeg-specialist", "Nutmeg Specialist tee", "A$42.95"),
+]
+
+
+def shop_grid(items):
+    return '<div class="shop">' + "".join(
+        f'<a class="prod" href="{ETSY}" rel="noopener" target="_blank"><img src="/shop/{slug}.jpg" alt="{E(name)}" width="500" height="600"><b>{E(name)}</b><span>{price} · Buy on Etsy</span></a>'
+        for slug, name, price in items) + "</div>"
+
+
+def shop_strip(items, title="The Clubhouse Shop"):
+    return (f'<section style="display:grid;gap:18px"><div class="sechead"><h2>{title}</h2><a class="count" href="/shop/" style="color:var(--gold2)">See all →</a></div>'
+            f'<p class="muted" style="margin:0">Tees for tournament weekends, sideline parents and players. Printed to order, free delivery in Australia.</p>{shop_grid(items)}</section>\n')
+
+
+def shop_page():
+    s = head("Shop · Tourney Finder", "Sports tees for tournament weekends, sideline parents and players. Free delivery in Australia.", "/shop/").replace("<!--HERO-->", """<section class="hero"><div class="in"><a class="back" href="/">← All fixtures</a><span class="eyebrow">The Clubhouse Shop</span><h1 style="font-size:clamp(34px,7vw,64px)">Gear for the<br><em>long weekend</em></h1>
+<p class="lede">Tees for tournament weekends, sideline parents and players. Free delivery in Australia, sizes S to 3XL.</p></div></section>""")
+    s += '<section style="display:grid;gap:18px"><div class="sechead"><h2>Tees</h2></div>' + shop_grid(PRODUCTS) + "</section>\n"
+    s += """<div class="panel" style="max-width:720px"><span class="eyebrow">For teams</span><h2>Custom tour shirts</h2><p class="muted">Heading to a tournament? Get matching shirts with your team name on the front and player names and numbers on the back. Minimum 10 shirts. Tell us what you need and we'll send a design and quote.</p>
+<form name="team-shirts" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+<input type="hidden" name="form-name" value="team-shirts"><p class="hidden"><label>Leave empty <input name="bot-field"></label></p>
+<label for="sTeam">Team or club name<input id="sTeam" name="team" required></label>
+<label for="sEvent">Tournament and dates<input id="sEvent" name="event" placeholder="e.g. Under 12s, January carnival"></label>
+<label for="sQty">How many shirts<input id="sQty" name="qty" type="number" min="10" placeholder="e.g. 15"></label>
+<label for="sEmail">Your email<input id="sEmail" name="email" type="email" required></label>
+<label for="sNotes">Colours, names, anything else<textarea id="sNotes" name="notes" rows="3"></textarea></label>
+<button type="submit">Ask for a quote</button></form></div>"""
     return s + FOOT
 
 
@@ -352,7 +398,10 @@ def main():
     w("index.html", index(evs))
     w("add/index.html", add_page())
     w("thanks/index.html", thanks())
-    urls = [f"{SITE}/", f"{SITE}/add/"]
+    w("shop/index.html", shop_page())
+    for f in os.listdir(os.path.join(ROOT, "shop")):
+        shutil.copy(os.path.join(ROOT, "shop", f), os.path.join(DIST, "shop", f))
+    urls = [f"{SITE}/", f"{SITE}/shop/", f"{SITE}/add/"]
     for e in evs:
         w(f"t/{e['slug']}/index.html", page(e))
         if e["start"]:
