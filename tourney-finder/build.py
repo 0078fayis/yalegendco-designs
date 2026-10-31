@@ -16,7 +16,7 @@ CSS = """
 :root{--bg:#0b1410;--card:#13211a;--card2:#182a21;--ink:#eef6ef;--muted:#9db3a5;--line:#24382c;
 --pitch:#1d6b3c;--pitch2:#1a5f35;--chalk:rgba(255,255,255,.55);--led:#ffd84d;--accent:#3ee07f;--pitch-ink:#0b1410;
 --ok:#3ee07f;--ok-soft:rgba(62,224,127,.14);--exp:#ffd84d;--exp-soft:rgba(255,216,77,.14);--tba:#9db3a5;--tba-soft:rgba(157,179,165,.14);
---football:#3ee07f;--futsal:#ff9a3d;--touch:#4dc3ff;--oztag:#ff6fae;
+--football:#3ee07f;--futsal:#ff9a3d;--touch:#4dc3ff;--oztag:#ff6fae;--cricket:#f5f0c8;--basketball:#ff7b3a;--afl:#ffd84d;--badminton:#c59bff;
 --display:"Barlow Condensed",system-ui,sans-serif;--body:"Barlow",system-ui,-apple-system,sans-serif;--mono:"Share Tech Mono",ui-monospace,monospace;color-scheme:dark}
 *{box-sizing:border-box}html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
@@ -77,7 +77,7 @@ p{margin:0}.muted{color:var(--muted)}
 .tag{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--c,var(--accent))}
 .pill{font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
 .pill.confirmed{background:var(--ok-soft);color:var(--ok)}.pill.expected{background:var(--exp-soft);color:var(--exp)}.pill.tba{background:var(--tba-soft);color:var(--tba)}
-.s-football{--c:var(--football)}.s-futsal{--c:var(--futsal)}.s-touch{--c:var(--touch)}.s-oztag{--c:var(--oztag)}
+.s-football{--c:var(--football)}.s-futsal{--c:var(--futsal)}.s-touch{--c:var(--touch)}.s-oztag{--c:var(--oztag)}.s-cricket{--c:var(--cricket)}.s-basketball{--c:var(--basketball)}.s-afl{--c:var(--afl)}.s-badminton{--c:var(--badminton)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px}
 .cta{background:linear-gradient(135deg,var(--pitch),var(--pitch2));border-radius:16px;padding:20px;display:grid;gap:10px}
 button,.button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:12px 16px;background:var(--accent);color:var(--pitch-ink);cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
@@ -198,7 +198,7 @@ def index(evs):
                  f'<a class="nm" href="/t/{nxt["slug"]}/" style="color:#fff;text-decoration:none">{E(nxt["name"])} · {E(nxt["place"])}</a>'
                  '<div class="digits"><div><b id="cd">--</b><small>days</small></div><div><b id="ch">--</b><small>hrs</small></div><div><b id="cm">--</b><small>min</small></div><div><b id="cs">--</b><small>sec</small></div></div></div>')
     hero = f"""<section class="hero"><div class="in"><h1>Find your<br>next tournament</h1>
-<p>Football, futsal, touch and Oztag tournaments across NSW and Queensland. One place, every date, straight to the organiser.</p>{board}</div></section>"""
+<p>Football, futsal, cricket, basketball, AFL, badminton, touch and Oztag tournaments across NSW and Queensland. One place, every date, straight to the organiser.</p>{board}</div></section>"""
     s = head("Tourney Finder: football, futsal and junior sports tournaments in NSW and QLD",
              "Find football, futsal, touch and Oztag tournaments and carnivals in NSW and Queensland. Dates, age groups and official links in one place.", "/").replace("<!--HERO-->", hero)
     s += f"""<div class="rowlabel">Pick a month</div><div class="months" id="months">{month_btns}</div>
@@ -262,7 +262,7 @@ def add_page():
 <div class="card"><form name="add-tournament" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
 <input type="hidden" name="form-name" value="add-tournament"><p class="hidden"><label>Leave empty <input name="bot-field"></label></p>
 <label for="tName">Tournament name<input id="tName" name="name" required></label>
-<label for="tSport">Sport<select id="tSport" name="sport"><option>Football</option><option>Futsal</option><option>Touch</option><option>Oztag</option><option>Cricket</option><option>Basketball</option><option>Netball</option><option>Other</option></select></label>
+<label for="tSport">Sport<select id="tSport" name="sport"><option>Football</option><option>Futsal</option><option>AFL</option><option>Cricket</option><option>Basketball</option><option>Badminton</option><option>Tennis</option><option>Touch</option><option>Oztag</option><option>Netball</option><option>Other</option></select></label>
 <label for="tDates">Dates<input id="tDates" name="dates" placeholder="e.g. 10-12 January 2027" required></label>
 <label for="tPlace">Suburb or town, and state<input id="tPlace" name="place" placeholder="e.g. Penrith, NSW" required></label>
 <label for="tAges">Age groups and divisions<input id="tAges" name="ages" placeholder="e.g. U9-U16 boys and girls"></label>
