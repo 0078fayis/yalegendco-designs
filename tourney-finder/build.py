@@ -12,49 +12,85 @@ DIST = os.path.join(ROOT, "dist")
 E = html.escape
 
 CSS = """
-:root{--bg:#f4f7f2;--card:#fff;--ink:#14261a;--muted:#5b6b5f;--line:#dbe4d8;--pitch:#1f7a43;--pitch-ink:#fff;--chalk:#eaf4ec;
---ok:#1f7a43;--ok-soft:#e1f2e6;--exp:#9a6a00;--exp-soft:#fff2d3;--tba:#5b6b5f;--tba-soft:#eceff0;
---display:"Barlow Condensed",system-ui,sans-serif;--body:"Barlow",system-ui,-apple-system,sans-serif;color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#0e1611;--card:#16211a;--ink:#e9f2ea;--muted:#9fb2a4;--line:#26362b;--pitch:#3fbf72;--pitch-ink:#0e1611;--chalk:#1b2b20;
---ok:#5fd38f;--ok-soft:#173826;--exp:#ffc95a;--exp-soft:#3a2d0f;--tba:#a3b0a7;--tba-soft:#222c26;color-scheme:dark}}
+/* Match-night look: floodlit pitch header, LED scoreboard countdown, ticket-style cards. Deliberately one dark theme. */
+:root{--bg:#0b1410;--card:#13211a;--card2:#182a21;--ink:#eef6ef;--muted:#9db3a5;--line:#24382c;
+--pitch:#1d6b3c;--pitch2:#1a5f35;--chalk:rgba(255,255,255,.55);--led:#ffd84d;--accent:#3ee07f;--pitch-ink:#0b1410;
+--ok:#3ee07f;--ok-soft:rgba(62,224,127,.14);--exp:#ffd84d;--exp-soft:rgba(255,216,77,.14);--tba:#9db3a5;--tba-soft:rgba(157,179,165,.14);
+--football:#3ee07f;--futsal:#ff9a3d;--touch:#4dc3ff;--oztag:#ff6fae;
+--display:"Barlow Condensed",system-ui,sans-serif;--body:"Barlow",system-ui,-apple-system,sans-serif;--mono:"Share Tech Mono",ui-monospace,monospace;color-scheme:dark}
 *{box-sizing:border-box}html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
-a{color:var(--pitch)}
-.top{background:var(--pitch);color:var(--pitch-ink)}
-.top .in,.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.top .in{padding-block:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.logo{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:.02em;color:var(--pitch-ink);text-decoration:none;text-transform:uppercase}
-.top a.btn{background:var(--pitch-ink);color:var(--pitch);text-decoration:none;font-weight:700;padding:8px 14px;border-radius:999px;font-size:14px}
-.wrap{padding-block:22px 48px;display:grid;gap:20px}
-h1,h2{font-family:var(--display);font-weight:800;margin:0;line-height:1.05;text-wrap:balance}
-h1{font-size:clamp(34px,8vw,52px);text-transform:uppercase}
-h2{font-size:24px}
+a{color:var(--accent)}
+.top{background:rgba(11,20,16,.92);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5;backdrop-filter:blur(6px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.top .in,.wrap,.hero .in{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top .in{padding-block:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:.04em;color:var(--ink);text-decoration:none;text-transform:uppercase}
+.logo span{color:var(--accent)}
+.top a.btn{background:var(--accent);color:var(--pitch-ink);text-decoration:none;font-weight:700;padding:8px 14px;border-radius:999px;font-size:14px}
+.hero{position:relative;overflow:hidden;background:
+ radial-gradient(ellipse 60% 70% at 15% -10%,rgba(255,255,230,.28),transparent 60%),
+ radial-gradient(ellipse 60% 70% at 85% -10%,rgba(255,255,230,.22),transparent 60%),
+ repeating-linear-gradient(90deg,var(--pitch) 0 70px,var(--pitch2) 70px 140px);border-bottom:3px solid var(--chalk)}
+.hero::before{content:"";position:absolute;left:50%;top:50%;width:260px;height:260px;border:3px solid var(--chalk);border-radius:50%;transform:translate(-50%,-50%);opacity:.5}
+.hero::after{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:3px solid var(--chalk);opacity:.5}
+.hero .in{position:relative;z-index:1;padding-block:40px 34px;display:grid;gap:14px}
+h1,h2{font-family:var(--display);font-weight:800;margin:0;line-height:1;text-wrap:balance;text-transform:uppercase}
+h1{font-size:clamp(44px,11vw,84px);letter-spacing:.01em;text-shadow:0 3px 0 rgba(0,0,0,.25)}
+h2{font-size:26px;letter-spacing:.02em}
+.hero p{max-width:560px;font-size:17px;color:#e3f1e6}
+.board{justify-self:start;background:#050806;border:3px solid #2b2b2b;border-radius:14px;padding:12px 16px;display:grid;gap:6px;box-shadow:0 10px 30px rgba(0,0,0,.45);max-width:100%}
+.board .lbl{font-family:var(--display);font-weight:800;letter-spacing:.12em;font-size:13px;color:#8fa;text-transform:uppercase}
+.board .nm{font-weight:700;font-size:15px;color:#fff;min-width:0}
+.digits{display:flex;gap:8px;flex-wrap:wrap}
+.digits div{display:grid;justify-items:center;background:#111;border-radius:8px;padding:6px 10px;min-width:60px}
+.digits b{font-family:var(--mono);font-size:34px;line-height:1;color:var(--led);text-shadow:0 0 12px rgba(255,216,77,.6);font-variant-numeric:tabular-nums}
+.digits small{font-size:10px;letter-spacing:.14em;color:#889;text-transform:uppercase}
+.wrap{padding-block:24px 56px;display:grid;gap:22px}
 p{margin:0}.muted{color:var(--muted)}
-.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-select,input,textarea{font:inherit;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--ink);width:100%}
-select:focus,input:focus,textarea:focus{outline:none;border-color:var(--pitch)}
-label{font-size:13px;font-weight:700;color:var(--muted);display:grid;gap:4px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.chip{flex:none;font:inherit;font-weight:700;font-size:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer;display:flex;gap:6px;align-items:center}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .dot{width:9px;height:9px;border-radius:50%;background:var(--c,var(--accent))}
+.chip .n{font-size:12px;opacity:.7}
+.months{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(62px,1fr);gap:6px;overflow-x:auto;padding-bottom:4px}
+.mo{font:inherit;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 4px;cursor:pointer;display:grid;justify-items:center;gap:2px}
+.mo b{font-family:var(--display);font-size:18px;text-transform:uppercase;letter-spacing:.04em}
+.mo small{font-size:11px;color:var(--muted)}
+.mo i{display:block;width:70%;height:6px;border-radius:3px;background:var(--line)}
+.mo i span{display:block;height:100%;border-radius:3px;background:var(--accent)}
+.mo[aria-pressed="true"]{border-color:var(--accent);background:var(--card2)}
+.mo:disabled{opacity:.35;cursor:default}
+.rowlabel{font-family:var(--display);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--muted)}
 .count{font-size:14px;color:var(--muted)}
-.list{display:grid;gap:12px}
-.ev{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:72px 1fr;gap:14px;text-decoration:none;color:var(--ink)}
-.ev:hover{border-color:var(--pitch)}
-.date{background:var(--chalk);border-radius:12px;display:grid;place-items:center;text-align:center;padding:8px 4px;font-family:var(--display);font-weight:800;line-height:1}
-.date .m{font-size:15px;text-transform:uppercase;color:var(--pitch)}
-.date .d{font-size:28px}.date .y{font-size:13px;color:var(--muted);font-weight:600}
-.ev h3{margin:0 0 4px;font-size:18px;line-height:1.25}
+.list{display:grid;gap:14px}
+.ev{position:relative;background:var(--card);border-radius:16px;display:grid;grid-template-columns:96px 1fr;text-decoration:none;color:var(--ink);overflow:hidden;border-left:6px solid var(--c,var(--accent));transition:transform .15s ease}
+.ev:hover{transform:translateY(-2px);background:var(--card2)}
+.ev::before,.ev::after{content:"";position:absolute;left:84px;width:22px;height:22px;border-radius:50%;background:var(--bg)}
+.ev::before{top:-11px}.ev::after{bottom:-11px}
+.date{border-right:2px dashed var(--line);display:grid;place-items:center;align-content:center;text-align:center;padding:14px 6px;font-family:var(--display);font-weight:800;line-height:1}
+.date .m{font-size:16px;text-transform:uppercase;color:var(--c,var(--accent));letter-spacing:.06em}
+.date .d{font-size:36px}.date .y{font-size:13px;color:var(--muted);font-weight:600}
+.ev .body{padding:14px 16px;min-width:0;display:grid;gap:6px}
+.ev h3{margin:0;font-size:19px;line-height:1.2;font-weight:700}
 .meta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:14px;color:var(--muted)}
+.tag{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--c,var(--accent))}
 .pill{font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
 .pill.confirmed{background:var(--ok-soft);color:var(--ok)}.pill.expected{background:var(--exp-soft);color:var(--exp)}.pill.tba{background:var(--tba-soft);color:var(--tba)}
+.s-football{--c:var(--football)}.s-futsal{--c:var(--futsal)}.s-touch{--c:var(--touch)}.s-oztag{--c:var(--oztag)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px}
-.cta{background:var(--pitch);color:var(--pitch-ink);border-radius:16px;padding:18px;display:grid;gap:10px}
-.cta a{color:var(--pitch-ink);font-weight:700}
-button,.button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:12px 16px;background:var(--pitch);color:var(--pitch-ink);cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
-.cta .button{background:var(--pitch-ink);color:var(--pitch)}
+.cta{background:linear-gradient(135deg,var(--pitch),var(--pitch2));border-radius:16px;padding:20px;display:grid;gap:10px}
+button,.button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:12px 16px;background:var(--accent);color:var(--pitch-ink);cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
+.cta .button{justify-self:start;background:#fff;color:var(--pitch)}
+select,input,textarea{font:inherit;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--card2);color:var(--ink);width:100%}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--accent)}
+label{font-size:13px;font-weight:700;color:var(--muted);display:grid;gap:4px}
 dl{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;margin:0}dt{font-weight:700;color:var(--muted)}dd{margin:0;min-width:0}
 form{display:grid;gap:12px}.hidden{display:none!important}
 footer{font-size:13px;color:var(--muted);display:grid;gap:6px}
-:focus-visible{outline:3px solid var(--pitch);outline-offset:2px}
-@media (max-width:420px){.ev{grid-template-columns:60px 1fr}dl{grid-template-columns:1fr}}
+:focus-visible{outline:3px solid var(--led);outline-offset:2px}
+@media (max-width:480px){.ev{grid-template-columns:76px 1fr}.ev::before,.ev::after{left:65px}.date .d{font-size:30px}dl{grid-template-columns:1fr}.digits div{min-width:52px;padding:6px 8px}.digits b{font-size:28px}}
+@media (prefers-reduced-motion:reduce){.ev{transition:none}}
 """
 
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -73,12 +109,13 @@ def head(title, desc, path):
 <meta name="description" content="{E(desc)}">
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website">
 <link rel="canonical" href="{SITE}{path}">
-<meta name="theme-color" content="#1f7a43">
+<meta name="theme-color" content="#0b1410">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%231f7a43'/%3E%3Cpolygon points='32,18 44,27 39,41 25,41 20,27' fill='white'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800&family=Barlow:wght@400;600;700&family=Share+Tech+Mono&display=swap">
 <style>{CSS}</style></head><body>
-<div class="top"><div class="in"><a class="logo" href="/">⚽ Tourney Finder</a><a class="btn" href="/add/">+ Add your tournament</a></div></div>
+<div class="top"><div class="in"><a class="logo" href="/">⚽ Tourney<span>Finder</span></a><a class="btn" href="/add/">+ Add your tournament</a></div></div>
+<!--HERO-->
 <div class="wrap">"""
 
 
@@ -127,41 +164,73 @@ def ics(ev):
 
 
 def card(ev):
-    return (f'<a class="ev" href="/t/{ev["slug"]}/" data-sport="{E(ev["sport"])}" data-state="{ev["state"]}" data-month="{ev["month"]}">'
-            f'{date_box(ev)}<div><h3>{E(ev["name"])}</h3><div class="meta"><span>{E(ev["place"])}, {ev["state"]}</span>'
-            f'<span>{E(ev["sport"])}</span><span>{E(ev["ages"])}</span><span class="pill {ev["status"]}">{STATUS[ev["status"]]}</span></div></div></a>')
+    return (f'<a class="ev s-{slugify(ev["sport"])}" href="/t/{ev["slug"]}/" data-sport="{E(ev["sport"])}" data-state="{ev["state"]}" data-month="{ev["month"]}">'
+            f'{date_box(ev)}<div class="body"><span class="tag">{E(ev["sport"])} · {ev["state"]}</span><h3>{E(ev["name"])}</h3><div class="meta"><span>📍 {E(ev["place"])}</span>'
+            f'<span>{E(ev["ages"])}</span></div><div><span class="pill {ev["status"]}">{STATUS[ev["status"]]}</span></div></div></a>')
 
 
 def index(evs):
-    sports = sorted({e["sport"] for e in evs})
-    states = sorted({e["state"] for e in evs})
-    months = sorted({e["month"] for e in evs if e["month"]})
-    opt = lambda vals, lab=lambda v: v: "".join(f'<option value="{E(v)}">{E(lab(v))}</option>' for v in vals)
-    mlab = lambda v: f"{MONTHS[int(v[5:])-1]} {v[:4]}"
+    from collections import Counter
+    sports = Counter(e["sport"] for e in evs)
+    states = Counter(e["state"] for e in evs)
+    mcount = Counter(e["month"] for e in evs if e["month"])
+    allm = []
+    y, m = 2026, 11
+    for _ in range(12):
+        allm.append(f"{y}-{m:02d}")
+        m += 1
+        if m == 13: y, m = y + 1, 1
+    mx = max(mcount.values()) if mcount else 1
+    nxt = next((e for e in evs if e["start"] and e["start"] >= date.today().isoformat()), None)
+    sport_chips = '<button class="chip" type="button" data-f="sport" data-v="" aria-pressed="true">All sports</button>' + "".join(
+        f'<button class="chip s-{slugify(k)}" type="button" data-f="sport" data-v="{E(k)}" aria-pressed="false"><span class="dot"></span>{E(k)} <span class="n">{n}</span></button>'
+        for k, n in sorted(sports.items(), key=lambda x: -x[1]))
+    state_chips = '<button class="chip" type="button" data-f="state" data-v="" aria-pressed="true">All states</button>' + "".join(
+        f'<button class="chip" type="button" data-f="state" data-v="{k}" aria-pressed="false">{k} <span class="n">{n}</span></button>'
+        for k, n in sorted(states.items(), key=lambda x: -x[1]))
+    month_btns = "".join(
+        f'<button class="mo" type="button" data-f="month" data-v="{mo}" aria-pressed="false"{"" if mcount.get(mo) else " disabled"}>'
+        f'<b>{MONTHS[int(mo[5:])-1]}</b><small>{mo[2:4]}</small><i><span style="width:{int(100*mcount.get(mo,0)/mx)}%"></span></i><small>{mcount.get(mo,0) or "–"}</small></button>'
+        for mo in allm)
+    board = ""
+    if nxt:
+        board = (f'<div class="board" id="board" data-start="{nxt["start"]}"><span class="lbl">Next kick-off</span>'
+                 f'<a class="nm" href="/t/{nxt["slug"]}/" style="color:#fff;text-decoration:none">{E(nxt["name"])} · {E(nxt["place"])}</a>'
+                 '<div class="digits"><div><b id="cd">--</b><small>days</small></div><div><b id="ch">--</b><small>hrs</small></div><div><b id="cm">--</b><small>min</small></div><div><b id="cs">--</b><small>sec</small></div></div></div>')
+    hero = f"""<section class="hero"><div class="in"><h1>Find your<br>next tournament</h1>
+<p>Football, futsal, touch and Oztag tournaments across NSW and Queensland. One place, every date, straight to the organiser.</p>{board}</div></section>"""
     s = head("Tourney Finder: football, futsal and junior sports tournaments in NSW and QLD",
-             "Find football, futsal, touch and Oztag tournaments and carnivals in NSW and Queensland. Dates, age groups and official links in one place.", "/")
-    s += f"""<header style="display:grid;gap:10px"><h1>Find your next tournament</h1>
-<p class="muted">Football, futsal and junior sports tournaments in NSW and Queensland, in one place. Every listing links to the organiser's own page.</p></header>
-<div class="filters">
-<label for="fSport">Sport<select id="fSport"><option value="">All sports</option>{opt(sports)}</select></label>
-<label for="fState">State<select id="fState"><option value="">All states</option>{opt(states)}</select></label>
-<label for="fMonth">Month<select id="fMonth"><option value="">Any month</option>{opt(months, mlab)}</select></label>
-</div>
+             "Find football, futsal, touch and Oztag tournaments and carnivals in NSW and Queensland. Dates, age groups and official links in one place.", "/").replace("<!--HERO-->", hero)
+    s += f"""<div class="rowlabel">Pick a month</div><div class="months" id="months">{month_btns}</div>
+<div class="chips" id="sports">{sport_chips}</div>
+<div class="chips" id="states">{state_chips}</div>
 <div class="count" id="count" role="status">{len(evs)} tournaments</div>
 <div class="list" id="list">{''.join(card(e) for e in evs)}</div>
 <div class="cta"><h2>Running a tournament?</h2><p>List it free. Coaches and parents across NSW and Queensland use Tourney Finder to plan their season.</p><a class="button" href="/add/">Add your tournament</a></div>
-<div class="card"><h2>Get new tournaments by email</h2><p class="muted">One short email a month with new tournaments for your sport and state. Free, unsubscribe any time.</p>
+<div class="card"><h2>New tournaments in your inbox</h2><p class="muted">One short email a month with new tournaments for your sport and area. Free, unsubscribe any time.</p>
 <form name="tourney-alerts" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
 <input type="hidden" name="form-name" value="tourney-alerts"><p class="hidden"><label>Leave empty <input name="bot-field"></label></p>
 <input id="aEmail" type="email" name="email" placeholder="Your email" required aria-label="Email">
 <input id="aWhat" type="text" name="interest" placeholder="Sport, age group and area, e.g. U12 football, Brisbane" aria-label="What you're looking for">
 <button type="submit">Send me new tournaments</button></form></div>
 <script>
-(function(){{var s=document.getElementById('fSport'),t=document.getElementById('fState'),m=document.getElementById('fMonth'),c=document.getElementById('count');
+(function(){{
+var f={{sport:'',state:'',month:''}},c=document.getElementById('count');
 var items=[].slice.call(document.querySelectorAll('#list .ev'));
-function run(){{var n=0;items.forEach(function(e){{var ok=(!s.value||e.dataset.sport===s.value)&&(!t.value||e.dataset.state===t.value)&&(!m.value||e.dataset.month===m.value);e.classList.toggle('hidden',!ok);if(ok)n++;}});
+function run(){{var n=0;items.forEach(function(e){{var ok=(!f.sport||e.dataset.sport===f.sport)&&(!f.state||e.dataset.state===f.state)&&(!f.month||e.dataset.month===f.month);e.classList.toggle('hidden',!ok);if(ok)n++;}});
 c.textContent=n+(n===1?' tournament':' tournaments')+(n===0?'. Try another filter, or add one you know about.':'');}}
-[s,t,m].forEach(function(x){{x.addEventListener('change',run);}});}})();
+[].forEach.call(document.querySelectorAll('[data-f]'),function(b){{b.addEventListener('click',function(){{
+var k=b.dataset.f,v=b.dataset.v;if(k==='month'&&f.month===v)v='';f[k]=v;
+[].forEach.call(document.querySelectorAll('[data-f="'+k+'"]'),function(x){{x.setAttribute('aria-pressed',String(x.dataset.v===v&&(k!=='month'||v!=='')));}});
+if(k!=='month'&&v==='')document.querySelector('[data-f="'+k+'"][data-v=""]').setAttribute('aria-pressed','true');
+run();}});}});
+var bd=document.getElementById('board');if(bd){{var t=new Date(bd.dataset.start+'T09:00:00+10:00').getTime();
+function p(x){{return (x<10?'0':'')+x;}}
+function tick(){{var d=Math.max(0,t-Date.now()),s=Math.floor(d/1000);
+document.getElementById('cd').textContent=Math.floor(s/86400);document.getElementById('ch').textContent=p(Math.floor(s%86400/3600));
+document.getElementById('cm').textContent=p(Math.floor(s%3600/60));document.getElementById('cs').textContent=p(s%60);}}
+tick();setInterval(tick,1000);}}
+}})();
 </script>"""
     return s + FOOT
 
@@ -171,7 +240,7 @@ def page(ev):
     yr = "2027" if "2027" in (ev["start"] or ev["month"]) and "2027" not in ev["name"] else ""
     title = f"{ev['name']} {yr}".strip() + f" · {ev['place']}, {st} · Tourney Finder"
     desc = f"{ev['name']} in {ev['place']}, {st}: {when(ev)}. {ev['ages']}. {ev['about']}"[:300]
-    s = head(title, desc, f"/t/{ev['slug']}/")
+    s = head(title, desc, f"/t/{ev['slug']}/").replace("<!--HERO-->", "")
     cal = f'<a class="button" href="/t/{ev["slug"]}/event.ics">Add to calendar</a>' if ev["start"] else ""
     s += f"""<p><a href="/">← All tournaments</a></p>
 <header style="display:grid;gap:10px"><h1 style="font-size:clamp(28px,6vw,40px)">{E(ev['name'])}</h1>
