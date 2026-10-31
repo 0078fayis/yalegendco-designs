@@ -7,7 +7,7 @@ import html, json, os, re, shutil, sys, zipfile
 from datetime import date, datetime
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-SITE = (sys.argv[1] if len(sys.argv) > 1 else "https://tourneyfinder.netlify.app").rstrip("/")
+SITE = (sys.argv[1] if len(sys.argv) > 1 else "https://tourneyfinder-au.netlify.app").rstrip("/")
 DIST = os.path.join(ROOT, "dist")
 E = html.escape
 
