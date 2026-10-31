@@ -1,0 +1,52 @@
+{
+  "state": "NSW",
+  "status": "DRAFT - every rule must be checked against the official page before launch",
+  "checked_on": null,
+  "rules": [
+    {
+      "id": "register",
+      "applies": "all",
+      "text": "List the property on the NSW short-term rental accommodation (STRA) register before advertising, and show its registration number on listings.",
+      "fee_note": "Secondary sources say about A$65 first registration and A$25 yearly renewal.",
+      "official": "https://www.planning.nsw.gov.au/policy-and-legislation/housing/short-term-rental-accommodation",
+      "secondary": ["https://www.fursat.fun/blog/how-to-register-short-term-rental-in-new-south-wales"],
+      "verified": false
+    },
+    {
+      "id": "cap_greater_sydney",
+      "applies": "non_hosted AND region=greater_sydney",
+      "text": "Non-hosted stays are capped at 180 nights in each 12-month period. Bookings of 21 or more nights in a row do not count.",
+      "official": "https://www.planning.nsw.gov.au/policy-and-legislation/housing/short-term-rental-accommodation",
+      "secondary": ["https://www.houst.com/blog/sydney-stra-rules-180-day-cap-registration", "https://www.fursat.fun/blog/how-to-register-short-term-rental-in-new-south-wales"],
+      "verified": false
+    },
+    {
+      "id": "cap_byron",
+      "applies": "non_hosted AND lga=Byron",
+      "text": "Most of Byron Shire has a 60-night cap for non-hosted stays (since September 2024), except mapped precincts.",
+      "secondary": ["https://www.fursat.fun/blog/how-to-register-short-term-rental-in-new-south-wales", "https://pbl.legal/insights/renting-your-strata-apartment-on-airbnb-a-guide-for-strata-landlords/"],
+      "verified": false
+    },
+    {
+      "id": "cap_other_councils",
+      "applies": "non_hosted AND lga in [Ballina, ...]",
+      "text": "Some regional councils, including parts of Ballina, also apply a 180-night cap. Full list to be confirmed.",
+      "verified": false
+    },
+    {
+      "id": "fire_safety",
+      "applies": "non_hosted OR hosted",
+      "text": "The STRA fire safety standard applies (for example smoke alarms and an evacuation diagram). Exact items to be confirmed.",
+      "secondary": ["https://pdclaw.au/nsw-strata-short-term-rental-accommodation-rules/"],
+      "verified": false
+    },
+    {
+      "id": "strata_ban",
+      "applies": "strata",
+      "text": "An owners corporation can pass a by-law banning short stays in lots that are not the host's principal place of residence. It cannot ban short stays where the host lives there.",
+      "official": "https://www.fairtrading.nsw.gov.au/housing-and-property/strata-and-community-living/short-term-rental-accommodation",
+      "secondary": ["https://pbl.legal/insights/renting-your-strata-apartment-on-airbnb-a-guide-for-strata-landlords/"],
+      "verified": false
+    }
+  ]
+}
