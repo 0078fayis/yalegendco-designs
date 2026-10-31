@@ -312,7 +312,7 @@ footer a{color:inherit}
       state.data = j; state.rows = build(j); state.now = nowIndex(state.rows, j);
       setStatus(""); render();
       try { localStorage.setItem("phc_place", JSON.stringify(place)); } catch(e){}
-      try { history.replaceState(null, "", "#" + place.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")); } catch(e){}
+      if (!window.PHC_PLACE) try { history.replaceState(null, "", "#" + place.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")); } catch(e){}
     }).catch(function(){ setStatus("Couldn't load the forecast. Check your connection and try again."); });
   }
 
@@ -359,7 +359,8 @@ footer a{color:inherit}
 
   // Start: suburb from link (#parramatta), else last place, else Sydney.
   var start = null;
-  if (location.hash.length > 1){ var hq = decodeURIComponent(location.hash.slice(1)).replace(/-/g, " "); if (hq !== "your location"){ $("q").value = hq; search(hq); start = true; } }
+  if (window.PHC_PLACE){ load(window.PHC_PLACE); start = true; }
+  else if (location.hash.length > 1){ var hq = decodeURIComponent(location.hash.slice(1)).replace(/-/g, " "); if (hq !== "your location"){ $("q").value = hq; search(hq); start = true; } }
   if (!start){
     var saved = null; try { saved = JSON.parse(localStorage.getItem("phc_place") || "null"); } catch(e){}
     load(saved || { name:"Sydney", label:"Sydney, NSW", lat:-33.868, lon:151.209 });

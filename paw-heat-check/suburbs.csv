@@ -1,0 +1,145 @@
+name,state,lat,lon
+Sydney,NSW,-33.868,151.209
+Parramatta,NSW,-33.815,151.003
+Blacktown,NSW,-33.771,150.906
+Penrith,NSW,-33.751,150.694
+Liverpool,NSW,-33.920,150.924
+Campbelltown,NSW,-34.065,150.814
+Bankstown,NSW,-33.918,151.035
+Chatswood,NSW,-33.797,151.183
+Hornsby,NSW,-33.703,151.099
+Castle Hill,NSW,-33.731,151.004
+Bondi,NSW,-33.891,151.274
+Manly,NSW,-33.797,151.288
+Cronulla,NSW,-34.058,151.152
+Hurstville,NSW,-33.967,151.102
+Ryde,NSW,-33.815,151.103
+Strathfield,NSW,-33.874,151.083
+Auburn,NSW,-33.849,151.033
+Fairfield,NSW,-33.872,150.956
+Rouse Hill,NSW,-33.682,150.915
+Marsden Park,NSW,-33.698,150.836
+Oran Park,NSW,-34.004,150.738
+Kellyville,NSW,-33.713,150.951
+Baulkham Hills,NSW,-33.762,150.987
+Westmead,NSW,-33.807,150.988
+Harris Park,NSW,-33.823,151.008
+Epping,NSW,-33.773,151.082
+Newtown,NSW,-33.897,151.179
+Dee Why,NSW,-33.752,151.286
+Sutherland,NSW,-34.031,151.058
+Wollongong,NSW,-34.425,150.893
+Newcastle,NSW,-32.928,151.781
+Maitland,NSW,-32.733,151.557
+Central Coast,NSW,-33.425,151.342
+Gosford,NSW,-33.425,151.342
+Port Macquarie,NSW,-31.430,152.909
+Coffs Harbour,NSW,-30.296,153.114
+Tamworth,NSW,-31.092,150.932
+Dubbo,NSW,-32.243,148.604
+Wagga Wagga,NSW,-35.118,147.370
+Albury,NSW,-36.081,146.916
+Orange,NSW,-33.284,149.100
+Bathurst,NSW,-33.420,149.578
+Byron Bay,NSW,-28.643,153.612
+Lismore,NSW,-28.813,153.277
+Broken Hill,NSW,-31.953,141.453
+Canberra,ACT,-35.281,149.130
+Belconnen,ACT,-35.238,149.066
+Tuggeranong,ACT,-35.415,149.065
+Gungahlin,ACT,-35.183,149.133
+Melbourne,VIC,-37.814,144.963
+Point Cook,VIC,-37.915,144.751
+Tarneit,VIC,-37.832,144.694
+Werribee,VIC,-37.900,144.661
+Craigieburn,VIC,-37.600,144.940
+Epping VIC,VIC,-37.650,145.030
+Clyde North,VIC,-38.117,145.334
+Cranbourne,VIC,-38.099,145.283
+Berwick,VIC,-38.033,145.350
+Dandenong,VIC,-37.988,145.215
+Glen Waverley,VIC,-37.878,145.164
+Box Hill,VIC,-37.819,145.122
+Frankston,VIC,-38.142,145.126
+St Kilda,VIC,-37.868,144.981
+Brunswick,VIC,-37.767,144.960
+Footscray,VIC,-37.800,144.900
+Sunbury,VIC,-37.577,144.726
+Melton,VIC,-37.684,144.585
+Ringwood,VIC,-37.815,145.229
+Doncaster,VIC,-37.786,145.124
+Geelong,VIC,-38.149,144.361
+Ballarat,VIC,-37.562,143.850
+Bendigo,VIC,-36.757,144.279
+Shepparton,VIC,-36.380,145.400
+Mildura,VIC,-34.185,142.162
+Traralgon,VIC,-38.195,146.540
+Wodonga,VIC,-36.122,146.888
+Warrnambool,VIC,-38.383,142.483
+Brisbane,QLD,-27.470,153.026
+Logan,QLD,-27.639,153.109
+Ipswich,QLD,-27.614,152.759
+Springfield,QLD,-27.653,152.917
+Redcliffe,QLD,-27.230,153.110
+North Lakes,QLD,-27.234,153.019
+Chermside,QLD,-27.385,153.032
+Carindale,QLD,-27.503,153.102
+Indooroopilly,QLD,-27.500,152.973
+Sunnybank,QLD,-27.580,153.060
+Gold Coast,QLD,-28.017,153.400
+Surfers Paradise,QLD,-28.002,153.430
+Southport,QLD,-27.967,153.400
+Coomera,QLD,-27.860,153.330
+Robina,QLD,-28.078,153.384
+Sunshine Coast,QLD,-26.650,153.067
+Caloundra,QLD,-26.800,153.133
+Noosa,QLD,-26.394,153.090
+Toowoomba,QLD,-27.561,151.954
+Townsville,QLD,-19.259,146.817
+Cairns,QLD,-16.918,145.778
+Mackay,QLD,-21.141,149.186
+Rockhampton,QLD,-23.378,150.510
+Bundaberg,QLD,-24.866,152.349
+Hervey Bay,QLD,-25.288,152.841
+Gladstone,QLD,-23.843,151.268
+Mount Isa,QLD,-20.726,139.497
+Perth,WA,-31.952,115.861
+Fremantle,WA,-32.056,115.745
+Joondalup,WA,-31.745,115.766
+Rockingham,WA,-32.281,115.730
+Mandurah,WA,-32.529,115.723
+Midland,WA,-31.888,116.010
+Armadale,WA,-32.153,116.015
+Baldivis,WA,-32.329,115.828
+Ellenbrook,WA,-31.787,115.968
+Scarborough,WA,-31.894,115.757
+Cannington,WA,-32.017,115.935
+Bunbury,WA,-33.327,115.637
+Busselton,WA,-33.652,115.345
+Geraldton,WA,-28.774,114.615
+Kalgoorlie,WA,-30.749,121.466
+Karratha,WA,-20.737,116.846
+Port Hedland,WA,-20.310,118.575
+Broome,WA,-17.962,122.236
+Albany,WA,-35.023,117.884
+Adelaide,SA,-34.929,138.601
+Glenelg,SA,-34.980,138.516
+Salisbury,SA,-34.762,138.640
+Elizabeth,SA,-34.715,138.670
+Mawson Lakes,SA,-34.809,138.609
+Marion,SA,-35.010,138.556
+Modbury,SA,-34.832,138.684
+Mount Barker,SA,-35.067,138.858
+Gawler,SA,-34.598,138.745
+Port Augusta,SA,-32.492,137.766
+Whyalla,SA,-33.033,137.564
+Mount Gambier,SA,-37.829,140.783
+Murray Bridge,SA,-35.120,139.273
+Hobart,TAS,-42.882,147.327
+Launceston,TAS,-41.437,147.139
+Devonport,TAS,-41.177,146.351
+Burnie,TAS,-41.052,145.906
+Darwin,NT,-12.463,130.842
+Palmerston,NT,-12.486,130.983
+Alice Springs,NT,-23.698,133.881
+Katherine,NT,-14.465,132.264
