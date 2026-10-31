@@ -127,6 +127,16 @@ def slugify(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")[:70]
 
 
+GA_ID = os.environ.get("GA_ID", "")
+
+
+def ga():
+    if not GA_ID:
+        return ""
+    return (f'<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>'
+            f"<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','{GA_ID}');</script>\n")
+
+
 def head(title, desc, path):
     return f"""<!doctype html>
 <html lang="en-AU"><head><meta charset="utf-8">
@@ -135,7 +145,7 @@ def head(title, desc, path):
 <meta name="description" content="{E(desc)}">
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website">
 <link rel="canonical" href="{SITE}{path}">
-<meta name="theme-color" content="#070b1f">
+{ga()}<meta name="theme-color" content="#070b1f">
 <meta name="google-site-verification" content="Gwq6BwauJ3oWrqJBQLNV-pmNyu8_st0YB2Ha4SraKXQ" />
 <meta name="google-site-verification" content="moVUIrIGxKMaJrlwkLTXLseoJm8-S9sDBxLsyKo_2r4" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23070b1f'/%3E%3Cpath d='M20 4 34 9v11c0 8-6 13-14 16C12 33 6 28 6 20V9Z' fill='none' stroke='%23c9a54c' stroke-width='2'/%3E%3C/svg%3E">
