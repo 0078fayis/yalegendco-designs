@@ -146,18 +146,21 @@ def ga():
             f"<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','{GA_ID}');</script>\n")
 
 
-def head(title, desc, path):
+def head(title, desc, path, ld=None):
+    ldj = "".join('<script type="application/ld+json">' + json.dumps(x, ensure_ascii=False).replace("</", "<\\/") + "</script>\n" for x in (ld or []))
     return f"""<!doctype html>
 <html lang="en-AU"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
-<meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website">
+<meta property="og:site_name" content="Tourney Finder"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website"><meta property="og:url" content="{SITE}{path}"><meta property="og:image" content="{SITE}/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="en_AU">
+<meta name="twitter:card" content="summary_large_image"><meta name="application-name" content="Tourney Finder"><meta name="apple-mobile-web-app-title" content="Tourney Finder">
 <link rel="canonical" href="{SITE}{path}">
 {ga()}<meta name="theme-color" content="#070b1f">
 <meta name="google-site-verification" content="Gwq6BwauJ3oWrqJBQLNV-pmNyu8_st0YB2Ha4SraKXQ" />
 <meta name="google-site-verification" content="moVUIrIGxKMaJrlwkLTXLseoJm8-S9sDBxLsyKo_2r4" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23070b1f'/%3E%3Cpath d='M20 4 34 9v11c0 8-6 13-14 16C12 33 6 28 6 20V9Z' fill='none' stroke='%23c9a54c' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png"><link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">
+{ldj}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..800&family=Hanken+Grotesk:wght@400;600;700&display=swap">
 <style>{CSS}</style></head><body>
@@ -258,8 +261,8 @@ def index(evs):
     hero = f"""<section class="hero"><div class="in"><span class="eyebrow">The 2026/27 season · NSW &amp; Queensland</span>
 <h1>Every tournament.<br><em>One calendar.</em></h1>
 <p class="lede">Football, futsal, cricket, basketball, AFL, badminton, touch and Oztag tournaments, with dates, age groups and the organiser's official link.</p>{board}</div></section>"""
-    s = head("Tourney Finder: football, futsal and junior sports tournaments in NSW and QLD",
-             "Find football, futsal, cricket, basketball, AFL, touch and Oztag tournaments in NSW and Queensland. Dates, age groups and official links in one place.", "/").replace("<!--HERO-->", hero)
+    s = head("Tourney Finder | Junior Football, Futsal & Sports Tournaments NSW & QLD",
+             "Find football, futsal, cricket, basketball, AFL, touch and Oztag tournaments in NSW and Queensland. Dates, age groups and official links in one place.", "/", ld=SITE_LD).replace("<!--HERO-->", hero)
     groups, cur = [], None
     for e in evs:
         key = e["month"] or "tba"
@@ -303,12 +306,38 @@ tick();setInterval(tick,1000);}}
     return s + FOOT
 
 
+SITE_LD = [
+    {"@context": "https://schema.org", "@type": "WebSite", "name": "Tourney Finder", "alternateName": "TourneyFinder AU",
+     "url": SITE + "/"},
+    {"@context": "https://schema.org", "@type": "Organization", "name": "Tourney Finder", "url": SITE + "/",
+     "logo": SITE + "/logo-512.png"},
+]
+
+
+def event_ld(ev):
+    out = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Tourney Finder", "item": SITE + "/"},
+        {"@type": "ListItem", "position": 2, "name": ev["name"], "item": f"{SITE}/t/{ev['slug']}/"}]}]
+    if ev["start"] and ev["status"] == "confirmed":
+        out.append({"@context": "https://schema.org", "@type": "SportsEvent", "name": ev["name"],
+                    "startDate": ev["start"], "endDate": ev["end"] or ev["start"],
+                    "eventStatus": "https://schema.org/EventScheduled",
+                    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                    "sport": ev["sport"], "description": ev["about"], "url": f"{SITE}/t/{ev['slug']}/",
+                    "image": [SITE + "/og-image.png"],
+                    "location": {"@type": "Place", "name": ev["place"],
+                                 "address": {"@type": "PostalAddress", "addressLocality": ev["place"],
+                                             "addressRegion": ev["state"], "addressCountry": "AU"}},
+                    "organizer": {"@type": "Organization", "name": ev["src_name"], "url": ev["src"]}})
+    return out
+
+
 def page(ev):
     st = ev["state"]
     yr = "2027" if "2027" in (ev["start"] or ev["month"]) and "2027" not in ev["name"] else ""
     title = f"{ev['name']} {yr}".strip() + f" · {ev['place']}, {st} · Tourney Finder"
     desc = f"{ev['name']} in {ev['place']}, {st}: {when(ev)}. {ev['ages']}. {ev['about']}"[:300]
-    s = head(title, desc, f"/t/{ev['slug']}/")
+    s = head(title, desc, f"/t/{ev['slug']}/", ld=event_ld(ev))
     cal = f'<a class="button" href="/t/{ev["slug"]}/event.ics">Add to calendar</a>' if ev["start"] else ""
     lab = {"confirmed": "Dates confirmed", "expected": "Expected, based on last year", "tba": "Dates to be announced"}[ev["status"]]
     hero = f"""<section class="hero"><div class="in"><a class="back" href="/">← All fixtures</a>
@@ -399,6 +428,12 @@ def main():
     w("add/index.html", add_page())
     w("thanks/index.html", thanks())
     w("shop/index.html", shop_page())
+    for f in os.listdir(os.path.join(ROOT, "brand")):
+        shutil.copy(os.path.join(ROOT, "brand", f), os.path.join(DIST, f))
+    w("site.webmanifest", json.dumps({"name": "Tourney Finder", "short_name": "Tourney Finder", "start_url": "/", "display": "standalone",
+                                      "background_color": "#070b1f", "theme_color": "#070b1f",
+                                      "icons": [{"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
+                                                {"src": "/logo-512.png", "sizes": "512x512", "type": "image/png"}]}))
     for f in os.listdir(os.path.join(ROOT, "shop")):
         shutil.copy(os.path.join(ROOT, "shop", f), os.path.join(DIST, "shop", f))
     urls = [f"{SITE}/", f"{SITE}/shop/", f"{SITE}/add/"]
