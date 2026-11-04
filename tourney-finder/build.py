@@ -1,13 +1,13 @@
-"""Tourney Finder: static site of football, futsal and junior sports tournaments (NSW + QLD first).
+"""Carnival Finder: static site of football, futsal and junior sports tournaments (Australia-wide).
 
-Usage: python3 build.py [site_url]  ->  dist/ and tourneyfinder.zip
+Usage: python3 build.py [site_url]  ->  dist/ and carnivalfinder.zip
 Data: events.json (agents update it weekly; organisers add events through the form on /add/).
 """
 import html, json, os, re, shutil, sys, zipfile
 from datetime import date, datetime
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-SITE = (sys.argv[1] if len(sys.argv) > 1 else "https://tourney-finder.netlify.app").rstrip("/")
+SITE = (sys.argv[1] if len(sys.argv) > 1 else "https://carnivalfinder.netlify.app").rstrip("/")
 DIST = os.path.join(ROOT, "dist")
 E = html.escape
 
@@ -16,7 +16,7 @@ CSS = """
 :root{--bg:#070b1f;--bg2:#0c1330;--panel:#101a3d;--panel2:#152150;--ink:#f3efe4;--muted:#a9b0cc;--faint:#6d76a0;--line:rgba(201,165,76,.22);--hair:rgba(243,239,228,.09);
 --gold:#c9a54c;--gold2:#e6c97a;--goldink:#1a1404;
 --ok:#7fd6a4;--exp:#e6c97a;--tba:#a9b0cc;
---football:#2e9e6a;--futsal:#d98b3a;--cricket:#d8cfa8;--basketball:#c8693a;--afl:#c9a54c;--badminton:#9d8ce0;--touch:#5aa9d6;--oztag:#d46a8f;
+--football:#2e9e6a;--futsal:#d98b3a;--cricket:#d8cfa8;--basketball:#c8693a;--afl:#c9a54c;--badminton:#9d8ce0;--touch:#5aa9d6;--oztag:#d46a8f;--rugby-league:#3f8fd8;--rugby-union:#7fb069;--netball:#e07fbf;
 --display:"Archivo",system-ui,sans-serif;--body:"Hanken Grotesk",system-ui,-apple-system,sans-serif;color-scheme:dark}
 *{box-sizing:border-box}html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -92,7 +92,7 @@ h2{font-stretch:125%;font-weight:800;font-size:clamp(24px,4vw,32px);text-transfo
 .st .confirmed{color:var(--ok)}.st .expected{color:var(--exp)}.st .tba{color:var(--tba)}
 .st i{font-style:normal;color:var(--faint);font-size:18px;transition:transform .2s,color .2s}
 .ev:hover .st i{transform:translateX(4px);color:var(--gold2)}
-.s-football{--c:var(--football)}.s-futsal{--c:var(--futsal)}.s-cricket{--c:var(--cricket)}.s-basketball{--c:var(--basketball)}.s-afl{--c:var(--afl)}.s-badminton{--c:var(--badminton)}.s-touch{--c:var(--touch)}.s-oztag{--c:var(--oztag)}
+.s-football{--c:var(--football)}.s-futsal{--c:var(--futsal)}.s-cricket{--c:var(--cricket)}.s-basketball{--c:var(--basketball)}.s-afl{--c:var(--afl)}.s-badminton{--c:var(--badminton)}.s-touch{--c:var(--touch)}.s-oztag{--c:var(--oztag)}.s-rugby-league{--c:var(--rugby-league)}.s-rugby-union{--c:var(--rugby-union)}.s-netball{--c:var(--netball)}
 .panel{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:4px;padding:26px;display:grid;gap:14px}
 .shop{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
 .prod{display:grid;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:10px;text-decoration:none;color:var(--ink);transition:border-color .2s,transform .2s}
@@ -124,7 +124,7 @@ footer{border-top:1px solid var(--line);margin-top:8px}
 footer .in{padding-block:28px 40px;display:grid;gap:8px;font-size:13px;color:var(--faint)}
 :focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
 @media (max-width:640px){.ev{grid-template-columns:58px 1fr;gap:6px 14px}.ev .crest{display:none}.top .in{flex-wrap:nowrap}.brand b{font-size:14px;letter-spacing:.12em}.brand small{letter-spacing:.2em}.navlink{font-size:11px;margin-right:10px;letter-spacing:.08em}.btn-gold{font-size:11px;padding:8px 10px;letter-spacing:.08em;white-space:nowrap}.st{grid-column:2}.date .d{font-size:32px}.digits b{font-size:36px}.digits div{padding:0 12px}.hero .in{padding-block:44px 40px}}
-@media (max-width:420px){.wide{display:none}}
+@media (max-width:420px){.wide{display:none}.brand small{display:none}.brand b{white-space:nowrap;font-size:13px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 """
 
@@ -153,8 +153,8 @@ def head(title, desc, path, ld=None):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
-<meta property="og:site_name" content="Tourney Finder"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website"><meta property="og:url" content="{SITE}{path}"><meta property="og:image" content="{SITE}/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="en_AU">
-<meta name="twitter:card" content="summary_large_image"><meta name="application-name" content="Tourney Finder"><meta name="apple-mobile-web-app-title" content="Tourney Finder">
+<meta property="og:site_name" content="Carnival Finder"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website"><meta property="og:url" content="{SITE}{path}"><meta property="og:image" content="{SITE}/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="en_AU">
+<meta name="twitter:card" content="summary_large_image"><meta name="application-name" content="Carnival Finder"><meta name="apple-mobile-web-app-title" content="Carnival Finder">
 <link rel="canonical" href="{SITE}{path}">
 {ga()}<meta name="theme-color" content="#070b1f">
 <meta name="google-site-verification" content="Gwq6BwauJ3oWrqJBQLNV-pmNyu8_st0YB2Ha4SraKXQ" />
@@ -164,13 +164,13 @@ def head(title, desc, path, ld=None):
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..800&family=Hanken+Grotesk:wght@400;600;700&display=swap">
 <style>{CSS}</style></head><body>
-<header class="top"><div class="in"><a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8Z" fill="none" stroke="#c9a54c" stroke-width="1.5"/><path d="M20 6 32 10.5V20c0 7-5.4 11.8-12 14.2C13.4 31.8 8 27 8 20v-9.5Z" fill="#c9a54c" fill-opacity=".12"/><text x="20" y="24.5" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="800" font-size="11" letter-spacing="1" fill="#e6c97a">TF</text></svg><span><b>Tourney Finder</b><small>NSW · QLD · Season 26/27</small></span></a><span class="hdr-r"><a class="navlink" href="/shop/">Shop</a><a class="btn-gold" href="/add/">List<span class="wide"> a tournament</span></a></span></div></header>
+<header class="top"><div class="in"><a class="brand" href="/"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8Z" fill="none" stroke="#c9a54c" stroke-width="1.5"/><path d="M20 6 32 10.5V20c0 7-5.4 11.8-12 14.2C13.4 31.8 8 27 8 20v-9.5Z" fill="#c9a54c" fill-opacity=".12"/><text x="20" y="24.5" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="800" font-size="11" letter-spacing="1" fill="#e6c97a">CF</text></svg><span><b>Carnival Finder</b><small>Junior sports carnivals &amp; tournaments</small></span></a><span class="hdr-r"><a class="navlink" href="/shop/">Shop</a><a class="btn-gold" href="/add/">List<span class="wide"> a tournament</span></a></span></div></header>
 <!--HERO-->
 <main class="in">"""
 
 
-FOOT = """</main><footer><div class="in"><p>Tourney Finder lists football, futsal, cricket, basketball, AFL, badminton, touch and Oztag tournaments in Australia, starting with NSW and Queensland. Dates come from organisers' own websites. Always confirm with the organiser before you book travel.</p>
-<p>Spotted a mistake or a missing tournament? <a href="/add/">Tell us</a>. © 2026 Tourney Finder · Made in Australia by YaLegendCo.</p></div></footer>
+FOOT = """</main><footer><div class="in"><p>Carnival Finder lists junior and community sports carnivals and tournaments across Australia. Dates come from organisers' own websites. Always confirm with the organiser before you book travel.</p>
+<p>Spotted a mistake or a missing tournament? <a href="/add/">Tell us</a>. © 2026 Carnival Finder · Made in Australia by YaLegendCo.</p></div></footer>
 </body></html>"""
 
 
@@ -184,7 +184,7 @@ def date_box(ev):
     return '<div class="date"><span class="tbc">TBA</span><span class="m">2027</span></div>'
 
 
-ABBR = {"Football": "FB", "Futsal": "FS", "Cricket": "CR", "Basketball": "BB", "AFL": "AFL", "Badminton": "BD", "Touch": "TF", "Oztag": "OZ"}
+ABBR = {"Football": "FB", "Futsal": "FS", "Cricket": "CR", "Basketball": "BB", "AFL": "AFL", "Badminton": "BD", "Touch": "TF", "Oztag": "OZ", "Rugby League": "RL", "Rugby Union": "RU", "Netball": "NB"}
 
 
 def crest(sport):
@@ -216,8 +216,8 @@ def ics(ev):
     a = ev["start"].replace("-", "")
     b = datetime.strptime(ev["end"] or ev["start"], "%Y-%m-%d").date()
     b = date.fromordinal(b.toordinal() + 1).strftime("%Y%m%d")
-    uid = slugify(ev["name"]) + "@tourneyfinder"
-    return ("BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Tourney Finder//EN\r\nBEGIN:VEVENT\r\n"
+    uid = slugify(ev["name"]) + "@carnivalfinder"
+    return ("BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Carnival Finder//EN\r\nBEGIN:VEVENT\r\n"
             f"UID:{uid}\r\nDTSTAMP:{date.today().strftime('%Y%m%d')}T000000Z\r\nDTSTART;VALUE=DATE:{a}\r\nDTEND;VALUE=DATE:{b}\r\n"
             f"SUMMARY:{ev['name']}\r\nLOCATION:{ev['place']}, {ev['state']}\r\nURL:{ev['src']}\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n")
 
@@ -258,11 +258,11 @@ def index(evs):
         board = (f'<div class="next" id="board" data-start="{nxt["start"]}"><span class="eyebrow">Next fixture</span>'
                  f'<a href="/t/{nxt["slug"]}/">{E(nxt["name"])} · {E(nxt["place"])}</a>'
                  '<div class="digits"><div><b id="cd">--</b><small>Days</small></div><div><b id="ch">--</b><small>Hours</small></div><div><b id="cm">--</b><small>Mins</small></div><div><b id="cs">--</b><small>Secs</small></div></div></div>')
-    hero = f"""<section class="hero"><div class="in"><span class="eyebrow">The 2026/27 season · NSW &amp; Queensland</span>
+    hero = f"""<section class="hero"><div class="in"><span class="eyebrow">The 2026/27 season · Australia-wide</span>
 <h1>Every tournament.<br><em>One calendar.</em></h1>
-<p class="lede">Football, futsal, cricket, basketball, AFL, badminton, touch and Oztag tournaments, with dates, age groups and the organiser's official link.</p>{board}</div></section>"""
-    s = head("Tourney Finder | Junior Football, Futsal & Sports Tournaments NSW & QLD",
-             "Find football, futsal, cricket, basketball, AFL, touch and Oztag tournaments in NSW and Queensland. Dates, age groups and official links in one place.", "/", ld=SITE_LD).replace("<!--HERO-->", hero)
+<p class="lede">Junior and community carnivals in football, rugby league, rugby union, AFL, cricket, basketball, netball, touch and more, in every state, with dates, age groups and the organiser's official link.</p>{board}</div></section>"""
+    s = head("Carnival Finder | Junior Sports Carnivals & Tournaments in Australia",
+             "Find junior football, rugby league, AFL, cricket, basketball, netball, touch and Oztag carnivals and tournaments in every Australian state. Dates, age groups and official links in one place.", "/", ld=SITE_LD).replace("<!--HERO-->", hero)
     groups, cur = [], None
     for e in evs:
         key = e["month"] or "tba"
@@ -275,7 +275,7 @@ def index(evs):
 <div class="months" id="months">{month_btns}</div>
 <div class="filters"><div class="seg">{sport_chips}</div><div class="seg">{state_chips}</div></div>
 <div class="list" id="list">{''.join(groups)}</div></section>
-""" + shop_strip(PRODUCTS[:4]) + f"""<div class="split"><div class="panel"><span class="eyebrow">For organisers</span><h2>List your tournament</h2><p class="muted">Free listing for clubs and associations. Coaches and parents across NSW and Queensland use Tourney Finder to plan their season.</p><a class="button" href="/add/" style="justify-self:start">Add a tournament</a></div>
+""" + shop_strip(PRODUCTS[:4]) + f"""<div class="split"><div class="panel"><span class="eyebrow">For organisers</span><h2>List your tournament</h2><p class="muted">Free listing for clubs and associations. Coaches and parents across Australia use Carnival Finder to plan their season.</p><a class="button" href="/add/" style="justify-self:start">Add a tournament</a></div>
 <div class="panel"><span class="eyebrow">Season alerts</span><h2>New fixtures, monthly</h2><p class="muted">One short email a month with new tournaments for your sport and area.</p>
 <form name="tourney-alerts" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
 <input type="hidden" name="form-name" value="tourney-alerts"><p class="hidden"><label>Leave empty <input name="bot-field"></label></p>
@@ -307,16 +307,16 @@ tick();setInterval(tick,1000);}}
 
 
 SITE_LD = [
-    {"@context": "https://schema.org", "@type": "WebSite", "name": "Tourney Finder", "alternateName": "TourneyFinder AU",
+    {"@context": "https://schema.org", "@type": "WebSite", "name": "Carnival Finder", "alternateName": "Carnival Finder Australia",
      "url": SITE + "/"},
-    {"@context": "https://schema.org", "@type": "Organization", "name": "Tourney Finder", "url": SITE + "/",
+    {"@context": "https://schema.org", "@type": "Organization", "name": "Carnival Finder", "url": SITE + "/",
      "logo": SITE + "/logo-512.png"},
 ]
 
 
 def event_ld(ev):
     out = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
-        {"@type": "ListItem", "position": 1, "name": "Tourney Finder", "item": SITE + "/"},
+        {"@type": "ListItem", "position": 1, "name": "Carnival Finder", "item": SITE + "/"},
         {"@type": "ListItem", "position": 2, "name": ev["name"], "item": f"{SITE}/t/{ev['slug']}/"}]}]
     if ev["start"] and ev["status"] == "confirmed":
         out.append({"@context": "https://schema.org", "@type": "SportsEvent", "name": ev["name"],
@@ -335,7 +335,7 @@ def event_ld(ev):
 def page(ev):
     st = ev["state"]
     yr = "2027" if "2027" in (ev["start"] or ev["month"]) and "2027" not in ev["name"] else ""
-    title = f"{ev['name']} {yr}".strip() + f" · {ev['place']}, {st} · Tourney Finder"
+    title = f"{ev['name']} {yr}".strip() + f" · {ev['sport']} · {ev['place']}, {st} | Carnival Finder"
     desc = f"{ev['name']} in {ev['place']}, {st}: {when(ev)}. {ev['ages']}. {ev['about']}"[:300]
     s = head(title, desc, f"/t/{ev['slug']}/", ld=event_ld(ev))
     cal = f'<a class="button" href="/t/{ev["slug"]}/event.ics">Add to calendar</a>' if ev["start"] else ""
@@ -378,7 +378,7 @@ def shop_strip(items, title="The Clubhouse Shop"):
 
 
 def shop_page():
-    s = head("Shop · Tourney Finder", "Sports tees for tournament weekends, sideline parents and players. Free delivery in Australia.", "/shop/").replace("<!--HERO-->", """<section class="hero"><div class="in"><a class="back" href="/">← All fixtures</a><span class="eyebrow">The Clubhouse Shop</span><h1 style="font-size:clamp(34px,7vw,64px)">Gear for the<br><em>long weekend</em></h1>
+    s = head("Shop · Carnival Finder", "Sports tees for tournament weekends, sideline parents and players. Free delivery in Australia.", "/shop/").replace("<!--HERO-->", """<section class="hero"><div class="in"><a class="back" href="/">← All fixtures</a><span class="eyebrow">The Clubhouse Shop</span><h1 style="font-size:clamp(34px,7vw,64px)">Gear for the<br><em>long weekend</em></h1>
 <p class="lede">Tees for tournament weekends, sideline parents and players. Free delivery in Australia, sizes S to 3XL.</p></div></section>""")
     s += '<section style="display:grid;gap:18px"><div class="sechead"><h2>Tees</h2></div>' + shop_grid(PRODUCTS) + "</section>\n"
     s += """<div class="panel" style="max-width:720px"><span class="eyebrow">For teams</span><h2>Custom tour shirts</h2><p class="muted">Heading to a tournament? Get matching shirts with your team name on the front and player names and numbers on the back. Minimum 10 shirts. Tell us what you need and we'll send a design and quote.</p>
@@ -394,7 +394,7 @@ def shop_page():
 
 
 def add_page():
-    s = head("Add your tournament · Tourney Finder", "List your football, futsal or junior sports tournament free on Tourney Finder.", "/add/").replace("<!--HERO-->", """<section class="hero"><div class="in"><a class="back" href="/">← All fixtures</a><span class="eyebrow">For organisers</span><h1 style="font-size:clamp(34px,7vw,64px)">List your<br><em>tournament</em></h1>
+    s = head("Add your tournament · Carnival Finder", "List your football, futsal or junior sports tournament free on Carnival Finder.", "/add/").replace("<!--HERO-->", """<section class="hero"><div class="in"><a class="back" href="/">← All fixtures</a><span class="eyebrow">For organisers</span><h1 style="font-size:clamp(34px,7vw,64px)">List your<br><em>tournament</em></h1>
 <p class="lede">Free for clubs, associations and organisers. We check every entry and usually publish within a few days.</p></div></section>""")
     s += """<div class="panel" style="max-width:720px"><form name="add-tournament" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
 <input type="hidden" name="form-name" value="add-tournament"><p class="hidden"><label>Leave empty <input name="bot-field"></label></p>
@@ -412,7 +412,7 @@ def add_page():
 
 
 def thanks():
-    s = head("Thanks · Tourney Finder", "Thanks for your submission.", "/thanks/").replace("<!--HERO-->", """<section class="hero"><div class="in"><span class="eyebrow">Received</span><h1>Thank <em>you</em></h1><p class="lede">We've got it. New tournaments are usually live within a few days.</p><a class="button" href="/" style="justify-self:start">Back to all fixtures</a></div></section>""")
+    s = head("Thanks · Carnival Finder", "Thanks for your submission.", "/thanks/").replace("<!--HERO-->", """<section class="hero"><div class="in"><span class="eyebrow">Received</span><h1>Thank <em>you</em></h1><p class="lede">We've got it. New tournaments are usually live within a few days.</p><a class="button" href="/" style="justify-self:start">Back to all fixtures</a></div></section>""")
     return s + FOOT
 
 
@@ -430,7 +430,7 @@ def main():
     w("shop/index.html", shop_page())
     for f in os.listdir(os.path.join(ROOT, "brand")):
         shutil.copy(os.path.join(ROOT, "brand", f), os.path.join(DIST, f))
-    w("site.webmanifest", json.dumps({"name": "Tourney Finder", "short_name": "Tourney Finder", "start_url": "/", "display": "standalone",
+    w("site.webmanifest", json.dumps({"name": "Carnival Finder", "short_name": "Carnival Finder", "start_url": "/", "display": "standalone",
                                       "background_color": "#070b1f", "theme_color": "#070b1f",
                                       "icons": [{"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
                                                 {"src": "/logo-512.png", "sizes": "512x512", "type": "image/png"}]}))
@@ -447,7 +447,7 @@ def main():
       + "".join(f"<url><loc>{u}</loc><lastmod>{today}</lastmod></url>" for u in urls) + "</urlset>")
     w("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
     w("_headers", "/*.ics\n  Content-Type: text/calendar; charset=utf-8\n")
-    zp = os.path.join(ROOT, "tourneyfinder.zip")
+    zp = os.path.join(ROOT, "carnivalfinder.zip")
     if os.path.exists(zp):
         os.remove(zp)
     with zipfile.ZipFile(zp, "w", zipfile.ZIP_DEFLATED) as z:
