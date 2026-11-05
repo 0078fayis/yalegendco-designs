@@ -45,13 +45,24 @@
       grid.appendChild(a);
     });
 
-    var active=-1, ticking=false, vw=0, teew=0;
-    function size(){ vw=stage.clientWidth; var rh=ring.clientHeight; teew=Math.max(130,Math.min(vw*0.46,340,rh*0.66)); stage.style.setProperty('--yl-teew',teew+'px'); }
-    function frame(){
-      ticking=false;
-      var r=show.getBoundingClientRect(), span=show.offsetHeight-stage.offsetHeight;
-      var p=span>0?Math.min(1,Math.max(0,-r.top/span)):0;
-      var pos=p*(n-1), R=Math.min(vw*0.62,560);
+    var active=-1, vw=0, teew=0, pos=0, target=0, auto=false, lastAct=0, hint=root.querySelector('.yl-hint');
+    var still=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    // Embedded viewers (some app previews) grow the frame to the page height, so the page never scrolls.
+    // Then the rack spins by itself and can be swiped instead.
+    function detect(){
+      var tall=window.innerHeight>Math.max(screen.height||0,900)*1.25;
+      if(tall!==auto){ auto=tall; root.classList.toggle('yl--auto',auto); if(hint) hint.textContent=auto?'Swipe or tap the arrows':'Scroll to spin the rack'; }
+    }
+    function size(){ detect(); vw=stage.clientWidth; var rh=ring.clientHeight; teew=Math.max(130,Math.min(vw*0.46,340,rh*0.66)); stage.style.setProperty('--yl-teew',teew+'px'); }
+    function scrollP(){ var r=show.getBoundingClientRect(), span=show.offsetHeight-stage.offsetHeight; return span>0?Math.min(1,Math.max(0,-r.top/span)):0; }
+    function go(d){ lastAct=Date.now();
+      var k=Math.max(0,Math.min(n-1,Math.round(target)+d));
+      if(auto){ target=k; return; }
+      var span=show.offsetHeight-stage.offsetHeight, top=show.getBoundingClientRect().top+window.scrollY;
+      window.scrollTo({top:top+span*k/(n-1)+1,behavior:still?'auto':'smooth'});
+    }
+    function render(){
+      var p=pos/(n-1), R=Math.min(vw*0.62,560);
       stage.style.setProperty('--yl-p',p);
       items.forEach(function(el,i){
         var rel=i-pos, a=rel*0.62, ab=Math.abs(rel);
@@ -70,10 +81,21 @@
         items.forEach(function(el,i){el.tabIndex=i===k?0:-1});
       }
     }
-    function req(){ if(!ticking){ticking=true;requestAnimationFrame(frame)} }
-    size(); frame();
-    window.addEventListener('scroll',req,{passive:true});
-    window.addEventListener('resize',function(){size();req()});
+    function loop(){
+      if(auto){
+        if(!still && Date.now()-lastAct>3200){ lastAct=Date.now(); target=Math.round(target)+1; if(target>n-1) target=0; }
+      } else target=scrollP()*(n-1);
+      var d=target-pos; pos=Math.abs(d)<0.001?target:pos+d*(still?1:0.12);
+      render(); requestAnimationFrame(loop);
+    }
+    // swipe (auto mode) and arrow buttons (both modes)
+    var sx=null;
+    stage.addEventListener('touchstart',function(e){ if(auto) sx=e.touches[0].clientX },{passive:true});
+    stage.addEventListener('touchend',function(e){ if(sx===null) return; var dx=e.changedTouches[0].clientX-sx; sx=null; if(Math.abs(dx)>30) go(dx<0?1:-1) },{passive:true});
+    var pv=root.querySelector('.yl-prev'), nx=root.querySelector('.yl-next');
+    if(pv) pv.addEventListener('click',function(){go(-1)}); if(nx) nx.addEventListener('click',function(){go(1)});
+    size(); target=auto?0:scrollP()*(n-1); pos=target; lastAct=Date.now(); render(); requestAnimationFrame(loop);
+    window.addEventListener('resize',size);
   }
   function boot(){ document.querySelectorAll('.yl').forEach(function(r){ if(!r.dataset.ylReady){r.dataset.ylReady=1;init(r)} }) }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();

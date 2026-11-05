@@ -94,5 +94,10 @@
 .yl-end .yl-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .yl-foot{font-family:var(--yl-mono);font-size:11px;color:var(--yl-mute);letter-spacing:.08em;text-align:center;padding-block:0 32px}
 
+.yl-ctrl{display:flex;align-items:center;gap:12px}
+.yl-nav{width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;font-size:22px;line-height:1;color:var(--yl-ink);background:rgba(244,239,228,.08);box-shadow:inset 0 0 0 1px rgba(244,239,228,.2);transition:background .2s ease}
+.yl-nav:hover{background:rgba(244,239,228,.16)}
+.yl--auto .yl-show{height:auto}
+.yl--auto .yl-stage{position:relative;height:min(760px,calc(100vw * 1.9));min-height:600px}
 @media (min-width:800px){.yl-show{height:600vh}.yl-head{top:16%}}
 @media (prefers-reduced-motion:reduce){.yl-float,.yl-shadow,.yl-strip div{animation:none}.yl-card,.yl-card .yl-cardtee{transition:none}}

@@ -43,7 +43,7 @@ def body(data_json, first, n, eyebrow, h1a, h1b, btn, shop, range_on=True):
         <p class="yl-name" aria-live="polite">{first['name']}</p>
         <p class="yl-tag">{first['tag']}</p>
         <div class="yl-bar"><i></i></div>
-        <a class="yl-btn yl-buy" href="{first['url']}">{btn} &rarr;</a>
+        <div class="yl-ctrl"><button type="button" class="yl-nav yl-prev" aria-label="Previous tee">&lsaquo;</button><a class="yl-btn yl-buy" href="{first['url']}">{btn} &rarr;</a><button type="button" class="yl-nav yl-next" aria-label="Next tee">&rsaquo;</button></div>
         <span class="yl-hint">Scroll to spin the rack</span>
       </div>
     </div>
