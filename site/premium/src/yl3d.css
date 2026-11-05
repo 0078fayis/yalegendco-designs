@@ -1,0 +1,98 @@
+/* YaLegendCo floating-tee showcase. Night stage, summer-sun gold, one gradient "heat line". */
+.yl{
+  --yl-night:#0a0c11; --yl-night-2:#12151d; --yl-ink:#f4efe4; --yl-mute:#8e95a3;
+  --yl-gold:#f2b544; --yl-red:#e2453c; --yl-sea:#4fb3d9; --yl-accent:#f2b544;
+  --yl-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --yl-body:"Figtree","Segoe UI",Roboto,sans-serif;
+  --yl-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  background:var(--yl-night); color:var(--yl-ink); font-family:var(--yl-body);
+  overflow-x:clip; -webkit-font-smoothing:antialiased;
+}
+.yl *{box-sizing:border-box}
+.yl a{color:inherit}
+.yl :focus-visible{outline:2px solid var(--yl-gold);outline-offset:3px;border-radius:4px}
+.yl-wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.yl-eyebrow{font-family:var(--yl-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--yl-mute)}
+
+/* ---------- scroll show ---------- */
+.yl-show{position:relative;height:520vh}
+.yl-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
+  display:grid;grid-template-rows:auto 1fr auto;isolation:isolate}
+.yl-stage::before{content:"";position:absolute;inset:-20% -10% auto;height:90%;z-index:-2;
+  background:radial-gradient(50% 55% at 50% 30%,color-mix(in srgb,var(--yl-accent) 26%,transparent),transparent 70%);
+  transition:background .8s ease}
+.yl-stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;z-index:-1;
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.03) 55%,rgba(255,255,255,.06))}
+.yl-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-top:calc(18px + env(safe-area-inset-top,0px))}
+.yl-brand{font-family:var(--yl-display);font-weight:800;font-size:22px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none}
+.yl-brand b{color:var(--yl-gold)}
+.yl-count{font-family:var(--yl-mono);font-size:12px;color:var(--yl-mute);font-variant-numeric:tabular-nums}
+.yl-count strong{color:var(--yl-ink);font-weight:500}
+.yl-head{position:absolute;left:0;right:0;top:12%;text-align:center;pointer-events:none;z-index:0}
+.yl-head h1{margin:8px 0 0;font-family:var(--yl-display);font-weight:900;text-transform:uppercase;
+  font-size:clamp(54px,15vw,190px);line-height:.82;letter-spacing:-.01em;text-wrap:balance;
+  color:transparent;-webkit-text-stroke:1px rgba(244,239,228,.22)}
+.yl-head h1 span{display:block;color:rgba(244,239,228,.07);-webkit-text-stroke:0}
+
+.yl-ring{position:relative;perspective:1100px;perspective-origin:50% 40%}
+.yl-tee{position:absolute;left:50%;top:50%;width:var(--yl-teew);margin-left:calc(var(--yl-teew)/-2);margin-top:calc(var(--yl-teew)*-0.62);
+  transform-style:preserve-3d;will-change:transform,opacity;text-decoration:none}
+.yl-float{animation:yl-bob 5.5s ease-in-out infinite;animation-delay:var(--yl-d,0s)}
+.yl-tee svg{display:block;width:100%;height:auto;overflow:visible}
+.yl-shadow{position:absolute;left:12%;right:12%;bottom:-16%;height:9%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(0,0,0,.75),transparent);animation:yl-shadow 5.5s ease-in-out infinite;animation-delay:var(--yl-d,0s)}
+@keyframes yl-bob{0%,100%{transform:translateY(0) rotateZ(-1.5deg) rotateY(-6deg)}50%{transform:translateY(-4%) rotateZ(1.5deg) rotateY(6deg)}}
+@keyframes yl-shadow{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(.82);opacity:.55}}
+
+.yl-plinth{position:absolute;left:50%;top:calc(50% + var(--yl-teew)*.5);width:calc(var(--yl-teew)*1.5);aspect-ratio:5/1;transform:translateX(-50%);z-index:-1;border-radius:50%;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--yl-accent) 30%,transparent),transparent);
+  box-shadow:0 0 0 1px rgba(255,255,255,.05) inset;transition:background .8s ease}
+
+.yl-cap{text-align:center;padding-bottom:calc(22px + env(safe-area-inset-bottom,0px));display:grid;justify-items:center;gap:10px;z-index:2}
+.yl-name{margin:0;font-family:var(--yl-display);font-weight:900;text-transform:uppercase;font-size:clamp(34px,8.5vw,68px);line-height:.9;letter-spacing:.01em;text-wrap:balance;min-height:1.8em;display:flex;align-items:flex-end;justify-content:center}
+.yl-tag{margin:0;color:var(--yl-mute);font-size:15px;min-height:1.4em}
+.yl-bar{width:min(320px,70vw);height:2px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+.yl-bar i{display:block;height:100%;width:100%;transform-origin:left;transform:scaleX(var(--yl-p,0));
+  background:linear-gradient(90deg,var(--yl-red),var(--yl-gold) 50%,var(--yl-sea))}
+.yl-hint{font-family:var(--yl-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--yl-mute)}
+.yl-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;
+  background:var(--yl-ink);color:var(--yl-night)!important;transition:transform .2s ease,background .2s ease}
+.yl-btn:hover{transform:translateY(-2px);background:var(--yl-gold)}
+.yl-btn--ghost{background:transparent;color:var(--yl-ink)!important;box-shadow:inset 0 0 0 1px rgba(244,239,228,.3)}
+.yl-btn--ghost:hover{background:rgba(244,239,228,.08)}
+
+/* ---------- marquee ---------- */
+.yl-strip{border-block:1px solid rgba(255,255,255,.08);overflow:hidden;padding-block:16px;white-space:nowrap}
+.yl-strip div{display:inline-flex;gap:40px;padding-right:40px;font-family:var(--yl-display);font-weight:800;font-size:clamp(22px,4vw,34px);text-transform:uppercase;animation:yl-marq 28s linear infinite}
+.yl-strip span:nth-child(3n+2){color:var(--yl-gold)}
+.yl-strip span:nth-child(3n){color:transparent;-webkit-text-stroke:1px var(--yl-ink)}
+@keyframes yl-marq{to{transform:translateX(-100%)}}
+
+/* ---------- range grid ---------- */
+.yl-range{padding-block:72px 40px;max-width:1180px;margin-inline:auto}
+.yl-range h2,.yl-end h2{margin:8px 0 0;font-family:var(--yl-display);font-weight:900;text-transform:uppercase;font-size:clamp(40px,9vw,88px);line-height:.88;text-wrap:balance}
+.yl-range p.yl-lede{max-width:46ch;color:var(--yl-mute);font-size:16px;line-height:1.55;margin:14px 0 0}
+.yl-grid{margin-top:36px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,165px),1fr));gap:18px}
+.yl-card{position:relative;display:grid;gap:10px;padding:clamp(14px,3vw,22px);align-content:start;border-radius:22px;text-decoration:none;
+  background:linear-gradient(180deg,var(--yl-night-2),#0d1016);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+  transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease,box-shadow .25s ease}
+.yl-card:hover{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 55%,transparent),0 24px 60px -30px var(--c)}
+.yl-card .yl-cardtee{width:78%;margin:0 auto;transform:translateZ(30px);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.yl-card:hover .yl-cardtee{transform:translateY(-6px) scale(1.04)}
+.yl-card h3{margin:0;font-family:var(--yl-display);font-weight:800;font-size:clamp(20px,5vw,26px);text-transform:uppercase;line-height:1}
+.yl-card p{margin:0;color:var(--yl-mute);font-size:14px}
+.yl-card .yl-meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--yl-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--yl-mute)}
+.yl-card .yl-meta b{color:var(--c);font-weight:500}
+
+/* ---------- facts + end ---------- */
+.yl-facts{max-width:1180px;margin-inline:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:1px;background:rgba(255,255,255,.08);border-radius:18px;overflow:hidden}
+.yl-facts div{background:var(--yl-night);padding:24px 22px;display:grid;gap:6px}
+.yl-facts strong{font-family:var(--yl-display);font-size:30px;font-weight:800;text-transform:uppercase;line-height:1}
+.yl-facts span{color:var(--yl-mute);font-size:14px;line-height:1.5}
+.yl-end{text-align:center;padding-block:90px 70px;display:grid;justify-items:center;gap:18px}
+.yl-end h2 em{font-style:normal;color:var(--yl-gold)}
+.yl-end .yl-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.yl-foot{font-family:var(--yl-mono);font-size:11px;color:var(--yl-mute);letter-spacing:.08em;text-align:center;padding-block:0 32px}
+
+@media (min-width:800px){.yl-show{height:600vh}.yl-head{top:16%}}
+@media (prefers-reduced-motion:reduce){.yl-float,.yl-shadow,.yl-strip div{animation:none}.yl-card,.yl-card .yl-cardtee{transition:none}}
