@@ -73,19 +73,17 @@ nav a{text-decoration:none;color:var(--mute)} nav a:hover{color:var(--ink)}
 .looks-head p{margin:10px 0 0;color:var(--mute);max-width:40ch}
 .look-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:28px;margin-top:30px;align-items:start}
 @media (max-width:860px){.look-layout{grid-template-columns:minmax(0,1fr)}}
-.reel{display:flex;gap:4px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-block:10px 18px;border-radius:24px;
+.reel{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-block:10px 18px;border-radius:24px;
   background:radial-gradient(80% 70% at 50% 40%,#fbfbfc,#e6e8ec)}
 .reel::-webkit-scrollbar{display:none}
-.look{flex:0 0 46%;scroll-snap-align:center;display:grid;justify-items:center;gap:6px;border:0;background:none;padding:18px 0 8px;cursor:pointer;
-  opacity:.45;transform:scale(.88);transition:opacity .35s,transform .35s}
-.look:first-child{margin-left:27%}.look:last-child{margin-right:27%}
-.look.on{opacity:1;transform:scale(1)}
-@media (max-width:640px){.look{flex-basis:62%}.look:first-child{margin-left:19%}.look:last-child{margin-right:19%}}
-.fig{position:relative;width:min(220px,100%)}
-.fig .top{position:relative;z-index:2;width:100%}
-.fig .bottom{position:relative;z-index:1;width:76%;margin:-18% auto 0}
-.fig svg{display:block;width:100%;height:auto;filter:drop-shadow(0 14px 16px rgba(18,19,23,.18))}
-.fig::after{content:"";display:block;width:70%;height:14px;margin:6px auto 0;border-radius:50%;background:radial-gradient(closest-side,rgba(18,19,23,.22),transparent)}
+.look{flex:0 0 24%;scroll-snap-align:center;display:grid;justify-items:center;gap:6px;border:0;background:none;padding:18px 0 8px;cursor:pointer;
+  opacity:.38;filter:blur(.6px);transform:scale(.9);transition:opacity .4s,transform .4s,filter .4s}
+.look:first-child{margin-left:38%}.look:last-child{margin-right:38%}
+.look.on{opacity:1;filter:none;transform:scale(1)}
+@media (max-width:900px){.look{flex-basis:34%}.look:first-child{margin-left:33%}.look:last-child{margin-right:33%}}
+@media (max-width:640px){.look{flex-basis:50%}.look:first-child{margin-left:25%}.look:last-child{margin-right:25%}}
+.fig{position:relative;width:100%}
+.fig svg.model{display:block;width:100%;height:auto;overflow:visible}
 .pin{position:absolute;z-index:3;width:22px;height:22px;border-radius:50%;border:0;background:rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(18,19,23,.25);cursor:pointer;padding:0}
 .pin::after{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--ink)}
 .look-name{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
@@ -136,10 +134,10 @@ form .pill{background:#fff;color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.item .sway{animation:none}.look,.card .ph svg,.toast{transition:none}}
 </style>
 
-<div class="concept">CONCEPT PREVIEW · WORKING NAME · EXAMPLE PRODUCTS AND PRICES</div>
+<div class="concept">CONCEPT PREVIEW · WORKING NAME · ILLUSTRATED MODELS (PHOTOS TO COME) · EXAMPLE PRICES</div>
 <div class="wrap"><header>
   <a class="logo" href="#top">KORA</a>
-  <nav aria-label="Main"><a href="#rail">New in</a><a href="#looks">Try the look</a><a href="#fabric">Fabric</a><a href="#shop">Shop all</a></nav>
+  <nav aria-label="Main"><a href="#rail">New in</a><a href="#looks">Shop the look</a><a href="#fabric">Fabric</a><a href="#shop">Shop all</a></nav>
   <button class="bag" type="button" id="bag">Bag <b id="bagn">0</b></button>
 </header></div>
 
@@ -159,7 +157,7 @@ form .pill{background:#fff;color:var(--ink)}
 <div class="wrap"><div class="facts"><span>Free delivery in Australia</span><span>280 gsm cotton</span><span>Sizes XS to 3XL</span><span>Made in Tiruppur</span></div></div>
 
 <section class="looks wrap" id="looks" aria-labelledby="looks-h">
-  <div class="looks-head"><div><span class="label">Five looks, head to toe</span><h2 id="looks-h">Try the look.</h2><p>Swipe through the looks. Tap an outfit to see its back, tap a pin to see the piece, or add the whole outfit in one go.</p></div></div>
+  <div class="looks-head"><div><span class="label">Six looks, head to toe</span><h2 id="looks-h">Shop the Look.</h2><p>Six looks, styled head to toe. Tap a pin to see the piece, or add the whole outfit in one go.</p></div></div>
   <div class="look-layout">
     <div class="reel" id="reel"></div>
     <aside class="panel" aria-live="polite">
@@ -228,6 +226,35 @@ var P=[
 function by(id){for(var i=0;i<P.length;i++) if(P[i].id===id) return P[i]}
 function draw(p){return SHAPES[p.type](C[p.c])}
 function drawBack(p){return SHAPES[p.type](C[p.c],true)}
+/* Illustrated model: a person wearing top + bottom. look = {skin,hair,hairStyle,h} */
+var SKIN={fair:'#f1d2bd',olive:'#d9a97f',tan:'#b97a52',deep:'#6b4330',brown:'#8d5a3b'};
+var HAIR={black:'#1b1a1f',brown:'#4a2f22',dark:'#2a2320',blonde:'#b99462'};
+function modelSVG(l){
+  var top=by(l.top), bot=by(l.bottom), tc=C[top.c], bc=C[bot.c], sk=SKIN[l.skin]||SKIN.olive, hr=HAIR[l.hair]||HAIR.black, id='m'+(uid++);
+  var dk=isDark(tc), hood=top.type==='hoodie', crew=top.type==='crew';
+  var hairPath = l.hairStyle==='curly' ? '<path d="M112 66 Q104 20 150 18 Q196 20 188 66 Q186 86 176 92 Q172 60 150 56 Q128 60 124 92 Q114 86 112 66 Z" fill="'+hr+'"/><circle cx="118" cy="52" r="10" fill="'+hr+'"/><circle cx="182" cy="52" r="10" fill="'+hr+'"/><circle cx="150" cy="26" r="11" fill="'+hr+'"/>'
+    : l.hairStyle==='locs' ? '<path d="M112 70 Q106 22 150 18 Q194 22 188 70 L186 120 Q180 128 176 118 L178 76 Q166 60 150 58 Q134 60 122 76 L124 118 Q120 128 114 120 Z" fill="'+hr+'"/>'
+    : l.hairStyle==='buzz' ? '<path d="M114 70 Q110 28 150 26 Q190 28 186 70 Q172 58 150 58 Q128 58 114 70 Z" fill="'+hr+'"/>'
+    : '<path d="M112 72 Q106 22 150 20 Q194 22 188 72 Q184 60 160 56 Q150 72 130 62 Q118 60 112 72 Z" fill="'+hr+'"/>';
+  var shoes='<path d="M92 702 L146 702 L148 728 Q148 740 134 742 L92 742 Q74 742 76 726 Q78 712 92 702 Z" fill="#f6f4f0" stroke="#000" stroke-opacity=".16" stroke-width="2"/><path d="M208 702 L154 702 L152 728 Q152 740 166 742 L208 742 Q226 742 224 726 Q222 712 208 702 Z" fill="#f6f4f0" stroke="#000" stroke-opacity=".16" stroke-width="2"/><path d="M76 734 L148 734 M152 734 L224 734" stroke="#b9b7b2" stroke-width="5"/><path d="M98 712 Q116 720 140 712 M202 712 Q184 720 160 712" fill="none" stroke="#000" stroke-opacity=".12" stroke-width="2"/>';
+  // wide-leg pants from waist (y 400) to ankle (y 712)
+  var pants='<path d="M96 396 L204 396 L224 704 Q224 716 212 716 L158 716 L150 480 L142 716 L88 716 Q76 716 76 704 Z" fill="'+bc+'"/><path d="M96 396 L204 396 L224 704 Q224 716 212 716 L158 716 L150 480 L142 716 L88 716 Q76 716 76 704 Z" fill="url(#'+id+'p)"/><path d="M112 430 Q106 560 100 690 M188 430 Q194 560 200 690" fill="none" stroke="#000" stroke-opacity=".08" stroke-width="7" stroke-linecap="round"/>';
+  // boxy top: dropped shoulders, long sleeves to wrists at pockets (hands in pockets)
+  var topBody='M70 232 Q76 196 110 182 L128 172 Q150 190 172 172 L190 182 Q224 196 230 232 L246 330 Q250 350 236 352 L212 352 L214 406 Q214 416 202 416 L98 416 Q86 416 86 406 L88 352 L64 352 Q50 350 54 330 Z';
+  var topSvg='<path d="'+topBody+'" fill="'+tc+'"/><path d="'+topBody+'" fill="url(#'+id+'t)"/>'+
+    (hood?'<path d="M118 176 Q116 150 150 148 Q184 150 182 176 Q166 170 150 172 Q134 170 118 176 Z" fill="'+tc+'"/><path d="M118 176 Q116 150 150 148 Q184 150 182 176 Q166 170 150 172 Q134 170 118 176 Z" fill="#000" fill-opacity=".22"/><path d="M140 196 L138 250 M160 196 L162 250" stroke="'+(dk?'#d9d6cf':'#fff')+'" stroke-opacity=".8" stroke-width="3" stroke-linecap="round"/><path d="M112 330 L188 330 L196 384 L104 384 Z" fill="#000" fill-opacity=".07" stroke="#000" stroke-opacity=".15" stroke-width="2"/>'
+         :crew?'<path d="M128 172 Q150 192 172 172" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="9" stroke-linecap="round"/>'
+         :'<path d="M128 172 Q150 190 172 172" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="6" stroke-linecap="round"/>')+
+    '<path d="M86 404 L214 404" stroke="#000" stroke-opacity=".12" stroke-width="3"/><path d="M64 352 L88 352 M212 352 L236 352" stroke="#000" stroke-opacity=".15" stroke-width="3"/>';
+  return '<svg class="model" viewBox="0 0 300 760" aria-hidden="true"><defs>'+
+    '<linearGradient id="'+id+'t" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset=".3" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#fff" stop-opacity="'+(dk?.08:.16)+'"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient>'+
+    '<linearGradient id="'+id+'p" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".25"/><stop offset=".3" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#000" stop-opacity=".28"/></linearGradient></defs>'+
+    '<ellipse cx="150" cy="746" rx="100" ry="11" fill="#000" fill-opacity=".14"/>'+
+    '<path d="M136 120 L136 176 L164 176 L164 120 Z" fill="'+sk+'"/><path d="M136 150 Q150 164 164 150 L164 176 L136 176 Z" fill="#000" fill-opacity=".12"/>'+
+    '<ellipse cx="150" cy="86" rx="36" ry="44" fill="'+sk+'"/>'+hairPath+
+    '<path d="M136 92 Q140 96 144 92 M156 92 Q160 96 164 92" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="2.4" stroke-linecap="round"/><path d="M144 112 Q150 116 156 112" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="2" stroke-linecap="round"/>'+
+    pants+topSvg+shoes+'</svg>';
+}
 function twoSided(p){return '<div class="turn"><div class="face front">'+draw(p)+'</div><div class="face back">'+drawBack(p)+'</div></div>'}
 function flip(el){el.classList.toggle('flipped');return el.classList.contains('flipped')}
 var money=function(n){return 'A$'+n.toFixed(2)};
@@ -278,25 +305,26 @@ size();render();requestAnimationFrame(loop);addEventListener('resize',function()
 
 /* ---------- try the look ---------- */
 var LOOKS=[
- {name:'Studio Day',top:'coal-hoodie',bottom:'sand-pant'},
- {name:'Market Run',top:'bone-tee',bottom:'coal-pant'},
- {name:'Late Arvo',top:'olive-crew',bottom:'coal-pant'},
- {name:'Sunday Slow',top:'sky-tee',bottom:'sand-pant'},
- {name:'Night Shift',top:'rust-hoodie',bottom:'coal-pant'}
+ {name:'Studio Day',top:'coal-hoodie',bottom:'sand-pant',skin:'olive',hair:'black',hairStyle:'short'},
+ {name:'Market Run',top:'bone-tee',bottom:'coal-pant',skin:'deep',hair:'black',hairStyle:'locs'},
+ {name:'Late Arvo',top:'olive-crew',bottom:'coal-pant',skin:'fair',hair:'brown',hairStyle:'curly'},
+ {name:'Sunday Slow',top:'sky-tee',bottom:'sand-pant',skin:'tan',hair:'dark',hairStyle:'buzz'},
+ {name:'Night Shift',top:'rust-hoodie',bottom:'coal-pant',skin:'brown',hair:'black',hairStyle:'short'},
+ {name:'City Edit',top:'coal-tee',bottom:'sand-pant',skin:'fair',hair:'blonde',hairStyle:'curly'}
 ];
 var reel=document.getElementById('reel'), cur=0, lookEls=[];
 LOOKS.forEach(function(l,i){var b=document.createElement('div');b.className='look';b.setAttribute('role','group');b.setAttribute('aria-label','Look '+(i+1)+': '+l.name);
-  b.innerHTML='<div class="fig"><div class="top">'+twoSided(by(l.top))+'</div><div class="bottom">'+twoSided(by(l.bottom))+'</div>'+
-   '<button class="pin" type="button" style="left:62%;top:22%" aria-label="Show '+by(l.top).name+'" data-piece="0"></button>'+
-   '<button class="pin" type="button" style="left:36%;top:70%" aria-label="Show '+by(l.bottom).name+'" data-piece="1"></button></div>'+
+  b.innerHTML='<div class="fig">'+modelSVG(l)+
+   '<button class="pin" type="button" style="left:64%;top:36%" aria-label="Show '+by(l.top).name+'" data-piece="0"></button>'+
+   '<button class="pin" type="button" style="left:34%;top:72%" aria-label="Show '+by(l.bottom).name+'" data-piece="1"></button></div>'+
    '<div class="look-name">'+String(i+1).padStart(2,'0')+' · '+l.name+'</div>';
-  b.addEventListener('click',function(e){var pin=e.target.closest('.pin'); if(i!==cur){center(i);return;} if(pin){setLook(i);hl(+pin.dataset.piece)} else flip(b)});
+  b.addEventListener('click',function(e){var pin=e.target.closest('.pin'); if(i!==cur){center(i);return;} if(pin){setLook(i);hl(+pin.dataset.piece)}});
   reel.appendChild(b);lookEls.push(b)});
 function center(i){var el=lookEls[i];reel.scrollTo({left:el.offsetLeft-(reel.clientWidth-el.offsetWidth)/2,behavior:still?'auto':'smooth'})}
 function hl(k){var rows=document.querySelectorAll('.piece');rows.forEach(function(r,j){r.classList.toggle('hl',j===k)});setTimeout(function(){rows.forEach(function(r){r.classList.remove('hl')})},1600)}
 function setLook(i){cur=i;var l=LOOKS[i],items=[by(l.top),by(l.bottom)];
   lookEls.forEach(function(e,j){e.classList.toggle('on',j===i)});
-  document.getElementById('lk-no').textContent='Look '+String(i+1).padStart(2,'0')+' of '+String(LOOKS.length).padStart(2,'0');
+  document.getElementById('lk-no').textContent='In this look · '+String(i+1).padStart(2,'0')+' / '+String(LOOKS.length).padStart(2,'0');
   document.getElementById('lk-name').textContent=l.name;
   document.getElementById('pieces').innerHTML=items.map(function(p,j){return '<div class="piece"><div class="thumb">'+draw(p)+'</div><div><small>'+(j?'Bottom':'Top')+'</small><strong>'+p.name+'</strong></div><div style="display:flex;gap:10px;align-items:center"><span class="pr">'+money(p.price)+'</span><button class="add" type="button" data-id="'+p.id+'" aria-label="Add '+p.name+'">+</button></div></div>'}).join('');
   var sum=items[0].price+items[1].price; document.getElementById('lk-total').textContent=money(sum*.9);
