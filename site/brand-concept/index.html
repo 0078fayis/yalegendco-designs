@@ -46,6 +46,15 @@ nav a{text-decoration:none;color:var(--mute)} nav a:hover{color:var(--ink)}
 .item .garment{filter:drop-shadow(0 16px 18px rgba(18,19,23,.22))}
 .item .hanger{width:56%;margin:0 auto -6%;position:relative;z-index:1}
 @keyframes sway{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.4deg)}}
+.stage{perspective:1200px}
+.item .turn{transform-style:preserve-3d;transform-origin:50% 40%}
+.item.spin .turn{animation:spin 1.3s cubic-bezier(.3,.7,.2,1) 1}
+.item.spin .sway{animation-play-state:paused}
+.fig{perspective:900px}
+.fig .turn{transform-style:preserve-3d;transform-origin:50% 45%}
+.look.spin .turn{animation:spin 1.3s cubic-bezier(.3,.7,.2,1) 1}
+@keyframes spin{from{transform:rotateY(0)}50%{filter:brightness(.72)}to{transform:rotateY(360deg)}}
+.tip{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-top:12px}
 .hero-cap{display:grid;justify-items:center;gap:4px;padding-bottom:28px;text-align:center}
 .hero-cap .name{font-weight:600;font-size:17px;min-height:1.5em}
 .hero-cap .price{font-family:var(--mono);font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
@@ -144,12 +153,13 @@ form .pill{background:#fff;color:var(--ink)}
     <div class="price" id="pprice"></div>
     <div class="ctrl"><button class="arrow" type="button" id="prev" aria-label="Previous piece">&#8249;</button><button class="pill" type="button" id="view">View product</button><button class="arrow" type="button" id="next" aria-label="Next piece">&#8250;</button></div>
     <div class="dots" id="dots" aria-hidden="true"></div>
+    <div class="tip">Tap the piece to turn it · swipe to browse</div>
   </div>
 </section>
 <div class="wrap"><div class="facts"><span>Free delivery in Australia</span><span>280 gsm cotton</span><span>Sizes XS to 3XL</span><span>Made in Tiruppur</span></div></div>
 
 <section class="looks wrap" id="looks" aria-labelledby="looks-h">
-  <div class="looks-head"><div><span class="label">Five looks, head to toe</span><h2 id="looks-h">Try the look.</h2><p>Swipe through the looks. Tap a pin to see the piece, or add the whole outfit in one go.</p></div></div>
+  <div class="looks-head"><div><span class="label">Five looks, head to toe</span><h2 id="looks-h">Try the look.</h2><p>Swipe through the looks. Tap an outfit to turn it, tap a pin to see the piece, or add the whole outfit in one go.</p></div></div>
   <div class="look-layout">
     <div class="reel" id="reel"></div>
     <aside class="panel" aria-live="polite">
@@ -217,6 +227,7 @@ var P=[
 function by(id){for(var i=0;i<P.length;i++) if(P[i].id===id) return P[i]}
 function draw(p){return SHAPES[p.type](C[p.c])}
 var money=function(n){return 'A$'+n.toFixed(2)};
+function spin(el){ if(el.classList.contains('spin')) return; el.classList.add('spin'); setTimeout(function(){el.classList.remove('spin')},1350); }
 var bagN=0, toastT;
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show')},1800)}
 function addBag(n,msg){bagN+=n;document.getElementById('bagn').textContent=bagN;toast(msg)}
@@ -228,8 +239,8 @@ var still=matchMedia('(prefers-reduced-motion:reduce)').matches;
 var rail=document.createElementNS('http://www.w3.org/2000/svg','svg'); rail.setAttribute('class','railbar'); stage.appendChild(rail);
 var dots=document.getElementById('dots');
 P.forEach(function(p,i){var b=document.createElement('button');b.type='button';b.className='item';b.setAttribute('aria-label',p.name);
-  b.innerHTML='<div class="sway" style="animation-delay:'+(-i*.9)+'s">'+HANGER+draw(p)+'</div>';
-  b.addEventListener('click',function(){ if(Math.round(target)===i) addBag(1,p.name+' added to bag'); else go(i-Math.round(target)); });
+  b.innerHTML='<div class="sway" style="animation-delay:'+(-i*.9)+'s"><div class="turn">'+HANGER+draw(p)+'</div></div>';
+  b.addEventListener('click',function(){ if(Math.round(target)===i) spin(b); else go(i-Math.round(target)); });
   stage.appendChild(b); items.push(b); dots.appendChild(document.createElement('i'));});
 function railY(x){var u=Math.min(1,Math.abs(x)/(W/2));return 26+gw*.08*(1-u*u)}
 function size(){W=stage.clientWidth; gw=Math.min(W*.4,260,stage.clientHeight*.52);
@@ -251,10 +262,12 @@ function loop(){ if(!still && Date.now()-last>4200){last=Date.now();target=Math.
 document.getElementById('prev').onclick=function(){go(-1)};document.getElementById('next').onclick=function(){go(1)};
 document.getElementById('view').onclick=function(){var p=P[Math.round(target)];addBag(1,p.name+' added to bag')};
 var sx=null,spos=0;
-stage.addEventListener('pointerdown',function(e){sx=e.clientX;spos=target;stage.setPointerCapture&&stage.setPointerCapture(e.pointerId)});
-stage.addEventListener('pointermove',function(e){if(sx===null)return;var dx=e.clientX-sx;if(Math.abs(dx)>4){target=Math.max(0,Math.min(n-1,spos-dx/(gw*.8)));last=Date.now()}});
+var dragged=false;
+stage.addEventListener('pointerdown',function(e){sx=e.clientX;spos=target;dragged=false});
+window.addEventListener('pointermove',function(e){if(sx===null)return;var dx=e.clientX-sx;if(Math.abs(dx)>6){dragged=true;target=Math.max(0,Math.min(n-1,spos-dx/(gw*.8)));last=Date.now()}});
 function up(){if(sx===null)return;sx=null;target=Math.round(target)}
-stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
+window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);
+stage.addEventListener('click',function(e){if(dragged){e.stopPropagation();e.preventDefault()}},true);
 stage.addEventListener('keydown',function(e){if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1)});
 size();render();requestAnimationFrame(loop);addEventListener('resize',function(){size()});
 
@@ -268,11 +281,11 @@ var LOOKS=[
 ];
 var reel=document.getElementById('reel'), cur=0, lookEls=[];
 LOOKS.forEach(function(l,i){var b=document.createElement('div');b.className='look';b.setAttribute('role','group');b.setAttribute('aria-label','Look '+(i+1)+': '+l.name);
-  b.innerHTML='<div class="fig"><div class="top">'+draw(by(l.top))+'</div><div class="bottom">'+draw(by(l.bottom))+'</div>'+
+  b.innerHTML='<div class="fig"><div class="turn"><div class="top">'+draw(by(l.top))+'</div><div class="bottom">'+draw(by(l.bottom))+'</div></div>'+
    '<button class="pin" type="button" style="left:62%;top:22%" aria-label="Show '+by(l.top).name+'" data-piece="0"></button>'+
    '<button class="pin" type="button" style="left:36%;top:70%" aria-label="Show '+by(l.bottom).name+'" data-piece="1"></button></div>'+
    '<div class="look-name">'+String(i+1).padStart(2,'0')+' · '+l.name+'</div>';
-  b.addEventListener('click',function(e){var pin=e.target.closest('.pin'); if(i!==cur){center(i);} if(pin){setLook(i);hl(+pin.dataset.piece)}});
+  b.addEventListener('click',function(e){var pin=e.target.closest('.pin'); if(i!==cur){center(i);return;} if(pin){setLook(i);hl(+pin.dataset.piece)} else spin(b)});
   reel.appendChild(b);lookEls.push(b)});
 function center(i){var el=lookEls[i];reel.scrollTo({left:el.offsetLeft-(reel.clientWidth-el.offsetWidth)/2,behavior:still?'auto':'smooth'})}
 function hl(k){var rows=document.querySelectorAll('.piece');rows.forEach(function(r,j){r.classList.toggle('hl',j===k)});setTimeout(function(){rows.forEach(function(r){r.classList.remove('hl')})},1600)}
