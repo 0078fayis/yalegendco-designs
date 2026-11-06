@@ -19,7 +19,7 @@ for t in TEES: t['url'] = ETSY
 FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Figtree:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">'
 MARQ = ''.join(f'<span>{w}</span>' for w in ['Aussie Christmas','Printed on demand','Free delivery in Australia','Sizes S to 3XL','Bin chickens welcome','Thongs optional'])
 
-def body(data_json, first, n, eyebrow, h1a, h1b, btn, shop, range_on=True):
+def body(data_json, first, n, eyebrow, h1a, h1b, btn, shop, range_on=True, cls='yl'):
     rng = f'''
   <section class="yl-range yl-wrap" aria-labelledby="yl-range-h">
     <div class="yl-eyebrow">The summer Christmas range</div>
@@ -32,7 +32,7 @@ def body(data_json, first, n, eyebrow, h1a, h1b, btn, shop, range_on=True):
     <div><strong>Free AU delivery</strong><span>No delivery fee anywhere in Australia.</span></div>
     <div><strong>S to 3XL</strong><span>Unisex fit, with roomy 2XL and 3XL sizes.</span></div>
   </div></div>''' if range_on else ''
-    return f'''<div class="yl">
+    return f'''<div class="{cls}">
   <script type="application/json" class="yl-data">{data_json}</script>
   <section class="yl-show" aria-label="Featured tees">
     <div class="yl-stage">
@@ -68,6 +68,11 @@ page = f'''<title>YaLegendCo Floating Tees</title>
 <script>{js}</script>
 '''
 (H/'index.html').write_text(page)
+rail = page.replace('<title>YaLegendCo Floating Tees</title>','<title>YaLegendCo Tee Rail</title>').replace(
+  body(json.dumps(TEES), TEES[0], len(TEES), 'Summer Christmas 2026', 'Aussie', 'Christmas', 'Shop this tee', ETSY),
+  body(json.dumps(TEES), TEES[0], len(TEES), 'Summer Christmas 2026', 'Aussie', 'Christmas', 'View tee', ETSY, cls='yl yl--rail')).replace(
+  'color-scheme:dark;background:#0a0c11}} body{{background:#0a0c11','x').replace(':root{color-scheme:dark;background:#0a0c11} body{background:#0a0c11;margin:0}',':root{color-scheme:light;background:#e9ebef} body{background:#e9ebef;margin:0}')
+(H/'rail.html').write_text(rail)
 
 # ---------- Shopify section ----------
 liquid = '''{%- comment -%} YaLegendCo floating tees. Add via Customize > Add section > "Floating tees (3D)". {%- endcomment -%}
@@ -90,7 +95,7 @@ liquid = '''{%- comment -%} YaLegendCo floating tees. Add via Customize > Add se
 '''
 b = body('{{ yl_json }}', dict(name='{{ first.settings.name | escape }}', tag='{{ first.settings.tagline | escape }}', url='{{ first.settings.link | default: routes.all_products_collection_url }}'),
          0, '{{ section.settings.eyebrow | escape }}', '{{ section.settings.headline_1 | escape }}', '{{ section.settings.headline_2 | escape }}',
-         '{{ section.settings.button | escape }}', '{{ routes.all_products_collection_url }}', range_on=True)
+         '{{ section.settings.button | escape }}', '{{ routes.all_products_collection_url }}', range_on=True, cls='yl{% if section.settings.style == "rail" %} yl--rail{% endif %}')
 b = b.replace('<span class="yl-tot">00</span>', '<span class="yl-tot">{{ section.blocks.size }}</span>')
 b = b.replace('<div class="yl-grid"></div>', '<div class="yl-grid"></div>').replace(
   '<section class="yl-range', '{%- if section.settings.show_range -%}<section class="yl-range').replace(
@@ -103,6 +108,7 @@ liquid += '''
   "tag": "section",
   "class": "yl-section",
   "settings": [
+    {"type":"select","id":"style","label":"Style","options":[{"value":"dark","label":"Dark spotlight (tees float)"},{"value":"rail","label":"Light studio (tees on a rail)"}],"default":"dark"},
     {"type":"text","id":"eyebrow","label":"Small heading","default":"Summer Christmas 2026"},
     {"type":"text","id":"headline_1","label":"Big background word 1","default":"Aussie"},
     {"type":"text","id":"headline_2","label":"Big background word 2","default":"Christmas"},

@@ -29,9 +29,12 @@
         cur=root.querySelector('.yl-cur'), tot=root.querySelector('.yl-tot'), buy=root.querySelector('.yl-buy'),
         grid=root.querySelector('.yl-grid');
     if(tot) tot.textContent=String(n).padStart(2,'0');
+    var rail=root.classList.contains('yl--rail'), railSvg=null;
+    var HANGER='<svg class="yl-hanger" viewBox="0 0 400 120" aria-hidden="true"><path d="M200 70 L200 46 Q200 36 210 32 Q222 26 220 14 Q216 2 202 2 Q190 3 188 14" fill="none" stroke="#9aa0aa" stroke-width="7" stroke-linecap="round"/><path d="M200 70 L52 112 Q40 116 52 118 L348 118 Q360 116 348 112 Z" fill="#c9a77c" stroke="#a88758" stroke-width="3"/></svg>';
+    if(rail){ railSvg=document.createElementNS('http://www.w3.org/2000/svg','svg'); railSvg.setAttribute('class','yl-railbar'); railSvg.setAttribute('aria-hidden','true'); ring.appendChild(railSvg); }
     var items=tees.map(function(t,i){
       var a=document.createElement('a'); a.className='yl-tee'; a.href=t.url||'#'; a.tabIndex=-1;
-      a.innerHTML='<div class="yl-float" style="--yl-d:'+(-i*0.8)+'s">'+teeSVG(t)+'<div class="yl-shadow" style="--yl-d:'+(-i*0.8)+'s"></div></div>';
+      a.innerHTML='<div class="yl-float" style="--yl-d:'+(-i*0.8)+'s">'+(rail?HANGER:'')+teeSVG(t)+'<div class="yl-shadow" style="--yl-d:'+(-i*0.8)+'s"></div></div>';
       ring.appendChild(a); return a;
     });
     if(grid) tees.forEach(function(t){
@@ -53,7 +56,16 @@
       var tall=window.innerHeight>Math.max(screen.height||0,900)*1.25;
       if(tall!==auto){ auto=tall; root.classList.toggle('yl--auto',auto); if(hint) hint.textContent=auto?'Swipe or tap the arrows':'Scroll to spin the rack'; }
     }
-    function size(){ detect(); vw=stage.clientWidth; var rh=ring.clientHeight; teew=Math.max(130,Math.min(vw*0.46,340,rh*0.66)); stage.style.setProperty('--yl-teew',teew+'px'); }
+    function size(){ detect(); vw=stage.clientWidth; var rh=ring.clientHeight; teew=Math.max(130,Math.min(vw*(rail?0.56:0.46),rail?320:340,rh*(rail?0.62:0.66))); stage.style.setProperty('--yl-teew',teew+'px'); if(rail) drawRail(); }
+    // rail mode: hooks sit on a bowed chrome rail; the rail dips toward the viewer in the middle
+    function railY(x){ var W=Math.max(vw,1)/2, u=Math.min(1,Math.abs(x)/W); return Math.max(ring.clientHeight*0.05,(ring.clientHeight-teew*1.42)*0.42)+teew*0.09*(1-u*u); }
+    function drawRail(){
+      var w=ring.clientWidth, pts=[]; for(var i=0;i<=40;i++){ var x=-w/2+w*i/40*1; pts.push((x+w/2).toFixed(1)+','+railY(x).toFixed(1)); }
+      railSvg.setAttribute('viewBox','0 0 '+w+' '+ring.clientHeight); railSvg.setAttribute('width',w); railSvg.setAttribute('height',ring.clientHeight);
+      railSvg.innerHTML='<defs><linearGradient id="ylchrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#b9bec7"/><stop offset=".55" stop-color="#7d838d"/><stop offset="1" stop-color="#e4e7ec"/></linearGradient></defs>'+
+        '<polyline points="'+pts.join(' ')+'" fill="none" stroke="rgba(0,0,0,.12)" stroke-width="9" stroke-linecap="round" transform="translate(0,6)"/>'+
+        '<polyline points="'+pts.join(' ')+'" fill="none" stroke="url(#ylchrome)" stroke-width="8" stroke-linecap="round"/>';
+    }
     function scrollP(){ var r=show.getBoundingClientRect(), span=show.offsetHeight-stage.offsetHeight; return span>0?Math.min(1,Math.max(0,-r.top/span)):0; }
     function go(d){ lastAct=Date.now();
       var k=Math.max(0,Math.min(n-1,Math.round(target)+d));
@@ -64,6 +76,14 @@
     function render(){
       var p=pos/(n-1), R=Math.min(vw*0.62,560);
       stage.style.setProperty('--yl-p',p);
+      if(rail){ items.forEach(function(el,i){
+        var rel=i-pos, ab=Math.abs(rel), sp=teew*(vw<600?0.62:0.78);
+        var x=rel*sp*(1-Math.min(ab,3)*0.08), s=Math.max(0.42,1-ab*0.3), hy=railY(x);
+        var ry=Math.max(-50,Math.min(50,-rel*26));
+        el.style.transform='translate3d('+x.toFixed(1)+'px,'+hy.toFixed(1)+'px,0) rotateY('+ry.toFixed(1)+'deg) scale('+s.toFixed(3)+')';
+        el.style.opacity=ab>3.4?0:Math.max(0.2,1-ab*0.22).toFixed(3);
+        el.style.zIndex=100-Math.round(ab*10);
+      }); } else
       items.forEach(function(el,i){
         var rel=i-pos, a=rel*0.62, ab=Math.abs(rel);
         var x=Math.sin(a)*R, z=(Math.cos(a)-1)*R*1.1 - ab*40, y=ab*ab*6;

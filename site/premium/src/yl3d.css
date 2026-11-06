@@ -72,7 +72,7 @@
 .yl-range{padding-block:72px 40px;max-width:1180px;margin-inline:auto}
 .yl-range h2,.yl-end h2{margin:8px 0 0;font-family:var(--yl-display);font-weight:900;text-transform:uppercase;font-size:clamp(40px,9vw,88px);line-height:.88;text-wrap:balance}
 .yl-range p.yl-lede{max-width:46ch;color:var(--yl-mute);font-size:16px;line-height:1.55;margin:14px 0 0}
-.yl-grid{margin-top:36px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,165px),1fr));gap:18px}
+.yl-grid{margin-top:36px;display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(150px,22%,400px),1fr));gap:18px}
 .yl-card{position:relative;display:grid;gap:10px;padding:clamp(14px,3vw,22px);align-content:start;border-radius:22px;text-decoration:none;
   background:linear-gradient(180deg,var(--yl-night-2),#0d1016);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
   transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease,box-shadow .25s ease}
@@ -101,3 +101,27 @@
 .yl--auto .yl-stage{position:relative;height:min(760px,calc(100vw * 1.9));min-height:600px}
 @media (min-width:800px){.yl-show{height:600vh}.yl-head{top:16%}}
 @media (prefers-reduced-motion:reduce){.yl-float,.yl-shadow,.yl-strip div{animation:none}.yl-card,.yl-card .yl-cardtee{transition:none}}
+
+/* ---------- rail style: light studio, tees on hangers along a chrome rail ---------- */
+.yl--rail{--yl-night:#e9ebef;--yl-night-2:#ffffff;--yl-ink:#14161b;--yl-mute:#6b7079;
+  background:radial-gradient(120% 70% at 50% 35%,#fbfbfc,#e3e6eb 70%,#d6dae1)}
+.yl--rail .yl-stage::before{background:radial-gradient(45% 40% at 50% 45%,color-mix(in srgb,var(--yl-accent) 14%,transparent),transparent 70%)}
+.yl--rail .yl-stage::after{background:linear-gradient(180deg,transparent,rgba(20,22,27,.035) 60%,rgba(20,22,27,.07))}
+.yl--rail .yl-head{display:none}
+.yl--rail .yl-tee{top:0;margin-top:0;transform-origin:50% 0}
+.yl--rail .yl-float{transform-origin:50% 0;animation-name:yl-sway}
+.yl--rail .yl-hanger{display:block;width:62%;margin:0 auto -9%;position:relative;z-index:1}
+.yl--rail .yl-tee svg:not(.yl-hanger){filter:drop-shadow(0 18px 22px rgba(20,22,27,.28))}
+.yl--rail .yl-shadow{bottom:-10%;background:radial-gradient(closest-side,rgba(20,22,27,.28),transparent)}
+.yl--rail .yl-railbar{position:absolute;left:0;top:0;pointer-events:none}
+.yl--rail .yl-plinth{display:none}
+.yl--rail .yl-btn{background:var(--yl-ink);color:#fff!important}
+.yl--rail .yl-btn:hover{background:#2b2f38}
+.yl--rail .yl-nav{color:var(--yl-ink);background:#fff;box-shadow:0 4px 14px rgba(20,22,27,.12)}
+.yl--rail .yl-strip{border-color:rgba(20,22,27,.1)}
+.yl--rail .yl-strip span:nth-child(3n+2){color:#b07a1e}
+.yl--rail .yl-card{background:#fff;box-shadow:0 1px 0 rgba(20,22,27,.06),0 10px 30px -18px rgba(20,22,27,.35)}
+.yl--rail .yl-facts{background:rgba(20,22,27,.1)}
+.yl--rail .yl-facts div{background:#f4f5f7}
+.yl--rail .yl-end h2 em{color:#b07a1e}
+@keyframes yl-sway{0%,100%{transform:rotateZ(-1.6deg)}50%{transform:rotateZ(1.6deg)}}
