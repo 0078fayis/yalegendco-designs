@@ -73,6 +73,16 @@ nav a{text-decoration:none;color:var(--mute)} nav a:hover{color:var(--ink)}
 .looks-head p{margin:10px 0 0;color:var(--mute);max-width:40ch}
 .look-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:28px;margin-top:30px;align-items:start}
 @media (max-width:860px){.look-layout{grid-template-columns:minmax(0,1fr)}}
+.reelwrap{position:relative}
+.reel-arrow{position:absolute;top:44%;z-index:3;background:rgba(255,255,255,.92);color:var(--ink);box-shadow:0 4px 14px rgba(18,19,23,.15)}
+.reel-arrow.prev{left:10px}.reel-arrow.next{right:10px}
+.reel-bar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);width:120px;height:2px;background:rgba(18,19,23,.12);border-radius:2px;overflow:hidden}
+.reel-bar i{display:block;height:100%;width:0;background:var(--ink)}
+.reel.dragging{cursor:grabbing;scroll-snap-type:none}
+.reel.dragging .look{pointer-events:none}
+.reel{cursor:grab}
+.look .fig{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.look.on .fig{transform:translateY(-6px)}
 .reel{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-block:10px 18px;border-radius:24px;
   background:radial-gradient(80% 70% at 50% 40%,#fbfbfc,#e6e8ec)}
 .reel::-webkit-scrollbar{display:none}
@@ -96,6 +106,12 @@ nav a{text-decoration:none;color:var(--mute)} nav a:hover{color:var(--ink)}
 .piece.hl{background:#f3f4f6}
 .piece .thumb{width:64px;height:64px;border-radius:14px;background:#f1f2f4;display:grid;place-items:center}
 .piece .thumb svg{width:44px;height:auto}
+.crop{display:block;width:100%;height:100%;overflow:hidden;border-radius:inherit}
+.crop img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.9)}
+.piece .thumb{overflow:hidden}
+.card .ph .crop{border-radius:20px}
+.card .ph .crop img{transform:scale(1.2);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.card:hover .ph .crop img{transform:scale(1.26)}
 .piece small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
 .piece strong{font-weight:600;font-size:15px}
 .piece .pr{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
@@ -162,7 +178,10 @@ form .pill{background:#fff;color:var(--ink)}
 <section class="looks wrap" id="looks" aria-labelledby="looks-h">
   <div class="looks-head"><div><span class="label">Six looks, head to toe</span><h2 id="looks-h">Shop the Look.</h2><p>Six looks, styled head to toe. Tap a pin to see the piece, or add the whole outfit in one go.</p></div></div>
   <div class="look-layout">
-    <div class="reel" id="reel"></div>
+    <div class="reelwrap"><div class="reel" id="reel"></div>
+      <button class="arrow reel-arrow prev" type="button" id="lkprev" aria-label="Previous look">&#8249;</button>
+      <button class="arrow reel-arrow next" type="button" id="lknext" aria-label="Next look">&#8250;</button>
+      <div class="reel-bar" aria-hidden="true"><i id="lkbar"></i></div></div>
     <aside class="panel" aria-live="polite">
       <div><span class="label" id="lk-no"></span><h3 id="lk-name"></h3></div>
       <div id="pieces"></div>
@@ -262,6 +281,9 @@ function modelSVG(l){
     '<path d="M136 92 Q140 96 144 92 M156 92 Q160 96 164 92" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="2.4" stroke-linecap="round"/><path d="M144 112 Q150 116 156 112" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="2" stroke-linecap="round"/>'+
     pants+topSvg+shoes+'</svg>';
 }
+function lookOf(p){for(var i=0;i<LOOKS.length;i++) if(LOOKS[i].top===p.id||LOOKS[i].bottom===p.id) return LOOKS[i]; return null}
+function photoCrop(p,cls){var l=lookOf(p); if(!l||!l.img) return draw(p); var isTop=l.top===p.id;
+  return '<span class="crop '+(cls||'')+'"><img src="'+l.img+'" alt="" style="object-position:50% '+(isTop?'22%':'78%')+'"></span>'}
 function twoSided(p){return '<div class="turn"><div class="face front">'+draw(p)+'</div><div class="face back">'+drawBack(p)+'</div></div>'}
 function flip(el){el.classList.toggle('flipped');return el.classList.contains('flipped')}
 var money=function(n){return 'A$'+n.toFixed(2)};
@@ -334,7 +356,7 @@ function setLook(i){cur=i;var l=LOOKS[i],items=[by(l.top),by(l.bottom)];
   lookEls.forEach(function(e,j){e.classList.toggle('on',j===i)});
   document.getElementById('lk-no').textContent='In this look · '+String(i+1).padStart(2,'0')+' / '+String(LOOKS.length).padStart(2,'0');
   document.getElementById('lk-name').textContent=l.name;
-  document.getElementById('pieces').innerHTML=items.map(function(p,j){return '<div class="piece"><div class="thumb">'+draw(p)+'</div><div><small>'+(j?'Bottom':'Top')+'</small><strong>'+p.name+'</strong></div><div style="display:flex;gap:10px;align-items:center"><span class="pr">'+money(p.price)+'</span><button class="add" type="button" data-id="'+p.id+'" aria-label="Add '+p.name+'">+</button></div></div>'}).join('');
+  document.getElementById('pieces').innerHTML=items.map(function(p,j){return '<div class="piece"><div class="thumb">'+photoCrop(p)+'</div><div><small>'+(j?'Bottom':'Top')+'</small><strong>'+p.name+'</strong></div><div style="display:flex;gap:10px;align-items:center"><span class="pr">'+money(p.price)+'</span><button class="add" type="button" data-id="'+p.id+'" aria-label="Add '+p.name+'">+</button></div></div>'}).join('');
   var sum=items[0].price+items[1].price; document.getElementById('lk-total').textContent=money(sum*.9);
   document.getElementById('addlook').textContent='Add full look · '+money(sum*.9);}
 document.getElementById('pieces').addEventListener('click',function(e){var b=e.target.closest('.add');if(b)addBag(1,by(b.dataset.id).name+' added to bag')});
@@ -342,11 +364,27 @@ document.getElementById('addlook').addEventListener('click',function(){addBag(2,
 var rt;reel.addEventListener('scroll',function(){clearTimeout(rt);rt=setTimeout(function(){var mid=reel.scrollLeft+reel.clientWidth/2,best=0,bd=1e9;
   lookEls.forEach(function(e,j){var d=Math.abs(e.offsetLeft+e.offsetWidth/2-mid);if(d<bd){bd=d;best=j}}); if(best!==cur) setLook(best)},90)},{passive:true});
 setLook(0);
+var lkLast=Date.now(), lkStill=matchMedia('(prefers-reduced-motion:reduce)').matches, lkBar=document.getElementById('lkbar');
+function lkGo(d){lkLast=Date.now();center((cur+d+LOOKS.length)%LOOKS.length)}
+document.getElementById('lkprev').onclick=function(){lkGo(-1)};document.getElementById('lknext').onclick=function(){lkGo(1)};
+reel.addEventListener('pointerdown',function(){lkLast=Date.now()},{passive:true});
+reel.addEventListener('touchstart',function(){lkLast=Date.now()},{passive:true});
+(function tick(){ var el=Date.now()-lkLast, period=4500;
+  if(lkBar) lkBar.style.width=Math.min(100,el/period*100)+'%';
+  if(!lkStill && el>period){ var r=reel.getBoundingClientRect(); if(r.bottom>0&&r.top<innerHeight) lkGo(1); else lkLast=Date.now(); }
+  requestAnimationFrame(tick); })();
+// mouse drag on desktop
+var mdx=null,msl=0,moved=false;
+reel.addEventListener('mousedown',function(e){mdx=e.clientX;msl=reel.scrollLeft;moved=false;reel.classList.add('dragging');e.preventDefault()});
+window.addEventListener('mousemove',function(e){if(mdx===null)return;var d=e.clientX-mdx;if(Math.abs(d)>4)moved=true;reel.scrollLeft=msl-d});
+window.addEventListener('mouseup',function(){if(mdx===null)return;mdx=null;reel.classList.remove('dragging');lkLast=Date.now();
+  var mid=reel.scrollLeft+reel.clientWidth/2,best=0,bd=1e9;lookEls.forEach(function(e,j){var d=Math.abs(e.offsetLeft+e.offsetWidth/2-mid);if(d<bd){bd=d;best=j}});center(best)});
+reel.addEventListener('click',function(e){if(moved){e.stopPropagation();e.preventDefault();moved=false}},true);
 
 /* ---------- collection ---------- */
 var grid=document.getElementById('grid');
 P.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='card';
-  b.innerHTML='<div class="ph">'+draw(p)+'</div><div class="row"><span>'+p.name+'</span><span>'+money(p.price)+'</span></div><div class="sw">'+p.cols.map(function(c){return '<i style="background:'+C[c]+'"></i>'}).join('')+'</div>';
+  b.innerHTML='<div class="ph">'+photoCrop(p,'tall')+'</div><div class="row"><span>'+p.name+'</span><span>'+money(p.price)+'</span></div><div class="sw">'+p.cols.map(function(c){return '<i style="background:'+C[c]+'"></i>'}).join('')+'</div>';
   b.addEventListener('click',function(){addBag(1,p.name+' added to bag')});grid.appendChild(b)});
 
 document.getElementById('news').addEventListener('submit',function(e){e.preventDefault();document.getElementById('newsnote').textContent='This is a concept preview, so sign-ups are not saved yet.'});
