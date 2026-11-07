@@ -60,12 +60,12 @@ nav a{text-decoration:none;color:var(--mute)} nav a:hover{color:var(--ink)}
 .reel{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-block:10px 18px;border-radius:24px;
   background:radial-gradient(80% 70% at 50% 40%,#fbfbfc,#e6e8ec)}
 .reel::-webkit-scrollbar{display:none}
-.look{flex:0 0 24%;scroll-snap-align:center;display:grid;justify-items:center;gap:6px;border:0;background:none;padding:18px 0 8px;cursor:pointer;
+.look{flex:0 0 36%;scroll-snap-align:center;display:grid;justify-items:center;gap:6px;border:0;background:none;padding:18px 0 8px;cursor:pointer;
   opacity:.38;filter:blur(.6px);transform:scale(.9);transition:opacity .4s,transform .4s,filter .4s}
-.look:first-child{margin-left:38%}.look:last-child{margin-right:38%}
+.look:first-child{margin-left:32%}.look:last-child{margin-right:32%}
 .look.on{opacity:1;filter:none;transform:scale(1)}
-@media (max-width:900px){.look{flex-basis:34%}.look:first-child{margin-left:33%}.look:last-child{margin-right:33%}}
-@media (max-width:640px){.look{flex-basis:50%}.look:first-child{margin-left:25%}.look:last-child{margin-right:25%}}
+@media (max-width:900px){.look{flex-basis:46%}.look:first-child{margin-left:27%}.look:last-child{margin-right:27%}}
+@media (max-width:640px){.look{flex-basis:62%}.look:first-child{margin-left:19%}.look:last-child{margin-right:19%}}
 .fig{position:relative;width:100%}
 .fig svg.model{display:block;width:100%;height:auto;overflow:visible}
 .fig img.photo{display:block;width:100%;height:auto;border-radius:14px;
@@ -268,7 +268,7 @@ var LOOKS=[
 ];
 var reel=document.getElementById('reel'), cur=0, lookEls=[];
 LOOKS.forEach(function(l,i){var b=document.createElement('div');b.className='look';b.setAttribute('role','group');b.setAttribute('aria-label','Look '+(i+1)+': '+l.name);
-  b.innerHTML='<div class="fig">'+(l.img?'<img class="photo" src="'+l.img+'" alt="'+l.name+' look" loading="lazy" width="230" height="768">':modelSVG(l))+
+  b.innerHTML='<div class="fig">'+(l.img?'<img class="photo" src="'+l.img+'" alt="'+l.name+' look" loading="lazy" width="600" height="1200">':modelSVG(l))+
    '<button class="pin" type="button" style="left:60%;top:34%" aria-label="Show '+by(l.top).name+'" data-piece="0"></button>'+
    '<button class="pin" type="button" style="left:38%;top:68%" aria-label="Show '+by(l.bottom).name+'" data-piece="1"></button></div>'+
    '<div class="look-name">'+String(i+1).padStart(2,'0')+' · '+l.name+'</div>';
