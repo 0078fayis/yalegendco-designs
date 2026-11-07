@@ -27,48 +27,22 @@ nav a{text-decoration:none;color:var(--mute)} nav a:hover{color:var(--ink)}
 .bag b{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:10px;background:var(--ink);color:#fff;font-size:11px;font-weight:600;font-variant-numeric:tabular-nums}
 @media (max-width:640px){nav{display:none}}
 
-/* ---------- hero rail ---------- */
-.hero{position:relative;overflow:hidden;isolation:isolate;
-  background:radial-gradient(70% 60% at 50% 42%,#fdfdfe 0%,#eef0f3 55%,#dde0e6 100%)}
-.hero::before,.hero::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(2px);
-  background:radial-gradient(circle at 35% 30%,#ffffff 0%,#d9dce2 30%,#9fa5ae 55%,#eef0f3 75%);opacity:.55}
-.hero::before{width:520px;height:520px;left:-260px;top:-140px}
-.hero::after{width:440px;height:440px;right:-220px;bottom:-160px}
-.hero-word{position:absolute;inset:auto 0 auto 0;top:8%;text-align:center;z-index:-1;font-family:var(--display);font-weight:800;
-  font-size:clamp(120px,34vw,420px);line-height:.8;letter-spacing:.06em;color:rgba(18,19,23,.045);pointer-events:none;user-select:none}
-.hero-top{text-align:center;padding-top:20px;display:grid;gap:6px;justify-items:center}
-.hero-top h1{margin:0;font-family:var(--display);font-weight:600;font-size:clamp(20px,3.4vw,30px);letter-spacing:-.01em;max-width:24ch;text-wrap:balance}
-.stage{position:relative;height:clamp(380px,62vw,520px);touch-action:pan-y;cursor:grab}
-.stage svg.railbar{position:absolute;left:0;top:0;pointer-events:none}
-.item{position:absolute;left:50%;top:0;transform-origin:50% 0;will-change:transform,opacity;border:0;background:none;padding:0;cursor:pointer}
-.item .sway{transform-origin:50% 0;animation:sway 6s ease-in-out infinite}
-.item svg{display:block;width:100%;height:auto;overflow:visible}
-.item .garment{filter:drop-shadow(0 16px 18px rgba(18,19,23,.22))}
-.item .hanger{width:56%;margin:0 auto -6%;position:relative;z-index:1}
-@keyframes sway{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.4deg)}}
-.stage{perspective:1200px}
 .turn{position:relative;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,.7,.2,1)}
 .flipped>.turn,.flipped .turn{transform:rotateY(180deg)}
 .face{backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .face.back{position:absolute;inset:0;transform:rotateY(180deg)}
 .fig{perspective:900px}
 .side{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);min-height:1.4em}
-.tip{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-top:12px}
-.hero-cap{display:grid;justify-items:center;gap:4px;padding-bottom:28px;text-align:center}
-.hero-cap .name{font-weight:600;font-size:17px;min-height:1.5em}
-.hero-cap .price{font-family:var(--mono);font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
-.ctrl{display:flex;align-items:center;gap:12px;margin-top:10px}
 .arrow{width:44px;height:44px;border-radius:50%;border:0;background:var(--ink);color:#fff;cursor:pointer;font-size:18px;line-height:1}
 .pill{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:12px 22px;background:var(--ink);color:#fff;font-weight:600;font-size:14px;cursor:pointer;text-decoration:none}
 .pill.ghost{background:var(--white);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
-.dots{display:flex;gap:6px;margin-top:14px}
-.dots i{width:18px;height:2px;background:rgba(18,19,23,.15);border-radius:2px;transition:background .3s,width .3s}
-.dots i.on{background:var(--ink);width:30px}
 
 .facts{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 26px;padding-block:16px;border-block:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
 
 /* ---------- try the look ---------- */
-.looks{padding-block:72px 40px}
+.looks{padding-block:18px 40px}
+.looks .reel{min-height:min(72vh,640px);align-items:center}
+.looks-head h2{font-size:clamp(40px,8vw,84px)}
 .looks-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
 .looks-head p{margin:10px 0 0;color:var(--mute);max-width:40ch}
 .look-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:28px;margin-top:30px;align-items:start}
@@ -156,27 +130,12 @@ form .pill{background:#fff;color:var(--ink)}
 <div class="concept">CONCEPT PREVIEW · WORKING NAME · AI-GENERATED MODEL IMAGERY · EXAMPLE PRICES</div>
 <div class="wrap"><header>
   <a class="logo" href="#top">KORA</a>
-  <nav aria-label="Main"><a href="#rail">New in</a><a href="#looks">Shop the look</a><a href="#fabric">Fabric</a><a href="#shop">Shop all</a></nav>
+  <nav aria-label="Main"><a href="#looks">Shop the look</a><a href="#fabric">Fabric</a><a href="#shop">Shop all</a></nav>
   <button class="bag" type="button" id="bag">Bag <b id="bagn">0</b></button>
 </header></div>
 
-<section class="hero" id="rail" aria-label="New in">
-  <div class="hero-word" aria-hidden="true">KORA</div>
-  <div class="hero-top wrap"><span class="label">Drop 01 · Heavyweight cotton</span><h1>Quiet basics, cut boxy, made in small batches.</h1></div>
-  <div class="stage" id="stage"></div>
-  <div class="hero-cap wrap">
-    <div class="name" id="pname" aria-live="polite"></div>
-    <div class="price" id="pprice"></div>
-    <div class="side" id="pside">Front · tap to see the back</div>
-    <div class="ctrl"><button class="arrow" type="button" id="prev" aria-label="Previous piece">&#8249;</button><button class="pill" type="button" id="view">View product</button><button class="arrow" type="button" id="next" aria-label="Next piece">&#8250;</button></div>
-    <div class="dots" id="dots" aria-hidden="true"></div>
-    <div class="tip">Swipe to browse</div>
-  </div>
-</section>
-<div class="wrap"><div class="facts"><span>Free delivery in Australia</span><span>280 gsm cotton</span><span>Sizes XS to 3XL</span><span>Made in Tiruppur</span></div></div>
-
 <section class="looks wrap" id="looks" aria-labelledby="looks-h">
-  <div class="looks-head"><div><span class="label">Six looks, head to toe</span><h2 id="looks-h">Shop the Look.</h2><p>Six looks, styled head to toe. Tap a pin to see the piece, or add the whole outfit in one go.</p></div></div>
+  <div class="looks-head"><div><span class="label">Drop 01 · Six looks, head to toe</span><h2 id="looks-h">Shop the Look.</h2><p>Six looks, styled head to toe. Tap a pin to see the piece, or add the whole outfit in one go.</p></div></div>
   <div class="look-layout">
     <div class="reelwrap"><div class="reel" id="reel"></div>
       <button class="arrow reel-arrow prev" type="button" id="lkprev" aria-label="Previous look">&#8249;</button>
@@ -190,6 +149,9 @@ form .pill{background:#fff;color:var(--ink)}
     </aside>
   </div>
 </section>
+<div class="wrap"><div class="facts"><span>Free delivery in Australia</span><span>280 gsm cotton</span><span>Sizes XS to 3XL</span><span>Made in Tiruppur</span></div></div>
+
+
 
 <section class="wrap" id="fabric" aria-labelledby="fab-h">
   <div class="fabric">
@@ -293,45 +255,7 @@ function toast(m){var t=document.getElementById('toast');t.textContent=m;t.class
 function addBag(n,msg){bagN+=n;document.getElementById('bagn').textContent=bagN;toast(msg)}
 document.getElementById('bag').addEventListener('click',function(){toast(bagN?bagN+' in your bag (concept preview)':'Your bag is empty')});
 
-/* ---------- hero rail ---------- */
-var RAIL=P.filter(function(p){return p.type!=='pant'}).concat([P[1],P[3]]);
-var stage=document.getElementById('stage'), items=[], pos=0, target=0, last=Date.now(), W=0, gw=0, n=RAIL.length;
 var still=matchMedia('(prefers-reduced-motion:reduce)').matches;
-var rail=document.createElementNS('http://www.w3.org/2000/svg','svg'); rail.setAttribute('class','railbar'); stage.appendChild(rail);
-var dots=document.getElementById('dots');
-RAIL.forEach(function(p,i){var b=document.createElement('button');b.type='button';b.className='item';b.setAttribute('aria-label',p.name);
-  b.innerHTML='<div class="sway" style="animation-delay:'+(-i*.9)+'s">'+HANGER+twoSided(p)+'</div>';
-  b.addEventListener('click',function(){ if(Math.round(target)===i){ var bk=flip(b); document.getElementById('pside').textContent=bk?'Back · tap to turn to front':'Front · tap to see the back'; } else go(i-Math.round(target)); });
-  stage.appendChild(b); items.push(b); dots.appendChild(document.createElement('i'));});
-function railY(x){var u=Math.min(1,Math.abs(x)/(W/2));return 26+gw*.08*(1-u*u)}
-function size(){W=stage.clientWidth; gw=Math.min(W*.4,260,stage.clientHeight*.52);
-  var pts=[];for(var i=0;i<=40;i++){var x=-W/2+W*i/40;pts.push((x+W/2).toFixed(1)+','+railY(x).toFixed(1))}
-  rail.setAttribute('width',W);rail.setAttribute('height',120);rail.setAttribute('viewBox','0 0 '+W+' 120');
-  rail.innerHTML='<defs><linearGradient id="chr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#bfc3ca"/><stop offset=".6" stop-color="#7c828c"/><stop offset="1" stop-color="#e6e8ec"/></linearGradient></defs><polyline points="'+pts.join(' ')+'" fill="none" stroke="rgba(0,0,0,.1)" stroke-width="8" transform="translate(0,6)"/><polyline points="'+pts.join(' ')+'" fill="none" stroke="url(#chr)" stroke-width="7" stroke-linecap="round"/>';
-  items.forEach(function(el){el.style.width=gw+'px';el.style.marginLeft=(-gw/2)+'px'});}
-var active=-1;
-function render(){items.forEach(function(el,i){var rel=i-pos,ab=Math.abs(rel),sp=gw*(W<600?.68:.86);
-  var x=rel*sp*(1-Math.min(ab,3)*.1), s=Math.max(.38,1-ab*.3);
-  el.style.transform='translate3d('+x.toFixed(1)+'px,'+railY(x).toFixed(1)+'px,0) scale('+s.toFixed(3)+')';
-  el.style.opacity=ab>3.5?0:(1-ab*.18).toFixed(3); el.style.zIndex=100-Math.round(ab*10); el.tabIndex=ab<.5?0:-1;});
-  var k=Math.round(pos); if(k!==active){active=k;var p=RAIL[k];
-   document.getElementById('pname').textContent=p.name;document.getElementById('pprice').textContent=money(p.price);
-   items.forEach(function(e){e.classList.remove('flipped')});document.getElementById('pside').textContent='Front · tap to see the back';
-   [].forEach.call(dots.children,function(d,i){d.classList.toggle('on',i===k)});}}
-function go(d){last=Date.now();target=Math.max(0,Math.min(n-1,Math.round(target)+d))}
-function loop(){ if(!still && Date.now()-last>4200){last=Date.now();target=Math.round(target)+1;if(target>n-1)target=0}
-  var d=target-pos; pos=Math.abs(d)<.001?target:pos+d*(still?1:.1); render(); requestAnimationFrame(loop)}
-document.getElementById('prev').onclick=function(){go(-1)};document.getElementById('next').onclick=function(){go(1)};
-document.getElementById('view').onclick=function(){var p=RAIL[Math.round(target)];addBag(1,p.name+' added to bag')};
-var sx=null,spos=0;
-var dragged=false;
-stage.addEventListener('pointerdown',function(e){sx=e.clientX;spos=target;dragged=false});
-window.addEventListener('pointermove',function(e){if(sx===null)return;var dx=e.clientX-sx;if(Math.abs(dx)>6){dragged=true;target=Math.max(0,Math.min(n-1,spos-dx/(gw*.8)));last=Date.now()}});
-function up(){if(sx===null)return;sx=null;target=Math.round(target)}
-window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);
-stage.addEventListener('click',function(e){if(dragged){e.stopPropagation();e.preventDefault()}},true);
-stage.addEventListener('keydown',function(e){if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1)});
-size();render();requestAnimationFrame(loop);addEventListener('resize',function(){size()});
 
 /* ---------- try the look ---------- */
 var LOOKS=[
