@@ -6,10 +6,9 @@
    then the Shop the Look row of cut-out models on a shared floor. Thin rules, light type, one black action per view. */
 :root{
   --bg:#f7f6f3; --fg:#17181a; --mute:#7a7c82; --line:#e3e1dc; --soft:#edebe6; --ink:#111214; --inkfg:#ffffff; --ok:#3f7a4f;
+  color-scheme:light;
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141415;--fg:#f1efea;--mute:#8f9096;--line:#2a2b2e;--soft:#1e1f21;--ink:#f1efea;--inkfg:#141415;--ok:#7fb48c;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#141415;--fg:#f1efea;--mute:#8f9096;--line:#2a2b2e;--soft:#1e1f21;--ink:#f1efea;--inkfg:#141415;--ok:#7fb48c;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:400;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
