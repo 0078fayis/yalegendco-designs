@@ -1,34 +1,77 @@
-<title>KORA Shop the Look</title>
+<title>KORA Studio</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap">
 <style>
-/* Layout: white studio page. One row of cut-out models on a shared floor, the centre look sharp, neighbours
-   smaller and softer. A thin "In this look" column on the right (below on phones). Everything else stays quiet. */
+/* Layout: one white studio page with hash routes (home, shop, product, story, help). Full-bleed campaign hero,
+   then the Shop the Look row of cut-out models on a shared floor. Thin rules, light type, one black action per view. */
 :root{
-  --bg:#f7f6f3; --fg:#17181a; --mute:#7a7c82; --line:#e3e1dc; --soft:#edebe6; --ink:#111214; --inkfg:#ffffff;
+  --bg:#f7f6f3; --fg:#17181a; --mute:#7a7c82; --line:#e3e1dc; --soft:#edebe6; --ink:#111214; --inkfg:#ffffff; --ok:#3f7a4f;
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141415;--fg:#f1efea;--mute:#8f9096;--line:#2a2b2e;--soft:#1e1f21;--ink:#f1efea;--inkfg:#141415;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#141415;--fg:#f1efea;--mute:#8f9096;--line:#2a2b2e;--soft:#1e1f21;--ink:#f1efea;--inkfg:#141415;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141415;--fg:#f1efea;--mute:#8f9096;--line:#2a2b2e;--soft:#1e1f21;--ink:#f1efea;--inkfg:#141415;--ok:#7fb48c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141415;--fg:#f1efea;--mute:#8f9096;--line:#2a2b2e;--soft:#1e1f21;--ink:#f1efea;--inkfg:#141415;--ok:#7fb48c;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:400;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 button{font:inherit;color:inherit}
-.note{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-align:center;padding:8px max(16px,env(safe-area-inset-left,0px)) 8px max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
+a{color:inherit}
+img{max-width:100%}
+h1,h2,h3{font-weight:300;letter-spacing:-.02em;margin:0;text-wrap:balance}
 .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding-block:16px}
-.brand{font-weight:500;letter-spacing:.32em;font-size:13px;text-decoration:none;color:inherit}
-nav{display:flex;gap:22px;font-size:12px;color:var(--mute)}
-nav a{color:inherit;text-decoration:none}
-nav a:hover{color:var(--fg)}
-.bag{display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:0;cursor:pointer;font-size:12px}
-.bag b{font-weight:500}
-@media (max-width:640px){nav .hide{display:none}}
+.note{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-align:center;padding:8px max(16px,env(safe-area-inset-left,0px)) 8px max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
+.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.lab{font-size:11px;color:var(--mute);letter-spacing:.06em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--ink);background:var(--ink);color:var(--inkfg);padding:13px 22px;font-size:13px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{opacity:.88}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--fg)}
+.btn.ghost:hover{background:var(--soft);opacity:1}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
 
-/* ---- shop the look ---- */
-.stl{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0 32px;padding-block:12px 0}
-.stl-head{grid-column:1/-1;padding-block:14px 6px}
-.stl-head h1{margin:0;font-weight:300;font-size:clamp(30px,4.6vw,46px);letter-spacing:-.02em;line-height:1.05;text-wrap:balance}
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding-block:16px;border-bottom:1px solid var(--line)}
+.brand{font-weight:500;letter-spacing:.32em;font-size:13px;text-decoration:none;color:inherit}
+nav{display:flex;gap:22px;font-size:12px;color:var(--mute);align-items:center}
+nav a{color:inherit;text-decoration:none;padding:4px 0;border-bottom:1px solid transparent}
+nav a:hover,nav a.on{color:var(--fg)}
+nav a.on{border-bottom-color:var(--fg)}
+.bag{display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:0;cursor:pointer;font-size:12px;color:var(--fg)}
+.bag b{font-weight:500;min-width:18px;height:18px;border-radius:9px;background:var(--ink);color:var(--inkfg);display:inline-grid;place-items:center;font-size:10px;padding:0 5px}
+@media (max-width:640px){nav{gap:14px}nav .hide{display:none}}
+.mnav{display:none;gap:18px;font-size:12px;color:var(--mute);padding-block:10px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.mnav a{text-decoration:none;white-space:nowrap}
+.mnav a.on{color:var(--fg)}
+@media (max-width:640px){.mnav{display:flex}}
+
+/* views */
+.view{display:none}
+.view.on{display:block}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--soft)}
+.hero img{display:block;width:100%;height:auto}
+.hero .pic-m{display:none}
+.hero .copy{position:absolute;left:max(16px,env(safe-area-inset-left,0px));top:50%;transform:translateY(-50%);max-width:34%;display:grid;gap:14px;color:#17181a}
+.hero h1{font-size:clamp(28px,4.2vw,58px);line-height:1.02}
+.hero p{margin:0;font-size:13px;color:#5c5e66;max-width:34ch}
+.hero .acts{display:flex;gap:10px;flex-wrap:wrap}
+.hero .acts .btn{background:#111214;color:#fff;border-color:#111214}
+.hero .acts .btn.ghost{background:transparent;color:#17181a;border-color:#17181a}
+@media (max-width:760px){
+  .hero .pic-d{display:none}.hero .pic-m{display:block}
+  .hero .copy{position:static;transform:none;max-width:none;padding:22px max(16px,env(safe-area-inset-right,0px)) 28px max(16px,env(safe-area-inset-left,0px));background:var(--bg);color:var(--fg)}
+  .hero h1{font-size:34px}
+  .hero p{font-size:14px;color:var(--mute)}
+  .hero .acts .btn{background:var(--ink);color:var(--inkfg);border-color:var(--ink)}
+  .hero .acts .btn.ghost{background:transparent;color:var(--fg);border-color:var(--fg)}
+}
+.ticker{display:flex;gap:40px;overflow:hidden;white-space:nowrap;border-bottom:1px solid var(--line);padding-block:11px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.ticker div{display:flex;gap:40px;animation:tick 40s linear infinite;flex:none}
+@keyframes tick{to{transform:translateX(-100%)}}
+
+/* shop the look */
+.stl{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0 32px;padding-block:28px 0}
+.stl-head{grid-column:1/-1;padding-block:14px 6px;display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.stl-head h2{font-size:clamp(30px,4.6vw,46px);line-height:1.05}
 .stl-head p{margin:6px 0 0;font-size:12px;color:var(--mute);max-width:46ch}
 .stage-wrap{min-width:0;position:relative}
 .stage{position:relative;height:clamp(420px,58vh,600px);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;overflow:hidden}
@@ -52,24 +95,22 @@ nav a:hover{color:var(--fg)}
 .rail .idx{display:flex;gap:16px;align-items:baseline;flex:1;min-width:0;overflow:hidden}
 .rail .idx button{border:0;background:none;padding:4px 0;cursor:pointer;color:var(--mute);font-variant-numeric:tabular-nums;font-size:11px;letter-spacing:.08em;border-bottom:1px solid transparent;white-space:nowrap}
 .rail .idx button.on{color:var(--fg);border-bottom-color:var(--fg)}
-.rail .idx button.on span{margin-left:8px;text-transform:none;letter-spacing:0}
-.rail .idx button span{display:none}
+.rail .idx button span{display:none;margin-left:8px;text-transform:none;letter-spacing:0}
 .rail .idx button.on span{display:inline}
 .bar{position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--line)}
 .bar i{display:block;height:100%;width:0;background:var(--fg);transition:width .2s linear}
-
-/* panel */
 .panel{border-left:1px solid var(--line);padding-left:28px;display:flex;flex-direction:column;min-width:0}
-.panel .lab{font-size:11px;color:var(--mute);letter-spacing:.06em}
-.panel h2{margin:4px 0 12px;font-weight:400;font-size:20px;letter-spacing:-.01em}
+.panel h3{margin:4px 0 12px;font-weight:400;font-size:20px;letter-spacing:-.01em}
 .pieces{display:flex;flex-direction:column}
-.piece{display:grid;grid-template-columns:22px 56px minmax(0,1fr) auto;gap:12px;align-items:center;padding-block:14px;border-top:1px solid var(--line);transition:background .3s}
+.piece{display:grid;grid-template-columns:22px 56px minmax(0,1fr) auto;gap:12px;align-items:center;padding-block:14px;border-top:1px solid var(--line);transition:background .3s;text-align:left}
 .piece.hl{background:var(--soft);margin-inline:-10px;padding-inline:10px}
 .piece .n{font-size:11px;color:var(--mute);font-variant-numeric:tabular-nums}
 .piece .th{width:56px;height:70px;overflow:hidden;background:var(--soft)}
 .piece .th img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.9)}
 .piece small{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
 .piece strong{display:block;font-weight:400;font-size:13px}
+.piece strong a{text-decoration:none}
+.piece strong a:hover{text-decoration:underline}
 .piece .pr{font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
 .piece .add{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:none;cursor:pointer;font-size:16px;line-height:1;display:grid;place-items:center}
 .piece .add:hover{border-color:var(--fg)}
@@ -78,15 +119,152 @@ nav a:hover{color:var(--fg)}
 .sum .row b{color:var(--fg);font-weight:500;font-variant-numeric:tabular-nums}
 .cta{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;background:var(--ink);color:var(--inkfg);padding:14px 16px;font-size:13px;cursor:pointer;width:100%}
 .cta:hover{opacity:.9}
+.cta[disabled]{opacity:.45;cursor:not-allowed}
 @media (max-width:900px){
   .stl{grid-template-columns:1fr;gap:0}
   .stage{height:clamp(380px,52vh,520px)}
   .panel{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:16px;margin-top:4px}
   .panel .sum{margin-top:6px}
-  .cta{position:sticky;bottom:0}
 }
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--inkfg);padding:10px 16px;font-size:12px;opacity:0;pointer-events:none;transition:.3s;z-index:40;white-space:nowrap}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* sections */
+.sec{padding-block:56px 10px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:16px}
+.sec-head h2{font-size:clamp(24px,3.4vw,34px)}
+.sec-head a{font-size:12px;color:var(--mute);text-decoration:none}
+.sec-head a:hover{color:var(--fg)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+@media (max-width:900px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:var(--bg);border:0;padding:0 0 16px;text-align:left;cursor:pointer;display:grid;gap:10px;text-decoration:none;color:inherit;min-width:0;align-content:start}
+.card .ph{aspect-ratio:3/4;overflow:hidden;background:var(--soft);position:relative}
+.card .ph img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.25);transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .4s}
+.card .ph img.alt{position:absolute;inset:0;opacity:0}
+.card:hover .ph img{transform:scale(1.3)}
+.card:hover .ph img.alt{opacity:1}
+.card .tag{position:absolute;left:10px;top:10px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:var(--bg);padding:4px 7px}
+.card .row{display:flex;justify-content:space-between;gap:10px;padding-inline:12px;font-size:12px}
+.card .row span:last-child{color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
+.card .sw{display:flex;gap:6px;padding-inline:12px}
+.card .sw i{width:9px;height:9px;border-radius:50%;border:1px solid rgba(0,0,0,.12)}
+.scroller{display:flex;gap:1px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;background:var(--line);border:1px solid var(--line)}
+.scroller::-webkit-scrollbar{display:none}
+.scroller .card{flex:0 0 min(70vw,260px);scroll-snap-align:start}
+
+.band{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:48px}
+.band>div{background:var(--bg);display:grid;gap:12px;padding-bottom:18px;min-width:0;align-content:start}
+.band .ph{aspect-ratio:1;overflow:hidden;background:var(--soft)}
+.band .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.band h3{font-size:18px;font-weight:400;padding-inline:14px}
+.band p{margin:0;padding-inline:14px;font-size:13px;color:var(--mute);max-width:40ch}
+@media (max-width:760px){.band{grid-template-columns:1fr}.band .ph{aspect-ratio:3/2}}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:center;padding-block:56px 10px}
+.split .ph{aspect-ratio:3/4;overflow:hidden;background:var(--soft)}
+.split .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.split .ph.wide{aspect-ratio:3/2}
+.split .txt{display:grid;gap:16px;max-width:46ch;min-width:0}
+.split h2{font-size:clamp(26px,3.6vw,40px)}
+.split p{margin:0;font-size:14px;color:var(--mute)}
+@media (max-width:760px){.split{grid-template-columns:1fr;gap:20px}}
+.facts{display:flex;flex-wrap:wrap;gap:6px 28px;justify-content:center;padding-block:28px;border-top:1px solid var(--line);margin-top:48px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+
+/* shop */
+.tools{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-bottom:16px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:none;border-radius:999px;padding:7px 14px;font-size:12px;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--inkfg);border-color:var(--ink)}
+.tools select{font:inherit;font-size:12px;color:inherit;background:none;border:0;border-bottom:1px solid var(--line);padding:6px 0}
+
+/* product */
+.crumbs{font-size:11px;color:var(--mute);padding-block:16px 8px;letter-spacing:.04em}
+.crumbs a{text-decoration:none}
+.pdp{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px;align-items:start;padding-bottom:40px}
+.gal{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px}
+.thumbs{display:grid;gap:8px;align-content:start}
+.thumbs button{border:1px solid transparent;background:var(--soft);padding:0;aspect-ratio:3/4;overflow:hidden;cursor:pointer}
+.thumbs button.on{border-color:var(--fg)}
+.thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.main{aspect-ratio:3/4;overflow:hidden;background:var(--soft);position:relative}
+.main img{width:100%;height:100%;object-fit:cover;display:block}
+.main .zoom{position:absolute;right:12px;bottom:12px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:var(--bg);padding:6px 9px;color:var(--mute)}
+.buy{display:grid;gap:18px;position:sticky;top:84px}
+.buy h1{font-size:clamp(24px,3vw,34px);font-weight:400}
+.buy .price{font-size:16px;font-variant-numeric:tabular-nums}
+.buy .price small{color:var(--mute);font-size:11px;margin-left:8px}
+.opt{display:grid;gap:8px}
+.opt .k{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.opt .k a{text-decoration:underline;text-transform:none;letter-spacing:0}
+.swatches{display:flex;gap:8px}
+.swatches button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);padding:3px;background:none;cursor:pointer}
+.swatches button i{display:block;width:100%;height:100%;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
+.swatches button.on{border-color:var(--fg)}
+.sizes{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.sizes button{border:1px solid var(--line);background:none;padding:10px 0;font-size:12px;cursor:pointer}
+.sizes button.on{border-color:var(--fg);background:var(--ink);color:var(--inkfg)}
+.sizes button.low{color:var(--mute)}
+.buy .meta{display:grid;gap:6px;font-size:12px;color:var(--mute)}
+.buy .meta b{color:var(--ok);font-weight:500}
+.acc{border-top:1px solid var(--line)}
+.acc details{border-bottom:1px solid var(--line)}
+.acc summary{cursor:pointer;padding:14px 0;font-size:13px;list-style:none;display:flex;justify-content:space-between}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"+";color:var(--mute)}
+.acc details[open] summary::after{content:"–"}
+.acc .body{padding:0 0 16px;font-size:13px;color:var(--mute);max-width:52ch}
+.acc .body ul{margin:0;padding-left:18px}
+.pairbox{background:var(--bg);padding:16px;display:grid;gap:14px;align-content:space-between;min-width:0}
+.pairbox .cta span{white-space:nowrap}
+@media (max-width:560px){.pairgrid{grid-template-columns:1fr!important}}
+@media (max-width:900px){.pdp{grid-template-columns:1fr;gap:24px}.gal{grid-template-columns:1fr}.thumbs{grid-template-columns:repeat(4,minmax(0,1fr));order:2}.buy{position:static}}
+
+/* story + help */
+.prose{max-width:62ch;display:grid;gap:14px;font-size:15px;color:var(--mute)}
+.prose p{margin:0}
+.prose strong{color:var(--fg);font-weight:400}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+.cols3>div{background:var(--bg);padding:20px 16px;display:grid;gap:8px;min-width:0;align-content:start}
+.cols3 .big{font-size:30px;font-weight:300;letter-spacing:-.02em}
+.cols3 p{margin:0;font-size:13px;color:var(--mute)}
+@media (max-width:760px){.cols3{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
+th{font-weight:500;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+td:not(:first-child),th:not(:first-child){text-align:right}
+.tblwrap{overflow-x:auto}
+.help{display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px;align-items:start;padding-block:16px 40px}
+.help .toc{position:sticky;top:84px;display:grid;gap:8px;font-size:12px}
+.help .toc a{text-decoration:none;color:var(--mute)}
+.help .toc a:hover{color:var(--fg)}
+.help section{padding-block:12px 36px;border-bottom:1px solid var(--line);display:grid;gap:14px}
+.help section h2{font-size:22px}
+.help section p{margin:0;font-size:14px;color:var(--mute);max-width:60ch}
+@media (max-width:760px){.help{grid-template-columns:1fr}.help .toc{position:static;display:flex;flex-wrap:wrap;gap:12px}}
+
+/* bag drawer */
+.drawer{position:fixed;inset:0;z-index:35;display:none}
+.drawer.on{display:block}
+.drawer .dim{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.drawer .box{position:absolute;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--bg);display:grid;grid-template-rows:auto minmax(0,1fr) auto;
+  padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) 16px;box-shadow:-20px 0 60px rgba(0,0,0,.12)}
+.drawer .hd{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.drawer .hd h2{font-size:18px;font-weight:400}
+.drawer .x{border:1px solid var(--line);background:none;width:34px;height:34px;border-radius:50%;cursor:pointer}
+.drawer .list{overflow:auto;display:flex;flex-direction:column}
+.line{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;padding-block:14px;border-bottom:1px solid var(--line);align-items:start}
+.line .th{width:64px;height:80px;overflow:hidden;background:var(--soft)}
+.line .th img{width:100%;height:100%;object-fit:cover;transform:scale(1.9)}
+.line .nm{font-size:13px}
+.line .sz{font-size:11px;color:var(--mute);margin-top:4px;display:flex;gap:8px;align-items:center}
+.line select{font:inherit;font-size:11px;background:none;border:1px solid var(--line);padding:2px 4px;color:inherit}
+.line .q{display:inline-flex;border:1px solid var(--line);margin-top:8px;vertical-align:middle}
+.line .q button{border:0;background:none;width:26px;height:26px;cursor:pointer}
+.line .q span{width:26px;display:grid;place-items:center;font-size:12px}
+.line .rm{border:0;background:none;color:var(--mute);font-size:11px;cursor:pointer;text-decoration:underline;padding:0;margin:8px 0 0 10px}
+.line .pr{font-size:13px;font-variant-numeric:tabular-nums}
+.drawer .ft{display:grid;gap:10px;padding-top:14px;border-top:1px solid var(--line)}
+.drawer .ft .row{display:flex;justify-content:space-between;font-size:13px}
+.drawer .ft .row.mute{font-size:11px;color:var(--mute)}
+.empty{padding:40px 0;color:var(--mute);font-size:13px;display:grid;gap:14px;justify-items:start}
 
 /* detail overlay */
 .detail{position:fixed;inset:0;z-index:30;background:var(--bg);display:grid;grid-template-columns:minmax(0,1fr) 320px;
@@ -99,106 +277,236 @@ nav a:hover{color:var(--fg)}
 .detail .panel{padding-top:56px}
 @media (max-width:900px){.detail{grid-template-columns:1fr;grid-template-rows:auto auto;align-content:start;gap:16px}.detail .big{height:min(58vh,540px);margin-top:64px;align-items:flex-start}.detail .panel{padding-top:0}}
 
-/* collection */
-.coll{padding-block:56px 10px}
-.coll-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:16px}
-.coll-head h2{margin:0;font-weight:300;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.02em}
-.coll-head span{font-size:11px;color:var(--mute);letter-spacing:.08em}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
-@media (max-width:900px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.card{background:var(--bg);border:0;padding:0;text-align:left;cursor:pointer;display:grid;gap:10px;padding-bottom:16px}
-.card .ph{aspect-ratio:3/4;overflow:hidden;background:var(--soft)}
-.card .ph img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.25);transition:transform .6s cubic-bezier(.2,.8,.2,1)}
-.card:hover .ph img{transform:scale(1.3)}
-.card .row{display:flex;justify-content:space-between;gap:10px;padding-inline:12px;font-size:12px}
-.card .row span:last-child{color:var(--mute);font-variant-numeric:tabular-nums}
-.card .sw{display:flex;gap:6px;padding-inline:12px}
-.card .sw i{width:9px;height:9px;border-radius:50%;border:1px solid rgba(0,0,0,.12)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--inkfg);padding:10px 16px;font-size:12px;opacity:0;pointer-events:none;transition:.3s;z-index:40;white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
+.toast.show{opacity:1;transform:translate(-50%,0)}
 
-.facts{display:flex;flex-wrap:wrap;gap:6px 28px;justify-content:center;padding-block:28px;border-top:1px solid var(--line);margin-top:48px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
-footer{border-top:1px solid var(--line);padding-block:36px 40px;display:grid;gap:14px;justify-items:start}
-footer p{margin:0;font-size:12px;color:var(--mute);max-width:46ch}
-footer form{display:flex;gap:8px;width:100%;max-width:420px}
+footer{border-top:1px solid var(--line);margin-top:56px;padding-block:40px 36px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:28px;font-size:12px}
+footer h4{margin:0 0 10px;font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+footer a{text-decoration:none;color:var(--mute)}
+footer a:hover{color:var(--fg)}
+footer p{margin:0;color:var(--mute);max-width:40ch}
+footer form{display:flex;gap:8px;max-width:360px;margin-top:12px}
 footer input{flex:1;min-width:0;border:0;border-bottom:1px solid var(--line);background:none;padding:10px 0;font:inherit;color:inherit;outline:none}
 footer input:focus{border-bottom-color:var(--fg)}
 footer button{border:0;background:var(--ink);color:var(--inkfg);padding:10px 18px;font-size:12px;cursor:pointer}
-footer .fine{font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.fine{grid-column:1/-1;border-top:1px solid var(--line);padding-top:16px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (max-width:760px){footer{grid-template-columns:1fr 1fr}footer>div:first-child{grid-column:1/-1}}
 :focus-visible{outline:2px solid var(--fg);outline-offset:3px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
-<div class="note">Concept preview · Working name · AI-generated model imagery · Example prices</div>
+<div class="note">Concept preview · Working name · AI-generated imagery · Example prices</div>
 
 <header class="wrap">
-  <a class="brand" href="#top">KORA</a>
+  <a class="brand" href="#home">KORA</a>
   <nav>
-    <a class="hide" href="#top">Home</a>
-    <a class="hide" href="#looks">Looks</a>
-    <a class="hide" href="#collection">Collection</a>
-    <button class="bag" id="bag" type="button">Bag <b id="bagn">0</b></button>
+    <a class="hide" href="#shop" data-nav="shop">Shop</a>
+    <a class="hide" href="#looks" data-nav="looks">Looks</a>
+    <a class="hide" href="#story" data-nav="story">Story</a>
+    <a class="hide" href="#help" data-nav="help">Help</a>
+    <button class="bag" id="bagbtn" type="button">Bag <b id="bagn">0</b></button>
   </nav>
 </header>
+<div class="mnav wrap">
+  <a href="#home" data-nav="home">Home</a><a href="#shop" data-nav="shop">Shop</a><a href="#looks" data-nav="looks">Looks</a><a href="#story" data-nav="story">Story</a><a href="#help" data-nav="help">Help</a>
+</div>
 
-<section class="stl wrap" id="looks">
-  <div class="stl-head">
-    <h1>Shop the Look.</h1>
-    <p>Six looks, styled head to toe. Tap a pin to see the piece, or add the whole outfit in one go.</p>
+<!-- ============ HOME ============ -->
+<main class="view on" id="v-home">
+  <section class="hero">
+    <img class="pic-d" src="img/hero.webp" alt="Two models in a charcoal tee, light denim, cream knit and sand trousers" width="2048" height="1152" fetchpriority="high">
+    <img class="pic-m" src="img/portrait.webp" alt="Model in a rust hoodie and navy wide trousers" width="1536" height="2048">
+    <div class="copy">
+      <span class="eyebrow">Drop 01 · Six looks</span>
+      <h1>Heavy cotton.<br>Quiet shapes.</h1>
+      <p>280 gsm combed cotton, boxy cuts, made in small runs in Tiruppur. Twelve pieces that go with each other.</p>
+      <div class="acts"><a class="btn" href="#looks">Shop the look</a><a class="btn ghost" href="#shop">Shop all</a></div>
+    </div>
+  </section>
+  <div class="ticker" aria-hidden="true"><div><span>Free delivery in Australia</span><span>·</span><span>30-day returns</span><span>·</span><span>280 gsm cotton</span><span>·</span><span>Sizes XS to 3XL</span><span>·</span><span>Made in Tiruppur</span><span>·</span><span>Small runs, no restocks</span><span>·</span></div><div><span>Free delivery in Australia</span><span>·</span><span>30-day returns</span><span>·</span><span>280 gsm cotton</span><span>·</span><span>Sizes XS to 3XL</span><span>·</span><span>Made in Tiruppur</span><span>·</span><span>Small runs, no restocks</span><span>·</span></div></div>
+
+  <section class="stl wrap" id="looks">
+    <div class="stl-head">
+      <div><h2>Shop the Look.</h2><p>Six looks, styled head to toe. Tap a pin to see the piece, or add the whole outfit in one go.</p></div>
+      <a href="#shop" class="lab" style="text-decoration:none">All 12 pieces →</a>
+    </div>
+    <div class="stage-wrap">
+      <div class="stage" id="stage" aria-roledescription="carousel" aria-label="Looks"><div class="floor"></div></div>
+      <div class="rail">
+        <button class="arrow" id="prev" type="button" aria-label="Previous look">&larr;</button>
+        <div class="idx" id="idx"></div>
+        <button class="arrow" id="next" type="button" aria-label="Next look">&rarr;</button>
+      </div>
+      <div class="bar"><i id="bar"></i></div>
+    </div>
+    <aside class="panel" id="panel">
+      <div class="lab" id="lk-no">In this look</div>
+      <h3 id="lk-name"></h3>
+      <div class="pieces" id="pieces"></div>
+      <div class="sum">
+        <div class="row"><span>Complete the look · 10% off the pair</span><b id="lk-total"></b></div>
+        <button class="cta" id="addlook" type="button"><span>Add full look to bag</span><span id="lk-cta">&rarr;</span></button>
+      </div>
+    </aside>
+  </section>
+
+  <section class="sec wrap">
+    <div class="sec-head"><h2>New in</h2><a href="#shop">Shop all →</a></div>
+    <div class="scroller" id="newin"></div>
+  </section>
+
+  <section class="wrap">
+    <div class="band">
+      <div><div class="ph"><img src="img/fabric.webp" alt="Macro of charcoal heavyweight cotton jersey" loading="lazy"></div><h3>280 gsm, combed</h3><p>Heavy enough to hold a boxy shape, soft enough to wear in summer. Pre-washed so the fit you buy is the fit you keep.</p></div>
+      <div><div class="ph"><img src="img/label.webp" alt="Back neck of a charcoal tee with a plain woven label" loading="lazy"></div><h3>Nothing extra</h3><p>No prints, no slogans. One plain woven label at the neck, flat seams, a slightly dropped shoulder.</p></div>
+      <div><div class="ph"><img src="img/flatlay.webp" alt="Folded tee, knit and jeans on linen" loading="lazy"></div><h3>Twelve pieces</h3><p>Six tops, six bottoms, all in the same palette. Any top goes with any bottom, which is the whole idea.</p></div>
+    </div>
+  </section>
+
+  <section class="split wrap">
+    <div class="ph wide"><img src="img/workshop.webp" alt="Hands guiding charcoal cotton through an overlock machine" loading="lazy"></div>
+    <div class="txt">
+      <span class="eyebrow">Made in Tiruppur</span>
+      <h2>Small runs from India's knitwear town.</h2>
+      <p>Every piece is knitted, dyed and sewn within a few kilometres of each other in Tiruppur, Tamil Nadu. We make 50 to 80 of each style. When they are gone, the next drop is a new colour, not a restock.</p>
+      <a class="btn ghost" href="#story" style="justify-self:start">Read the story</a>
+    </div>
+  </section>
+
+  <div class="facts wrap"><span>Free delivery in Australia</span><span>280 gsm cotton</span><span>Sizes XS to 3XL</span><span>Made in Tiruppur</span></div>
+</main>
+
+<!-- ============ SHOP ============ -->
+<main class="view wrap" id="v-shop">
+  <div class="crumbs"><a href="#home">Home</a> / Shop</div>
+  <div class="sec-head" style="padding-top:4px"><h2>Drop 01</h2><span class="lab" id="cnt"></span></div>
+  <div class="tools">
+    <div class="chips" id="chips">
+      <button class="chip on" data-f="all" type="button">All</button>
+      <button class="chip" data-f="top" type="button">Tops</button>
+      <button class="chip" data-f="pant" type="button">Bottoms</button>
+      <button class="chip" data-f="hoodie" type="button">Hoodies</button>
+    </div>
+    <label class="lab">Sort <select id="sort"><option value="feat">Featured</option><option value="lo">Price, low to high</option><option value="hi">Price, high to low</option></select></label>
   </div>
-
-  <div class="stage-wrap">
-    <div class="stage" id="stage" aria-roledescription="carousel" aria-label="Looks">
-      <div class="floor"></div>
-    </div>
-    <div class="rail">
-      <button class="arrow" id="prev" type="button" aria-label="Previous look">&larr;</button>
-      <div class="idx" id="idx"></div>
-      <button class="arrow" id="next" type="button" aria-label="Next look">&rarr;</button>
-    </div>
-    <div class="bar"><i id="bar"></i></div>
-  </div>
-
-  <aside class="panel" id="panel">
-    <div class="lab" id="lk-no">In this look</div>
-    <h2 id="lk-name"></h2>
-    <div class="pieces" id="pieces"></div>
-    <div class="sum">
-      <div class="row"><span>Complete the look · 10% off the pair</span><b id="lk-total"></b></div>
-      <button class="cta" id="addlook" type="button"><span>Add full look to bag</span><span id="lk-cta">&rarr;</span></button>
-    </div>
-  </aside>
-</section>
-
-<section class="coll wrap" id="collection">
-  <div class="coll-head"><h2>The collection</h2><span>DROP 01 · 12 PIECES</span></div>
   <div class="grid" id="grid"></div>
-</section>
+  <div class="facts"><span>Free delivery in Australia</span><span>30-day returns</span><span>Sizes XS to 3XL</span></div>
+</main>
 
-<div class="facts wrap"><span>Free delivery in Australia</span><span>280 gsm cotton</span><span>Sizes XS to 3XL</span><span>Made in Tiruppur</span></div>
+<!-- ============ PRODUCT ============ -->
+<main class="view wrap" id="v-product"></main>
 
-<footer class="wrap" id="top">
-  <span class="fine">Drop 01 · Notify me</span>
-  <p>Be first to hear when the first pieces go on sale. No spam, one email per drop.</p>
-  <form id="news"><input id="email" type="email" placeholder="Your email" aria-label="Your email" required><button type="submit">Notify me</button></form>
-  <p class="fine">KORA is a working name · model imagery is AI-generated · prices are examples</p>
+<!-- ============ STORY ============ -->
+<main class="view" id="v-story">
+  <section class="hero"><img src="img/workshop.webp" alt="Charcoal cotton being sewn on an industrial machine" width="1600" height="1067" style="max-height:62vh;object-fit:cover"></section>
+  <section class="sec wrap">
+    <span class="eyebrow">The story</span>
+    <h2 style="font-size:clamp(28px,4vw,46px);margin:10px 0 24px">Kora is the plain cloth before it becomes anything else.</h2>
+    <div class="prose">
+      <p>In Malayalam, <strong>kora</strong> is unbleached, undyed cotton: the fabric at the start of everything. We named the label after it because that is what we wanted to sell. Good cloth, cut simply, with nothing on it.</p>
+      <p>The first drop is twelve pieces. Six tops, six bottoms, one palette. They were designed together so that any top works with any bottom, and so that you can buy two pieces this year and two more next year without anything looking out of place.</p>
+      <p><strong>The fabric</strong> is a 280 gsm combed cotton jersey for the tees and crews, a 400 gsm loopback for the hoodies, and a 12 oz rigid denim and a brushed cotton twill for the bottoms. Everything is garment-washed before it is sewn, so there is no shrinkage after your first wash.</p>
+      <p><strong>Tiruppur</strong>, in Tamil Nadu, makes a large share of the world's cotton knitwear. We work with one small unit there that knits, dyes and sews under one roof, pays above the state minimum, and lets us visit unannounced. We make 50 to 80 pieces per style. When a style sells out, it is replaced by a new colour rather than a restock.</p>
+    </div>
+    <div class="cols3">
+      <div><span class="big">280</span><p>grams per square metre. Most high-street tees are 150 to 180.</p></div>
+      <div><span class="big">50–80</span><p>pieces per style. Small enough to sell through, large enough to price fairly.</p></div>
+      <div><span class="big">1</span><p>workshop, one town, one fabric family. Fewer hands, fewer surprises.</p></div>
+    </div>
+  </section>
+  <section class="split wrap">
+    <div class="ph wide"><img src="img/yarn.webp" alt="Cones of unbleached cotton yarn in a mill" loading="lazy"></div>
+    <div class="txt">
+      <span class="eyebrow">Honest pricing</span>
+      <h2>What a A$69 tee is made of.</h2>
+      <p>Example breakdown for the Charcoal Boxy Tee, including GST. These are planning numbers for the first run and will be updated with real invoices.</p>
+      <div class="tblwrap"><table>
+        <tr><th>Fabric, knitting and dyeing</th><td>A$9.50</td></tr>
+        <tr><th>Cutting, sewing, washing, label</th><td>A$7.00</td></tr>
+        <tr><th>Freight to Australia and duty</th><td>A$4.50</td></tr>
+        <tr><th>Delivery to you, packaging</th><td>A$11.00</td></tr>
+        <tr><th>GST</th><td>A$6.27</td></tr>
+        <tr><th>Returns, payment fees, photos, site</th><td>A$9.00</td></tr>
+        <tr><th>What is left to run the label</th><td>A$21.73</td></tr>
+      </table></div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ HELP ============ -->
+<main class="view wrap" id="v-help">
+  <div class="crumbs"><a href="#home">Home</a> / Help</div>
+  <div class="help">
+    <nav class="toc" aria-label="Help topics"><a href="#help" data-s="h-del">Delivery</a><a href="#help" data-s="h-ret">Returns</a><a href="#help" data-s="h-size">Size guide</a><a href="#help" data-s="h-care">Care</a><a href="#help" data-s="h-faq">FAQ</a><a href="#help" data-s="h-contact">Contact</a></nav>
+    <div>
+      <section id="h-del"><h2>Delivery</h2><p>Free standard delivery anywhere in Australia, sent with tracking. Orders placed before 12 pm AEST leave the same business day. Metro addresses usually take 2 to 4 business days, regional 4 to 7. We do not ship outside Australia yet.</p></section>
+      <section id="h-ret"><h2>Returns</h2><p>30 days from delivery, for any reason, as long as the piece is unworn and unwashed with the label attached. Start a return from your order email and we send a prepaid label. Refunds go back to the original payment method within 5 business days of the piece arriving. Exchanges for another size are free.</p></section>
+      <section id="h-size"><h2>Size guide</h2><p>All pieces are cut boxy and oversized on purpose. If you are between sizes or prefer a closer fit, take the smaller size. Measurements are of the garment laid flat, in centimetres.</p>
+        <h3 style="font-size:14px;font-weight:500">Tees, crews and hoodies</h3>
+        <div class="tblwrap"><table><tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th><th>Fits chest</th></tr>
+        <tr><td>XS</td><td>54</td><td>66</td><td>52</td><td>80–88</td></tr><tr><td>S</td><td>57</td><td>68</td><td>54</td><td>88–96</td></tr><tr><td>M</td><td>60</td><td>70</td><td>56</td><td>96–104</td></tr><tr><td>L</td><td>63</td><td>72</td><td>58</td><td>104–112</td></tr><tr><td>XL</td><td>66</td><td>74</td><td>60</td><td>112–120</td></tr><tr><td>2XL</td><td>70</td><td>76</td><td>63</td><td>120–130</td></tr><tr><td>3XL</td><td>74</td><td>78</td><td>66</td><td>130–140</td></tr></table></div>
+        <h3 style="font-size:14px;font-weight:500">Wide pants and denim</h3>
+        <div class="tblwrap"><table><tr><th>Size</th><th>Waist</th><th>Hip</th><th>Inseam</th><th>Leg opening</th></tr>
+        <tr><td>XS</td><td>36</td><td>54</td><td>74</td><td>26</td></tr><tr><td>S</td><td>39</td><td>57</td><td>76</td><td>27</td></tr><tr><td>M</td><td>42</td><td>60</td><td>78</td><td>28</td></tr><tr><td>L</td><td>45</td><td>63</td><td>78</td><td>29</td></tr><tr><td>XL</td><td>48</td><td>66</td><td>80</td><td>30</td></tr><tr><td>2XL</td><td>52</td><td>70</td><td>80</td><td>31</td></tr><tr><td>3XL</td><td>56</td><td>74</td><td>80</td><td>32</td></tr></table></div>
+        <p>Model in look 01 is 183 cm and wears M in the tee and M in the denim.</p></section>
+      <section id="h-care"><h2>Care</h2><p>Cold machine wash inside out, with like colours. Line dry in the shade. Do not tumble dry, bleach or dry clean. A warm iron on the reverse is fine. The denim is rigid and will soften with wear; wash it as little as you can.</p></section>
+      <section id="h-faq"><h2>FAQ</h2>
+        <div class="acc">
+          <details><summary>Will you restock sold-out sizes?</summary><div class="body">Not in the same colour. Each style is made once, in a run of 50 to 80. The next drop brings new colours of the same cuts, so the fit stays the same.</div></details>
+          <details><summary>Where is the clothing made?</summary><div class="body">Tiruppur, Tamil Nadu, India, in one small knitwear unit that knits, dyes and sews under one roof. More in the <a href="#story">story</a>.</div></details>
+          <details><summary>Is the model imagery real?</summary><div class="body">No. While we are a concept, the people in the photos are AI-generated. Garment photos of the real production run will replace them before launch.</div></details>
+          <details><summary>Do you ship outside Australia?</summary><div class="body">Not yet. New Zealand is planned for the second drop.</div></details>
+          <details><summary>How do I pay?</summary><div class="body">Card, Apple Pay, Google Pay and PayPal at checkout. Prices include GST.</div></details>
+        </div></section>
+      <section id="h-contact"><h2>Contact</h2><p>Email hello at kora dot studio (placeholder until the domain is registered). We answer within one business day, Monday to Friday, Melbourne time.</p></section>
+    </div>
+  </div>
+</main>
+
+<footer class="wrap">
+  <div>
+    <a class="brand" href="#home">KORA</a>
+    <p style="margin-top:12px">Heavy cotton basics in quiet shapes, made in small runs in Tiruppur and sold only in Australia for now.</p>
+    <form id="news"><input id="email" type="email" placeholder="Email for the next drop" aria-label="Email for the next drop" required><button type="submit">Notify me</button></form>
+  </div>
+  <div><h4>Shop</h4><ul><li><a href="#shop">All pieces</a></li><li><a href="#shop" data-f="top">Tops</a></li><li><a href="#shop" data-f="pant">Bottoms</a></li><li><a href="#looks">Shop the look</a></li></ul></div>
+  <div><h4>Help</h4><ul><li><a href="#help" data-s="h-del">Delivery</a></li><li><a href="#help" data-s="h-ret">Returns</a></li><li><a href="#help" data-s="h-size">Size guide</a></li><li><a href="#help" data-s="h-contact">Contact</a></li></ul></div>
+  <div><h4>About</h4><ul><li><a href="#story">Story</a></li><li><a href="#story">Honest pricing</a></li><li><a href="#help" data-s="h-faq">FAQ</a></li></ul></div>
+  <div class="fine"><span>© 2026 KORA (working name) · Melbourne, Australia · ABN pending</span><span>Model imagery AI-generated · Prices are examples</span></div>
 </footer>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="dim" id="dim"></div>
+  <div class="box" role="dialog" aria-label="Your bag">
+    <div class="hd"><h2>Your bag <span class="lab" id="bagcnt"></span></h2><button class="x" id="bagx" type="button" aria-label="Close bag">✕</button></div>
+    <div class="list" id="baglist"></div>
+    <div class="ft">
+      <div class="row"><span>Subtotal</span><b id="bagsub">A$0.00</b></div>
+      <div class="row mute"><span>Delivery</span><span>Free, Australia</span></div>
+      <div class="row mute"><span>Includes GST</span><span id="baggst"></span></div>
+      <button class="cta" id="checkout" type="button"><span>Checkout</span><span>→</span></button>
+      <span class="lab" style="text-align:center">Concept preview · checkout opens on the live store at launch</span>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast" role="status"></div>
 
 <script>
 var P=[
- {id:'coal-tee',name:'Charcoal Boxy Tee',type:'tee',price:69,cols:['#4a4a4c','#f4f3ef','#1c1c1e']},
- {id:'light-denim',name:'Light Wash Wide Denim',type:'pant',price:139,cols:['#7e9fc1','#8b8b8b']},
- {id:'bone-knit',name:'Cream Boxy Knit',type:'crew',price:119,cols:['#ebe4d3','#6f7a55']},
- {id:'sand-pant',name:'Sand Wide Trouser',type:'pant',price:119,cols:['#cfb791','#7a5b45','#1f2a44']},
- {id:'black-hoodie',name:'Black Heavy Hoodie',type:'hoodie',price:129,cols:['#1c1c1e','#b0582e']},
- {id:'black-pant',name:'Black Wide Pant',type:'pant',price:119,cols:['#1c1c1e','#1f2a44']},
- {id:'olive-crew',name:'Olive Crew',type:'crew',price:109,cols:['#6f7a55','#ebe4d3']},
- {id:'brown-pant',name:'Brown Wide Trouser',type:'pant',price:119,cols:['#7a5b45','#cfb791']},
- {id:'white-tee',name:'White Boxy Tee',type:'tee',price:69,cols:['#f4f3ef','#4a4a4c']},
- {id:'grey-denim',name:'Grey Wash Wide Denim',type:'pant',price:139,cols:['#8b8b8b','#7e9fc1']},
- {id:'rust-hoodie',name:'Rust Heavy Hoodie',type:'hoodie',price:129,cols:['#b0582e','#1c1c1e']},
- {id:'navy-pant',name:'Navy Wide Pant',type:'pant',price:119,cols:['#1f2a44','#1c1c1e']}
+ {id:'coal-tee',name:'Charcoal Boxy Tee',type:'tee',price:69,cols:[['Charcoal','#4a4a4c'],['Chalk','#f4f3ef'],['Black','#1c1c1e']],fab:'280 gsm combed cotton jersey',desc:'The tee everything else was designed around. Dropped shoulder, wide body, slightly shorter length so it sits right over wide pants. Ribbed collar that keeps its shape.',tag:'Core'},
+ {id:'light-denim',name:'Light Wash Wide Denim',type:'pant',price:139,cols:[['Light wash','#7e9fc1'],['Grey wash','#8b8b8b']],fab:'12 oz rigid cotton denim, garment washed',desc:'Straight from the hip, wide to the hem. Mid rise, button fly, no stretch. Breaks in over the first month and then stays.',tag:'Core'},
+ {id:'bone-knit',name:'Cream Boxy Knit',type:'crew',price:119,cols:[['Cream','#ebe4d3'],['Olive','#6f7a55']],fab:'7-gauge cotton knit, 100% combed cotton',desc:'A chunky cotton knit with an open collar and a boxy body. Warm without weight, and it does not itch.'},
+ {id:'sand-pant',name:'Sand Wide Trouser',type:'pant',price:119,cols:[['Sand','#cfb791'],['Brown','#7a5b45'],['Navy','#1f2a44']],fab:'Brushed cotton twill, 300 gsm',desc:'Single pleat, wide leg, elastic at the back of the waist with a drawcord inside. Sits like a trouser, feels like a track pant.'},
+ {id:'black-hoodie',name:'Black Heavy Hoodie',type:'hoodie',price:129,cols:[['Black','#1c1c1e'],['Rust','#b0582e']],fab:'400 gsm loopback cotton fleece',desc:'Double-layer hood, no drawcord, kangaroo pocket, heavy ribbed hem. Cut long in the arm so the cuff can be pushed up.',tag:'New'},
+ {id:'black-pant',name:'Black Wide Pant',type:'pant',price:119,cols:[['Black','#1c1c1e'],['Navy','#1f2a44']],fab:'Brushed cotton twill, 300 gsm',desc:'Same cut as the Sand Wide Trouser in a deep garment-dyed black that fades slowly to charcoal.'},
+ {id:'olive-crew',name:'Olive Crew',type:'crew',price:109,cols:[['Olive','#6f7a55'],['Cream','#ebe4d3']],fab:'400 gsm loopback cotton fleece',desc:'The hoodie without the hood. Raglan sleeve, wide ribbed collar, a body that ends at the hip.'},
+ {id:'brown-pant',name:'Brown Wide Trouser',type:'pant',price:119,cols:[['Brown','#7a5b45'],['Sand','#cfb791']],fab:'Brushed cotton twill, 300 gsm',desc:'The Sand trouser in a warm tobacco brown. Pairs with everything in the drop, including the rust hoodie.'},
+ {id:'white-tee',name:'White Boxy Tee',type:'tee',price:69,cols:[['Chalk','#f4f3ef'],['Charcoal','#4a4a4c']],fab:'280 gsm combed cotton jersey',desc:'An off-white, not a bright white, so it does not go grey next to the sand and cream pieces. Opaque at 280 gsm.',tag:'Core'},
+ {id:'grey-denim',name:'Grey Wash Wide Denim',type:'pant',price:139,cols:[['Grey wash','#8b8b8b'],['Light wash','#7e9fc1']],fab:'12 oz rigid cotton denim, garment washed',desc:'The wide denim in a cool grey wash. Same block, same rise, slightly softer hand from the extra wash.'},
+ {id:'rust-hoodie',name:'Rust Heavy Hoodie',type:'hoodie',price:129,cols:[['Rust','#b0582e'],['Black','#1c1c1e']],fab:'400 gsm loopback cotton fleece',desc:'The one colour in the drop. Garment-dyed rust that sits between brick and terracotta, on the same heavy hoodie block.',tag:'New'},
+ {id:'navy-pant',name:'Navy Wide Pant',type:'pant',price:119,cols:[['Navy','#1f2a44'],['Black','#1c1c1e']],fab:'Brushed cotton twill, 300 gsm',desc:'A near-black navy with a soft brushed face. The dressier of the twill trousers.'}
 ];
 var LOOKS=[
  {name:'Studio Day',cut:'cut/look1.webp',img:'models/look1.webp',top:'coal-tee',bottom:'light-denim',pins:[[.5,.3],[.46,.66]]},
@@ -208,17 +516,92 @@ var LOOKS=[
  {name:'City Edit',cut:'cut/look5.webp',img:'models/look5.webp',top:'white-tee',bottom:'grey-denim',pins:[[.5,.3],[.5,.68]]},
  {name:'Sunday Slow',cut:'cut/look6.webp',img:'models/look6.webp',top:'rust-hoodie',bottom:'navy-pant',pins:[[.52,.32],[.5,.7]]}
 ];
+var SIZES=['XS','S','M','L','XL','2XL','3XL'];
 function by(id){for(var i=0;i<P.length;i++) if(P[i].id===id) return P[i]}
 function money(n){return 'A$'+n.toFixed(2)}
 function lookOf(p){for(var i=0;i<LOOKS.length;i++) if(LOOKS[i].top===p.id||LOOKS[i].bottom===p.id) return LOOKS[i]}
-function crop(p){var l=lookOf(p);return '<img src="'+l.img+'" alt="" loading="lazy" style="object-position:50% '+(l.top===p.id?'22%':'78%')+'">'}
+function isTop(p){return p.type!=='pant'}
+function pos(p){return '50% '+(isTop(p)?'22%':'78%')}
+function crop(p,cls){var l=lookOf(p);return '<img class="'+(cls||'')+'" src="'+l.img+'" alt="" loading="lazy" style="object-position:'+pos(p)+'">'}
+function pair(p){var l=lookOf(p);return by(l.top===p.id?l.bottom:l.top)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 
-var bagN=0,toastT;
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show')},1800)}
-function addBag(n,msg){bagN+=n;document.getElementById('bagn').textContent=bagN;toast(msg)}
-document.getElementById('bag').addEventListener('click',function(){toast(bagN?bagN+' in your bag (concept preview)':'Your bag is empty')});
+/* ---- toast + bag ---- */
+var toastT;
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show')},2000)}
+var BAG=[];try{BAG=JSON.parse(localStorage.getItem('kora-bag')||'[]')||[]}catch(e){BAG=[]}
+BAG=BAG.filter(function(l){return l&&by(l.id)});
+function saveBag(){try{localStorage.setItem('kora-bag',JSON.stringify(BAG))}catch(e){}}
+function bagCount(){return BAG.reduce(function(a,l){return a+l.q},0)}
+function addBag(id,size,q,silent){size=size||'M';q=q||1;var f=null;BAG.forEach(function(l){if(l.id===id&&l.size===size)f=l});if(f)f.q+=q;else BAG.push({id:id,size:size,q:q});saveBag();renderBag();if(!silent)toast(by(id).name+' · '+size+' added to bag')}
+function renderBag(){
+  var n=bagCount();document.getElementById('bagn').textContent=n;document.getElementById('bagcnt').textContent=n?'· '+n+(n===1?' item':' items'):'';
+  var list=document.getElementById('baglist');
+  if(!BAG.length){list.innerHTML='<div class="empty"><span>Your bag is empty.</span><a class="btn ghost" href="#looks" data-close="1">Shop the look</a></div>';}
+  else list.innerHTML=BAG.map(function(l,i){var p=by(l.id);return '<div class="line"><div class="th">'+crop(p)+'</div><div><div class="nm"><a href="#p-'+p.id+'" data-close="1" style="text-decoration:none">'+p.name+'</a></div><div class="sz">Size <select data-i="'+i+'" aria-label="Size">'+SIZES.map(function(s){return '<option'+(s===l.size?' selected':'')+'>'+s+'</option>'}).join('')+'</select></div><div class="q"><button type="button" data-i="'+i+'" data-d="-1" aria-label="Less">–</button><span>'+l.q+'</span><button type="button" data-i="'+i+'" data-d="1" aria-label="More">+</button></div><button class="rm" type="button" data-rm="'+i+'">Remove</button></div><div class="pr">'+money(p.price*l.q)+'</div></div>'}).join('');
+  var sub=BAG.reduce(function(a,l){return a+by(l.id).price*l.q},0);
+  document.getElementById('bagsub').textContent=money(sub);document.getElementById('baggst').textContent=money(sub/11);
+  document.getElementById('checkout').disabled=!BAG.length;
+}
+function openBag(){var d=document.getElementById('drawer');d.classList.add('on');d.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'}
+function closeBag(){var d=document.getElementById('drawer');d.classList.remove('on');d.setAttribute('aria-hidden','true');if(!document.getElementById('detail'))document.body.style.overflow=''}
+document.getElementById('bagbtn').onclick=openBag;document.getElementById('bagx').onclick=closeBag;document.getElementById('dim').onclick=closeBag;
+document.getElementById('baglist').addEventListener('click',function(e){
+  var b=e.target.closest('button');
+  if(b&&b.dataset.rm!==undefined){BAG.splice(+b.dataset.rm,1);saveBag();renderBag();return}
+  if(b&&b.dataset.d){var l=BAG[+b.dataset.i];l.q+=+b.dataset.d;if(l.q<=0)BAG.splice(+b.dataset.i,1);saveBag();renderBag();return}
+  if(e.target.closest('[data-close]'))closeBag();
+});
+document.getElementById('baglist').addEventListener('change',function(e){var s=e.target.closest('select');if(s){BAG[+s.dataset.i].size=s.value;saveBag();renderBag()}});
+document.getElementById('checkout').onclick=function(){toast('Checkout opens on the live store at launch')};
 
-/* ---- stage ---- */
+/* ---- cards ---- */
+function card(p){return '<a class="card" href="#p-'+p.id+'"><div class="ph">'+crop(p)+'<img class="alt" src="'+lookOf(p).img+'" alt="" loading="lazy" style="object-position:50% '+(isTop(p)?'40%':'60%')+'">'+(p.tag?'<span class="tag">'+p.tag+'</span>':'')+'</div><div class="row"><span>'+p.name+'</span><span>'+money(p.price)+'</span></div><div class="sw">'+p.cols.map(function(c){return '<i style="background:'+c[1]+'" title="'+c[0]+'"></i>'}).join('')+'</div></a>'}
+document.getElementById('newin').innerHTML=[P[4],P[10],P[0],P[1],P[2],P[3]].map(card).join('');
+
+/* ---- shop ---- */
+var filt='all',sortBy='feat';
+function renderShop(){
+  var items=P.filter(function(p){return filt==='all'||(filt==='top'?isTop(p):p.type===filt)});
+  if(sortBy==='lo')items=items.slice().sort(function(a,b){return a.price-b.price});if(sortBy==='hi')items=items.slice().sort(function(a,b){return b.price-a.price});
+  document.getElementById('grid').innerHTML=items.map(card).join('');
+  document.getElementById('cnt').textContent=items.length+' PIECES';
+  [].forEach.call(document.querySelectorAll('#chips .chip'),function(c){c.classList.toggle('on',c.dataset.f===filt)});
+}
+document.getElementById('chips').addEventListener('click',function(e){var c=e.target.closest('.chip');if(c){filt=c.dataset.f;renderShop()}});
+document.getElementById('sort').addEventListener('change',function(e){sortBy=e.target.value;renderShop()});
+var pendingScroll=null;
+document.addEventListener('click',function(e){var a=e.target.closest('a[data-f]');if(a){filt=a.dataset.f}var s=e.target.closest('a[data-s]');if(s){pendingScroll=s.dataset.s;if(location.hash==='#help'){go()}}});
+
+/* ---- product ---- */
+var sel={};
+function renderProduct(id){
+  var p=by(id);if(!p)return false;var l=lookOf(p),m=pair(p),s=sel[id]||(sel[id]={size:null,col:0});
+  var gal=[{src:l.img,pos:pos(p),alt:p.name+' on model'},{src:l.img,pos:'50% 50%',alt:'Full look'},{src:isTop(p)?'img/fabric.webp':'img/denim.webp',pos:'50% 50%',alt:'Fabric detail'},{src:isTop(p)?'img/label.webp':'img/flatlay.webp',pos:'50% 50%',alt:'Detail'}];
+  var v=document.getElementById('v-product');
+  v.innerHTML='<div class="crumbs"><a href="#home">Home</a> / <a href="#shop">Shop</a> / '+p.name+'</div>'+
+  '<div class="pdp"><div class="gal"><div class="thumbs" id="thumbs">'+gal.map(function(g,i){return '<button type="button" data-i="'+i+'" class="'+(i?'':'on')+'" aria-label="'+esc(g.alt)+'"><img src="'+g.src+'" alt="" style="object-position:'+g.pos+'"></button>'}).join('')+'</div>'+
+  '<div class="main"><img id="mainimg" src="'+gal[0].src+'" alt="'+esc(gal[0].alt)+'" style="object-position:'+gal[0].pos+'"><span class="zoom" id="zoomlab">'+gal[0].alt+'</span></div></div>'+
+  '<div class="buy"><div><span class="eyebrow">Drop 01 · '+(isTop(p)?'Top':'Bottom')+'</span><h1 style="margin-top:6px">'+p.name+'</h1></div>'+
+  '<div class="price">'+money(p.price)+'<small>incl. GST · free delivery</small></div>'+
+  '<div class="opt"><div class="k"><span>Colour · <span id="colname">'+p.cols[s.col][0]+'</span></span></div><div class="swatches" id="sw">'+p.cols.map(function(c,i){return '<button type="button" data-i="'+i+'" class="'+(i===s.col?'on':'')+'" aria-label="'+c[0]+'"><i style="background:'+c[1]+'"></i></button>'}).join('')+'</div></div>'+
+  '<div class="opt"><div class="k"><span id="sizek">Size'+(s.size?' · '+s.size:'')+'</span><a href="#help" data-s="h-size">Size guide</a></div><div class="sizes" id="sizes">'+SIZES.map(function(z){return '<button type="button" data-z="'+z+'" class="'+(z===s.size?'on':'')+(z==='3XL'?' low':'')+'">'+z+'</button>'}).join('')+'</div><span class="lab" id="sizehint">'+(s.size?'':'Select a size. Boxy fit: size down for a closer fit.')+'</span></div>'+
+  '<button class="cta" id="pdp-add" type="button"><span>Add to bag</span><span>'+money(p.price)+' →</span></button>'+
+  '<div class="meta"><span><b>In stock</b> · ships from Melbourne in 1 business day</span><span>Free delivery in Australia · 30-day returns · exchanges free</span></div>'+
+  '<div class="acc"><details open><summary>Details</summary><div class="body"><p style="margin:0 0 8px">'+p.desc+'</p><ul><li>'+p.fab+'</li><li>Garment washed, no shrinkage</li><li>Plain woven label, flat seams</li><li>Made in Tiruppur, India</li></ul></div></details>'+
+  '<details><summary>Fabric and care</summary><div class="body">'+p.fab+'. Cold wash inside out, line dry in shade, warm iron on reverse. No tumble dry.</div></details>'+
+  '<details><summary>Delivery and returns</summary><div class="body">Free tracked delivery in Australia, 2 to 7 business days. 30 days to return or exchange, unworn, with a prepaid label.</div></details></div></div></div>'+
+  '<section class="sec" style="padding-top:20px"><div class="sec-head"><h2>Complete the look</h2><a href="#looks">See look · '+l.name+' →</a></div><div class="grid pairgrid" style="grid-template-columns:repeat(2,minmax(0,1fr));max-width:560px">'+card(m)+'<div class="pairbox"><div><span class="eyebrow">Pair</span><h3 style="font-size:20px;margin-top:6px;font-weight:400">'+p.name+' + '+m.name+'</h3><p style="margin:8px 0 0;font-size:13px;color:var(--mute)">10% off when you add both. '+money((p.price+m.price)*.9)+' for the pair.</p></div><button class="cta" id="pdp-pair" type="button"><span>Add both</span><span>'+money((p.price+m.price)*.9)+' →</span></button></div></div></section>'+
+  '<section class="sec" style="padding-top:20px"><div class="sec-head"><h2>You may also like</h2><a href="#shop">Shop all →</a></div><div class="scroller">'+P.filter(function(x){return x.id!==p.id&&x.id!==m.id&&isTop(x)===isTop(p)}).slice(0,5).map(card).join('')+'</div></section>';
+  v.querySelector('#thumbs').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var g=gal[+b.dataset.i];var im=v.querySelector('#mainimg');im.src=g.src;im.style.objectPosition=g.pos;im.alt=g.alt;v.querySelector('#zoomlab').textContent=g.alt;[].forEach.call(b.parentNode.children,function(c){c.classList.toggle('on',c===b)})});
+  v.querySelector('#sw').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;s.col=+b.dataset.i;v.querySelector('#colname').textContent=p.cols[s.col][0];[].forEach.call(b.parentNode.children,function(c){c.classList.toggle('on',c===b)})});
+  v.querySelector('#sizes').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;s.size=b.dataset.z;[].forEach.call(b.parentNode.children,function(c){c.classList.toggle('on',c===b)});v.querySelector('#sizehint').textContent='';v.querySelector('#sizek').textContent='Size · '+s.size});
+  v.querySelector('#pdp-add').onclick=function(){if(!s.size){v.querySelector('#sizehint').textContent='Choose a size first.';v.querySelector('#sizes').scrollIntoView({block:'center',behavior:'smooth'});return}addBag(p.id,s.size,1,true);openBag()};
+  v.querySelector('#pdp-pair').onclick=function(){var z=s.size||'M';addBag(p.id,z,1,true);addBag(m.id,z,1,true);openBag();toast('Pair added in size '+z+' · change sizes in the bag')};
+  return true;
+}
+
+/* ---- shop the look stage ---- */
 var stage=document.getElementById('stage'),figs=[],cur=0,still=matchMedia('(prefers-reduced-motion:reduce)').matches;
 LOOKS.forEach(function(l,i){
   var b=document.createElement('button');b.type='button';b.className='fig';b.setAttribute('aria-label',l.name);b.dataset.i=i;
@@ -228,26 +611,24 @@ LOOKS.forEach(function(l,i){
   stage.appendChild(b);figs.push(b);
 });
 function layout(){
-  var W=stage.clientWidth,H=stage.clientHeight,narrow=W<640;
+  var W=stage.clientWidth,H=stage.clientHeight,narrow=W<640;if(!W)return;
   var h=Math.round(H*(narrow?.84:.9)), s0=narrow?W*.40:Math.min(W*.2,300), s1=narrow?W*.26:Math.min(W*.14,200);
   figs.forEach(function(el,i){
     var n=LOOKS.length,d=i-cur;if(d>3)d-=n;if(d<-2)d+=n;var a=Math.abs(d),sg=d<0?-1:1;
     var x=d===0?0:sg*(s0+(a-1)*s1);
-    var sc=a===0?1:a===1?.78:a===2?.62:.5;
-    var op=a===0?1:a===1?.5:a===2?.28:.14;
-    var bl=a===0?0:a===1?1.4:a===2?2.4:3;
-    el.style.height=h+'px';
-    el.style.transform='translate3d(calc(-50% + '+x.toFixed(1)+'px),0,0) scale('+sc+')';
+    var sc=a===0?1:a===1?.78:a===2?.62:.5, op=a===0?1:a===1?.5:a===2?.28:.14, bl=a===0?0:a===1?1.4:a===2?2.4:3;
+    el.style.height=h+'px';el.style.transform='translate3d(calc(-50% + '+x.toFixed(1)+'px),0,0) scale('+sc+')';
     el.style.opacity=op;el.style.filter=bl?'blur('+bl+'px)':'none';el.style.zIndex=10-a;
     el.classList.toggle('on',a===0);el.setAttribute('aria-hidden',a!==0);
   });
 }
+function pieceRow(p,j){return '<div class="piece" data-id="'+p.id+'"><span class="n">'+(j+1)+'</span><div class="th">'+crop(p)+'</div><div><small>KORA · '+(j?'Bottom':'Top')+'</small><strong><a href="#p-'+p.id+'">'+p.name+'</a></strong><span class="pr">'+money(p.price)+'</span></div><button class="add" type="button" data-id="'+p.id+'" aria-label="Add '+p.name+'">+</button></div>'}
 function setLook(i,user){
   cur=(i+LOOKS.length)%LOOKS.length;layout();
   var l=LOOKS[cur],items=[by(l.top),by(l.bottom)],total=items[0].price+items[1].price;
   document.getElementById('lk-no').textContent='In this look · '+String(cur+1).padStart(2,'0')+' / '+String(LOOKS.length).padStart(2,'0');
   document.getElementById('lk-name').textContent=l.name;
-  document.getElementById('pieces').innerHTML=items.map(function(p,j){return '<div class="piece" data-id="'+p.id+'"><span class="n">'+(j+1)+'</span><div class="th">'+crop(p)+'</div><div><small>KORA · '+(j?'Bottom':'Top')+'</small><strong>'+p.name+'</strong><span class="pr">'+money(p.price)+'</span></div><button class="add" type="button" data-id="'+p.id+'" aria-label="Add '+p.name+'">+</button></div>'}).join('');
+  document.getElementById('pieces').innerHTML=items.map(pieceRow).join('');
   document.getElementById('lk-total').textContent=money(total*.9);
   document.getElementById('lk-cta').textContent=money(total*.9)+' →';
   [].forEach.call(document.getElementById('idx').children,function(b,k){b.classList.toggle('on',k===cur)});
@@ -260,52 +641,54 @@ document.getElementById('next').onclick=function(){setLook(cur+1,true)};
 stage.addEventListener('click',function(e){
   var pin=e.target.closest('.pin');
   if(pin){e.stopPropagation();hilite(pin.dataset.id);pin.classList.add('hot');setTimeout(function(){pin.classList.remove('hot')},1200);last=Date.now();hold=12000;return}
-  if(dragged)return;
-  var f=e.target.closest('.fig');if(!f)return;
-  var i=+f.dataset.i; if(i===cur)openDetail(); else setLook(i,true);
+  if(dragged)return;var f=e.target.closest('.fig');if(!f)return;
+  var i=+f.dataset.i;if(i===cur)openDetail();else setLook(i,true);
 });
-function hilite(id){var el=document.querySelector('.piece[data-id="'+id+'"]');if(!el)return;el.classList.add('hl');el.scrollIntoView({block:'nearest',behavior:still?'auto':'smooth'});setTimeout(function(){el.classList.remove('hl')},1400)}
-document.getElementById('panel').addEventListener('click',function(e){var b=e.target.closest('.add');if(b)addBag(1,by(b.dataset.id).name+' added to bag')});
-document.getElementById('addlook').addEventListener('click',function(){addBag(2,LOOKS[cur].name+' look added to bag')});
-
-/* drag / swipe */
+function hilite(id){var el=document.querySelector('#panel .piece[data-id="'+id+'"]');if(!el)return;el.classList.add('hl');el.scrollIntoView({block:'nearest',behavior:still?'auto':'smooth'});setTimeout(function(){el.classList.remove('hl')},1400)}
+document.getElementById('panel').addEventListener('click',function(e){var b=e.target.closest('.add');if(b)addBag(b.dataset.id,'M')});
+document.getElementById('addlook').addEventListener('click',function(){var l=LOOKS[cur];addBag(l.top,'M',1,true);addBag(l.bottom,'M',1,true);toast(l.name+' look added in M · change sizes in the bag')});
 var sx=0,dragged=false,down=false;
 stage.addEventListener('pointerdown',function(e){down=true;dragged=false;sx=e.clientX;stage.classList.add('drag')});
 addEventListener('pointermove',function(e){if(!down)return;if(Math.abs(e.clientX-sx)>12)dragged=true});
 addEventListener('pointerup',function(e){if(!down)return;down=false;stage.classList.remove('drag');var dx=e.clientX-sx;if(Math.abs(dx)>40)setLook(cur+(dx<0?1:-1),true);setTimeout(function(){dragged=false},0)});
 stage.addEventListener('keydown',function(e){if(e.key==='ArrowRight')setLook(cur+1,true);if(e.key==='ArrowLeft')setLook(cur-1,true)});
-
-/* auto-advance */
 var last=Date.now(),hold=5200,bar=document.getElementById('bar');
-function tick(){var el=Date.now()-last,per=hold;bar.style.width=Math.min(100,el/per*100)+'%';
-  if(!still&&el>per&&!document.getElementById('detail')){last=Date.now();hold=5200;setLook(cur+1)}
+function tick(){var el=Date.now()-last;bar.style.width=Math.min(100,el/hold*100)+'%';
+  if(!still&&el>hold&&!document.getElementById('detail')&&route==='home'){last=Date.now();hold=5200;setLook(cur+1)}
   requestAnimationFrame(tick)}
 addEventListener('resize',layout);
-setLook(0);requestAnimationFrame(tick);
-
-/* detail view */
 function openDetail(){
   var l=LOOKS[cur],items=[by(l.top),by(l.bottom)],total=items[0].price+items[1].price;
   var d=document.createElement('div');d.className='detail';d.id='detail';d.setAttribute('role','dialog');d.setAttribute('aria-label',l.name);
   d.innerHTML='<div class="meta">LOOK '+String(cur+1).padStart(2,'0')+'<b>'+l.name+'</b></div><button class="x" type="button" aria-label="Close">&#10005;</button>'+
    '<div class="big"><img src="'+l.cut+'" alt="'+l.name+' look"></div>'+
-   '<aside class="panel"><div class="lab">In this look</div><h2>'+l.name+'</h2><div class="pieces">'+
-   items.map(function(p,j){return '<div class="piece" data-id="'+p.id+'"><span class="n">'+(j+1)+'</span><div class="th">'+crop(p)+'</div><div><small>KORA · '+(j?'Bottom':'Top')+'</small><strong>'+p.name+'</strong><span class="pr">'+money(p.price)+'</span></div><button class="add" type="button" data-id="'+p.id+'" aria-label="Add '+p.name+'">+</button></div>'}).join('')+
-   '</div><div class="sum"><div class="row"><span>Complete the look · 10% off the pair</span><b>'+money(total*.9)+'</b></div><button class="cta" type="button" id="d-add"><span>Add full look to bag</span><span>'+money(total*.9)+' →</span></button></div></aside>';
+   '<aside class="panel"><div class="lab">In this look</div><h3>'+l.name+'</h3><div class="pieces">'+items.map(pieceRow).join('')+'</div><div class="sum"><div class="row"><span>Complete the look · 10% off the pair</span><b>'+money(total*.9)+'</b></div><button class="cta" type="button" id="d-add"><span>Add full look to bag</span><span>'+money(total*.9)+' →</span></button></div></aside>';
   document.body.appendChild(d);document.body.style.overflow='hidden';
   d.querySelector('.x').onclick=closeDetail;
-  d.querySelector('#d-add').onclick=function(){addBag(2,l.name+' look added to bag')};
-  d.addEventListener('click',function(e){var b=e.target.closest('.add');if(b)addBag(1,by(b.dataset.id).name+' added to bag')});
+  d.querySelector('#d-add').onclick=function(){addBag(l.top,'M',1,true);addBag(l.bottom,'M',1,true);toast(l.name+' look added in M')};
+  d.addEventListener('click',function(e){var b=e.target.closest('.add');if(b)addBag(b.dataset.id,'M');if(e.target.closest('a'))closeDetail()});
   d.querySelector('.x').focus();
 }
-function closeDetail(){var d=document.getElementById('detail');if(d)d.remove();document.body.style.overflow='';last=Date.now();hold=12000}
-addEventListener('keydown',function(e){if(e.key==='Escape')closeDetail()});
+function closeDetail(){var d=document.getElementById('detail');if(d)d.remove();if(!document.getElementById('drawer').classList.contains('on'))document.body.style.overflow='';last=Date.now();hold=12000}
+addEventListener('keydown',function(e){if(e.key==='Escape'){closeDetail();closeBag()}});
 
-/* collection */
-var grid=document.getElementById('grid');
-P.forEach(function(p){var b=document.createElement('button');b.className='card';b.type='button';
-  b.innerHTML='<div class="ph">'+crop(p)+'</div><div class="row"><span>'+p.name+'</span><span>'+money(p.price)+'</span></div><div class="sw">'+p.cols.map(function(c){return '<i style="background:'+c+'"></i>'}).join('')+'</div>';
-  b.addEventListener('click',function(){addBag(1,p.name+' added to bag')});grid.appendChild(b)});
-
-document.getElementById('news').addEventListener('submit',function(e){e.preventDefault();toast('Thanks, you are on the list (concept preview)');e.target.reset()});
+/* ---- router ---- */
+var route='home';
+function show(name){
+  [].forEach.call(document.querySelectorAll('.view'),function(v){v.classList.toggle('on',v.id==='v-'+name)});
+  var h=location.hash;
+  [].forEach.call(document.querySelectorAll('[data-nav]'),function(a){a.classList.toggle('on',a.dataset.nav===name||(h==='#looks'&&a.dataset.nav==='looks'))});
+  route=name;
+}
+function go(){
+  var h=(location.hash||'#home').slice(1);closeDetail();closeBag();
+  if(h.indexOf('p-')===0){if(renderProduct(h.slice(2))){show('product');scrollTo(0,0);return}h='shop'}
+  if(h==='looks'){show('home');layout();setTimeout(function(){var el=document.getElementById('looks');if(el)el.scrollIntoView({behavior:still?'auto':'smooth'})},30);return}
+  if(h==='shop'){renderShop();show('shop');scrollTo(0,0);return}
+  if(h==='story'||h==='help'){show(h);scrollTo(0,0);if(h==='help'&&pendingScroll){var el=document.getElementById(pendingScroll);pendingScroll=null;if(el)setTimeout(function(){el.scrollIntoView({behavior:still?'auto':'smooth',block:'start'})},30)}return}
+  show('home');layout();scrollTo(0,0);
+}
+addEventListener('hashchange',go);
+document.getElementById('news').addEventListener('submit',function(e){e.preventDefault();toast('Thanks, you are on the list for Drop 01');e.target.reset()});
+renderBag();setLook(0);requestAnimationFrame(tick);go();
 </script>
