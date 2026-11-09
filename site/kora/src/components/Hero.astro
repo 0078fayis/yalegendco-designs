@@ -15,8 +15,11 @@
         <img src="/img/hero.webp" alt="Two models in a charcoal tee, light denim, cream knit and sand trousers" width="2048" height="1152" fetchpriority="high" />
       </picture>
       <picture class="shot">
-        <source media="(max-width: 760px)" srcset="/img/portrait.webp" />
+        <source media="(max-width: 760px)" srcset="/img/portrait2.webp" />
         <img src="/img/hero2.webp" alt="" width="2048" height="1152" loading="lazy" />
+      </picture>
+      <picture class="shot m-only">
+        <img src="/img/portrait3.webp" alt="" width="1152" height="1536" loading="lazy" />
       </picture>
       <div class="frame-meta label"><span>Drop 01</span><span>Melbourne · Nov 2026</span></div>
     </div>
@@ -42,6 +45,7 @@
 .frame{position:absolute;inset:0;overflow:hidden;background:var(--mist);transform-origin:50% 40%}
 .shot{position:absolute;inset:0;opacity:0;transition:opacity 1.8s var(--ease)}
 .shot.on{opacity:1}
+.m-only{display:none}
 .shot img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;transform:scale(1.08);will-change:transform;animation:drift 18s ease-in-out infinite alternate}
 .shot:nth-child(2) img{animation-delay:-9s;object-position:78% 30%}
 .frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(244,241,234,.92) 0%,rgba(244,241,234,.55) 28%,rgba(244,241,234,0) 52%)}
@@ -65,7 +69,9 @@
   .hero-h{font-size:clamp(44px,13vw,80px)}
   .frame-meta{left:16px;right:16px}
   .frame::after{background:linear-gradient(180deg,rgba(244,241,234,0) 42%,rgba(244,241,234,.75) 68%,rgba(244,241,234,.96) 100%)}
-  .shot img{object-position:50% 12%}
+  .shot img{object-position:50% 0;transform-origin:50% 0;animation-name:driftm}
+  @keyframes driftm{from{transform:scale(1.02) translate3d(0,0,0)}to{transform:scale(1.06) translate3d(-1.2%,0,0)}}
+  .m-only{display:block}
 }
 @media (prefers-reduced-motion:reduce){
   .shot img,.scroll-hint i{animation:none}

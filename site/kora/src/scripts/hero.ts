@@ -28,7 +28,7 @@ if (loader && frame && heroH && !reduce) {
     .to(rest, { opacity: 1, y: 0, duration: 1.1, stagger: 0.1 }, '-=1.0');
 
   // Second campaign shot crossfades in after the opening, then alternates
-  const shots = frame.querySelectorAll('.shot');
+  const shots = Array.from(frame.querySelectorAll<HTMLElement>('.shot')).filter((s) => getComputedStyle(s).display !== 'none');
   let i = 0;
   setInterval(() => { i = (i + 1) % shots.length; shots.forEach((s, k) => s.classList.toggle('on', k === i)); }, 7000);
 
