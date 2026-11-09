@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Bag from '../components/Bag.astro';
 interface Props { title?: string; description?: string }
 const { title = 'KORA', description = 'Heavy cotton basics in quiet shapes. Made in small batches by one workshop.' } = Astro.props;
 ---
@@ -14,16 +17,11 @@ const { title = 'KORA', description = 'Heavy cotton basics in quiet shapes. Made
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" />
+  <ClientRouter fallback="swap" />
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <header class="top wrap">
-    <a class="logo" href="/">KORA</a>
-    <nav class="nav" aria-label="Primary">
-      <a href="/shop/">Shop</a><a href="/looks/">Looks</a><a href="/story/">Story</a>
-    </nav>
-    <button class="bag" type="button">Bag <span>0</span></button>
-  </header>
+  <Header />
   <main id="main"><slot /></main>
   <footer class="foot wrap">
     <div class="foot-top rule">
@@ -36,26 +34,29 @@ const { title = 'KORA', description = 'Heavy cotton basics in quiet shapes. Made
     </div>
     <div class="foot-bot"><span class="label">© 2026 KORA (working name) · Melbourne</span><span class="label">Concept preview · Model imagery AI-generated · Prices are examples</span></div>
   </footer>
+  <Bag />
+  <script src="../scripts/ui.ts"></script>
   <script src="../scripts/hero.ts"></script>
   <script src="../scripts/motion.ts"></script>
 </body>
 </html>
 
+<style is:global>
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--bone);padding:8px 12px;z-index:100}
+.skip:focus{left:8px}
+html.lock,html.lock body{overflow:hidden}
+#wipe{position:fixed;inset:0;z-index:90;background:var(--mist);pointer-events:none;transform:translateY(101%)}
+#wipe.in{animation:wipein .6s var(--ease) forwards}
+#wipe.out{animation:wipeout .7s var(--ease) forwards}
+@keyframes wipein{from{transform:translateY(101%)}to{transform:translateY(0)}}
+@keyframes wipeout{from{transform:translateY(0)}to{transform:translateY(-101%)}}
+::view-transition-old(root),::view-transition-new(root){animation:none}
+</style>
 <style>
-.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--bone);padding:8px 12px}
-.skip:focus{left:8px;z-index:100}
-.top{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;height:68px;padding-top:env(safe-area-inset-top,0px);background:linear-gradient(var(--bone) 55%,rgba(244,241,234,0))}
-.logo{font-family:var(--sans);font-weight:500;letter-spacing:.34em;font-size:13px}
-.nav{display:flex;gap:28px;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
-.nav a{position:relative;padding-block:4px}
-.nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:currentColor;transition:right .5s var(--ease)}
-.nav a:hover::after{right:0}
-.bag{font-size:12px;letter-spacing:.06em;text-transform:uppercase;display:flex;gap:8px;align-items:center}
-.bag span{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--bone);font-size:10px}
-@media (max-width:760px){.nav{display:none}}
 .foot{padding-block:0 40px}
 .foot-top{display:grid;grid-template-columns:1.2fr 2fr;gap:40px;padding-block:48px}
 .foot-top p{margin-top:14px;color:var(--mute);font-size:13px}
+.logo{font-family:var(--sans);font-weight:500;letter-spacing:.34em;font-size:13px}
 .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 .cols div{display:grid;gap:8px;align-content:start;font-size:13px}
 .cols .label{margin-bottom:6px}

@@ -1,0 +1,50 @@
+---
+---
+<div class="bag-veil" id="bag-veil" transition:persist="bag-veil"></div>
+<aside class="bag" id="bag" aria-hidden="true" aria-label="Your bag" transition:persist="bag">
+  <div class="bag-head">
+    <h3>Your bag <span class="label" id="bag-n"></span></h3>
+    <button class="bag-x" id="bag-x" type="button" aria-label="Close bag">Close</button>
+  </div>
+  <div class="bag-items" id="bag-items"></div>
+  <div class="bag-empty" id="bag-empty">
+    <p>Nothing in here yet.</p>
+    <a class="btn" href="/shop/">See the twelve pieces</a>
+  </div>
+  <div class="bag-foot" id="bag-foot">
+    <div class="row"><span>Subtotal</span><b id="bag-sub"></b></div>
+    <div class="row mute"><span>Delivery</span><span>Free, Australia</span></div>
+    <div class="row mute"><span>Includes GST</span><span id="bag-gst"></span></div>
+    <button class="btn solid wide" id="bag-checkout" type="button">Checkout <span>→</span></button>
+    <span class="label">Concept preview · checkout opens on the live store at launch</span>
+  </div>
+</aside>
+
+<style is:global>
+.bag-veil{position:fixed;inset:0;z-index:70;background:rgba(20,20,20,.28);opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s;backdrop-filter:blur(2px)}
+.bag-veil.on{opacity:1;visibility:visible}
+.bag{position:fixed;top:0;right:0;bottom:0;z-index:71;width:min(440px,100%);background:var(--bone);display:grid;grid-template-rows:auto 1fr auto;transform:translateX(102%);transition:transform .8s var(--ease);padding-top:env(safe-area-inset-top,0px);box-shadow:-20px 0 60px rgba(20,20,20,.08)}
+.bag.open{transform:none}
+.bag-head{display:flex;justify-content:space-between;align-items:baseline;padding:22px 24px 16px;border-bottom:1px solid var(--line)}
+.bag-head h3{font-size:26px;display:flex;gap:10px;align-items:baseline}
+.bag-x{font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.bag-items{overflow:auto;padding:8px 24px}
+.bag .item{display:grid;grid-template-columns:72px 1fr auto;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);opacity:0;transform:translateX(20px);animation:itemin .7s var(--ease) forwards}
+@keyframes itemin{to{opacity:1;transform:none}}
+.bag .item img{width:72px;height:96px;object-fit:cover;background:var(--mist)}
+.bag .item .nm{font-size:14px;font-weight:400}
+.bag .item .mt{font-size:12px;color:var(--mute);margin-top:4px}
+.bag .item .q{display:inline-flex;align-items:center;gap:0;border:1px solid var(--line);margin-top:12px}
+.bag .item .q button{width:28px;height:28px}
+.bag .item .q span{min-width:24px;text-align:center;font-size:12px}
+.bag .item .rm{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-left:12px}
+.bag .item .pr{font-size:14px}
+.bag-empty{display:none;place-content:center;justify-items:center;gap:18px;text-align:center;color:var(--mute);padding:24px}
+.bag.empty .bag-empty{display:grid}
+.bag.empty .bag-items,.bag.empty .bag-foot{display:none}
+.bag-foot{padding:16px 24px calc(24px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:grid;gap:8px}
+.row{display:flex;justify-content:space-between;font-size:14px}
+.row.mute{font-size:12px;color:var(--mute)}
+.wide{width:100%;justify-content:space-between;margin-top:8px}
+.bag-foot .label{text-align:center;margin-top:6px}
+</style>
