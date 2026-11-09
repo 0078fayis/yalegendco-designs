@@ -1,21 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
 ---
 <Base title="KORA — Heavy cotton, quiet shapes">
 
-  <!-- Step 2 shell: placeholder opening. The real hero (video / motion) is step 3. -->
-  <section class="open wrap">
-    <span class="label r-fade">Drop 01 · Six looks · Step 2 shell</span>
-    <h1 data-split>Heavy cotton,<br><em>quiet</em> shapes.</h1>
-    <div class="open-row">
-      <p class="measure r-fade" data-delay="0.3">280 gsm combed cotton, boxy cuts, made in small batches by one workshop. Twelve pieces that go with each other.</p>
-      <div class="r-fade" data-delay="0.45"><a class="btn solid" href="#looks">Shop the look</a></div>
-    </div>
-  </section>
-
-  <section class="r-img full" data-depth="0.1">
-    <img src="/img/hero.webp" alt="Two models in a charcoal tee, light denim, cream knit and sand trousers" width="2048" height="1152" />
-  </section>
+  <Hero />
 
   <section class="sec wrap two" id="looks">
     <div>
@@ -42,18 +31,13 @@ import Base from '../layouts/Base.astro';
   </section>
 
   <section class="sec wrap end rule">
-    <h2 data-split>Next step: the hero.<br><em>Video</em>, or stills in motion.</h2>
-    <p class="measure r-fade">Scroll back up slowly. If the pace, the type and the air feel right, say so and step 3 begins.</p>
+    <h2 data-split>Step 3 done: the hero.<br>Next, <em>navigation</em> and the bag.</h2>
+    <p class="measure r-fade">Reload the page to watch the opening again. If it feels right, say go and step 4 begins.</p>
   </section>
 
 </Base>
 
 <style>
-.open{min-height:92svh;display:grid;align-content:end;gap:28px;padding-top:120px;padding-bottom:40px}
-.open-row{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end}
-.open p{color:var(--mute)}
-.full{max-height:88vh;aspect-ratio:16/9;max-width:100%}
-.full img{width:100%;height:100%;object-fit:cover}
 .two{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end}
 .two p{color:var(--mute)}
 .two .label{display:block;margin-bottom:22px}
@@ -69,8 +53,6 @@ import Base from '../layouts/Base.astro';
 .end{display:grid;gap:24px}
 .end p{color:var(--mute)}
 @media (max-width:760px){
-  .open{min-height:86svh;padding-top:100px}
-  .open-row{grid-template-columns:1fr}
   .two{grid-template-columns:1fr;gap:24px}
   .trio{grid-template-columns:1fr 1fr;gap:12px}
   .trio figure:nth-child(2),.trio figure:nth-child(3){margin-top:0}

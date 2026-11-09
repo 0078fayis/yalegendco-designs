@@ -1,0 +1,75 @@
+---
+// Step 3: opening sequence. Preloader counter -> wordmark lifts -> campaign frame settles -> headline rises.
+// On scroll the frame shrinks into an inset while the headline parts. Stills in motion (no video yet).
+---
+<div class="loader" id="loader" aria-hidden="true">
+  <span class="loader-mark">KORA</span>
+  <span class="loader-n"><span id="loader-n">00</span></span>
+</div>
+
+<section class="hero" id="hero">
+  <div class="hero-pin">
+    <div class="frame" id="frame">
+      <picture class="shot on">
+        <source media="(max-width: 760px)" srcset="/img/portrait.webp" />
+        <img src="/img/hero.webp" alt="Two models in a charcoal tee, light denim, cream knit and sand trousers" width="2048" height="1152" fetchpriority="high" />
+      </picture>
+      <picture class="shot">
+        <source media="(max-width: 760px)" srcset="/img/portrait.webp" />
+        <img src="/img/hero2.webp" alt="" width="2048" height="1152" loading="lazy" />
+      </picture>
+      <div class="frame-meta label"><span>Drop 01</span><span>Melbourne · Nov 2026</span></div>
+    </div>
+    <div class="hero-copy wrap">
+      <span class="label r-hero">Drop 01 · Six looks</span>
+      <h1 id="hero-h" class="hero-h"><span class="r-line"><span>Heavy cotton,</span></span><span class="r-line"><span><em>quiet</em> shapes.</span></span></h1>
+      <div class="hero-row">
+        <p class="measure r-hero">280 gsm combed cotton, boxy cuts, made in small batches by one workshop. Twelve pieces that go with each other.</p>
+        <div class="r-hero acts"><a class="btn solid" href="#looks">Shop the look</a><a class="btn" href="/shop/">All pieces</a></div>
+      </div>
+    </div>
+    <div class="scroll-hint r-hero" aria-hidden="true"><span class="label">Scroll</span><i></i></div>
+  </div>
+</section>
+
+<style>
+.loader{position:fixed;inset:0;z-index:100;background:var(--bone);display:flex;align-items:flex-end;justify-content:space-between;padding:28px var(--gutter);pointer-events:none}
+.loader-mark{font-family:var(--sans);font-weight:500;letter-spacing:.34em;font-size:13px;overflow:hidden}
+.loader-n{font-family:var(--serif);font-size:clamp(64px,12vw,160px);line-height:.85;letter-spacing:-.03em;overflow:hidden;display:block}
+.loader-n span{display:block}
+.hero{position:relative;height:200vh}
+.hero-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.frame{position:absolute;inset:0;overflow:hidden;background:var(--mist);transform-origin:50% 40%}
+.shot{position:absolute;inset:0;opacity:0;transition:opacity 1.8s var(--ease)}
+.shot.on{opacity:1}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;transform:scale(1.08);will-change:transform;animation:drift 18s ease-in-out infinite alternate}
+.shot:nth-child(2) img{animation-delay:-9s;object-position:78% 30%}
+.frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(244,241,234,.92) 0%,rgba(244,241,234,.55) 28%,rgba(244,241,234,0) 52%)}
+@keyframes drift{from{transform:scale(1.04) translate3d(0,0,0)}to{transform:scale(1.1) translate3d(-1%,-1.2%,0)}}
+.frame-meta{position:absolute;left:24px;right:24px;bottom:20px;display:flex;justify-content:space-between;color:var(--ink);opacity:0;transition:opacity 1s}
+.frame.inset .frame-meta{opacity:1}
+.hero-copy{position:absolute;left:0;right:0;bottom:0;padding-bottom:max(36px,6vh);display:grid;gap:22px;color:var(--ink)}
+.hero-h{font-size:clamp(48px,9vw,150px)}
+.hero-row{display:grid;grid-template-columns:1fr;gap:22px;justify-items:start;max-width:46ch}
+.hero-row p{color:#3d3a35}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.r-hero{opacity:0;transform:translateY(16px)}
+.scroll-hint{position:absolute;right:var(--gutter);bottom:max(36px,6vh);display:grid;justify-items:center;gap:10px}
+.scroll-hint i{width:1px;height:48px;background:var(--ink);transform-origin:top;animation:hint 2.2s var(--ease) infinite}
+@keyframes hint{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@media (max-width:760px){
+  .hero{height:170vh}
+  .hero-row{grid-template-columns:1fr;gap:18px}
+  .hero-row p{font-size:14px}
+  .scroll-hint{display:none}
+  .hero-h{font-size:clamp(44px,13vw,80px)}
+  .frame-meta{left:16px;right:16px}
+  .frame::after{background:linear-gradient(180deg,rgba(244,241,234,0) 42%,rgba(244,241,234,.75) 68%,rgba(244,241,234,.96) 100%)}
+  .shot img{object-position:50% 12%}
+}
+@media (prefers-reduced-motion:reduce){
+  .shot img,.scroll-hint i{animation:none}
+  .r-hero,.hero-h .r-line>span{opacity:1!important;transform:none!important}
+  .loader{display:none}
+}
+</style>
