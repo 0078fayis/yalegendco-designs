@@ -1,22 +1,30 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { P, SIZES, money } from '../../data/products';
+import { P, money, sizesFor, kind } from '../../data/products';
 import { LOOKS } from '../../data/looks';
 export function getStaticPaths() { return P.map((p) => ({ params: { id: p.id }, props: { p } })); }
 const { p } = Astro.props;
 const l = LOOKS[p.look - 1];
 const top = p.type !== 'pant';
-const mate = P.find((x) => x.id === (top ? l.bottom : l.top))!;
+const SIZES = sizesFor(p);
+const mate = P.find((x) => x.id === (p.mate || (top ? l.bottom : l.top)))!;
 const pair = Math.round((p.price + mate.price) * 0.9 * 100) / 100;
 const isDenim = p.fab.includes('denim');
-const gallery = [
+const isShoe = p.type === 'shoe';
+const gallery = p.img ? [
+  { src: p.img, pos: '50% 50%', alt: isShoe ? `${p.name}, pair` : `${p.name} on the hanger` },
+  { src: l.img, pos: `50% ${isShoe ? 92 : 18}%`, alt: `${l.name} look, worn with ${mate.name}` },
+  { src: isShoe ? '/img/flatlay.webp' : '/img/fabric.webp', pos: '50% 50%', alt: `${p.fab}, close` },
+  { src: '/img/label.webp', pos: '50% 50%', alt: 'Plain woven label, nothing else' },
+] : [
   { src: l.img, pos: `50% ${top ? 18 : 82}%`, alt: `${p.name} on model` },
   { src: l.cut, pos: '50% 50%', alt: `${l.name} look, full length`, cut: true },
   { src: isDenim ? '/img/denim.webp' : '/img/fabric.webp', pos: '50% 50%', alt: `${p.fab}, close` },
   { src: top ? '/img/label.webp' : '/img/flatlay.webp', pos: '50% 50%', alt: top ? 'Plain woven label at the neck' : 'Folded with the rest of the drop' },
 ];
-const also = P.filter((x) => x.id !== p.id && x.id !== mate.id && (x.type !== 'pant') === top).slice(0, 4);
-const care = isDenim ? 'Cold wash inside out, rarely. Line dry in shade. No tumble dry.' : 'Cold wash inside out, line dry in shade, warm iron on reverse. No tumble dry.';
+const also = P.filter((x) => x.id !== p.id && x.id !== mate.id && (p.img ? x.type === p.type : (x.type !== 'pant') === top && !x.img)).slice(0, 4);
+const hint = isShoe ? 'EU sizing. True to size, with room for a sock.' : 'Select a size. Boxy fit: size down for a closer fit.';
+const care = isShoe ? 'Brush dry dirt off. Canvas: cold hand wash, air dry. Suede and nubuck: brush and protect, keep out of the rain.' : isDenim ? 'Cold wash inside out, rarely. Line dry in shade. No tumble dry.' : 'Cold wash inside out, line dry in shade, warm iron on reverse. No tumble dry.';
 ---
 <Base title={`${p.name} — KORA`} description={p.desc}>
   <nav class="crumb wrap label" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/shop/">Shop</a> / <span>{p.name}</span></nav>
@@ -35,7 +43,7 @@ const care = isDenim ? 'Cold wash inside out, rarely. Line dry in shade. No tumb
     </div>
 
     <aside class="buy">
-      <span class="label">Drop 01 · {top ? 'Top' : 'Bottom'}{p.tag ? ` · ${p.tag}` : ''}</span>
+      <span class="label">Drop 01 · {kind(p)}{p.tag ? ` · ${p.tag}` : ''}</span>
       <h1>{p.name}</h1>
       <div class="price"><b>{money(p.price)}</b><span class="label">incl. GST · free delivery</span></div>
 
@@ -46,21 +54,21 @@ const care = isDenim ? 'Cold wash inside out, rarely. Line dry in shade. No tumb
 
       <div class="opt">
         <div class="k label"><span id="sizek">Size</span><a href="/help/#size">Size guide</a></div>
-        <div class="sizes" id="sizes">{SIZES.map((z) => <button type="button" data-z={z} class={z === '3XL' ? 'low' : ''}>{z}</button>)}</div>
-        <span class="label hint" id="sizehint">Select a size. Boxy fit: size down for a closer fit.</span>
+        <div class="sizes" id="sizes" style={`grid-template-columns:repeat(${SIZES.length > 7 ? 5 : 7},minmax(0,1fr))`}>{SIZES.map((z) => <button type="button" data-z={z} class={z === '3XL' || z === '45' ? 'low' : ''}>{z}</button>)}</div>
+        <span class="label hint" id="sizehint">{hint}</span>
       </div>
 
       <button class="btn solid wide" id="pdp-add" type="button" data-id={p.id}><span>Add to bag</span><span>{money(p.price)} →</span></button>
       <div class="meta"><span><b class="ok">In stock</b> · ships from Melbourne in 1 business day</span><span>30-day returns · exchanges free</span></div>
 
       <div class="acc">
-        <details open><summary>Details</summary><div class="body"><p>{p.desc}</p><ul><li>{p.fab}</li><li>Garment washed, no shrinkage</li><li>Plain woven label, flat seams</li><li>Made in small batches by one workshop</li></ul></div></details>
+        <details open><summary>Details</summary><div class="body"><p>{p.desc}</p><ul><li>{p.fab}</li>{isShoe ? <li>Cotton laces, leather lining</li> : <li>Garment washed, no shrinkage</li>}<li>Plain woven label, flat seams</li><li>Made in small batches by one workshop</li></ul></div></details>
         <details><summary>Fabric and care</summary><div class="body">{p.fab}. {care}</div></details>
         <details><summary>Delivery and returns</summary><div class="body">Free tracked delivery in Australia, 2 to 7 business days. 30 days to return or exchange, unworn, with a prepaid label.</div></details>
       </div>
 
       <div class="pairbox">
-        <div class="pair-pic"><img src={l.img} alt={`${mate.name} on model`} style={`object-position:50% ${top ? 82 : 18}%`} width="300" height="400" loading="lazy" /></div>
+        <div class="pair-pic"><img src={mate.img || l.img} alt={mate.img ? mate.name : `${mate.name} on model`} style={`object-position:50% ${top ? 82 : 18}%`} width="300" height="400" loading="lazy" /></div>
         <div>
           <span class="label">Complete the look · {l.name}</span>
           <h3>{mate.name}</h3>
@@ -76,7 +84,7 @@ const care = isDenim ? 'Cold wash inside out, rarely. Line dry in shade. No tumb
     <div class="also-row">
       {also.map((x) => { const lx = LOOKS[x.look - 1]; return (
         <a class="card r-fade" href={`/p/${x.id}/`}>
-          <div class="card-pic"><img src={lx.img} alt={x.name} style={`object-position:50% ${x.type !== 'pant' ? 18 : 82}%`} width="600" height="800" loading="lazy" /></div>
+          <div class="card-pic"><img src={x.img || lx.img} alt={x.name} style={`object-position:50% ${x.type !== 'pant' ? 18 : 82}%`} width="600" height="800" loading="lazy" /></div>
           <div class="card-meta"><span>{x.name}</span><span class="pr">{money(x.price)}</span></div>
         </a>
       ); })}

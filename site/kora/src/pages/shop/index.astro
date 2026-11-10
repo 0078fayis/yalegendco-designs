@@ -2,13 +2,14 @@
 import Base from '../../layouts/Base.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { P } from '../../data/products';
-const filters = [['all', 'All', P.length], ['top', 'Tops', P.filter((p) => p.type !== 'pant').length], ['pant', 'Bottoms', P.filter((p) => p.type === 'pant').length], ['hoodie', 'Fleece', P.filter((p) => p.type === 'hoodie').length], ['new', 'New', P.filter((p) => p.tag === 'New').length]] as const;
+const n = (t: string) => P.filter((p) => p.type === t).length;
+const filters = [['all', 'All', P.length], ['top', 'Tops', n('top') + n('hoodie')], ['pant', 'Bottoms', n('pant')], ['dress', 'Dresses', n('dress')], ['shirt', 'Shirts', n('shirt')], ['shoe', 'Shoes', n('shoe')], ['new', 'New', P.filter((p) => p.tag === 'New').length]] as const;
 ---
 <Base title="KORA — Shop all twelve pieces" description="Six tops and six bottoms in one palette. Heavy cotton basics, free delivery in Australia.">
   <section class="shop-head wrap">
     <span class="label r-fade">Drop 01 · Live now</span>
-    <h1 data-split>Twelve<br>pieces<em>.</em></h1>
-    <p class="measure r-fade" data-delay="0.2">Six tops, six bottoms, one palette. Any top goes with any bottom. Free delivery in Australia, 30-day returns.</p>
+    <h1 data-split>One<br>palette<em>.</em></h1>
+    <p class="measure r-fade" data-delay="0.2">Tops, bottoms, dresses, shirts and shoes, all in the same six colours. Anything goes with anything. Free delivery in Australia, 30-day returns.</p>
   </section>
 
   <div class="bar wrap" id="shop-bar">
@@ -78,7 +79,7 @@ const filters = [['all', 'All', P.length], ['top', 'Tops', P.filter((p) => p.typ
       chips.forEach((c) => { const on = c.dataset.f === f; c.classList.toggle('on', on); c.setAttribute('aria-selected', String(on)); });
       let n = 0;
       cards.forEach((c) => {
-        const t = c.dataset.type!, show = f === 'all' || (f === 'top' && t !== 'pant') || (f === 'pant' && t === 'pant') || (f === 'hoodie' && t === 'hoodie') || (f === 'new' && c.dataset.tag === 'New');
+        const t = c.dataset.type!, show = f === 'all' || (f === 'top' && (t === 'top' || t === 'hoodie')) || (f === 'new' && c.dataset.tag === 'New') || f === t;
         c.classList.toggle('off', !show); if (show) n++;
       });
       const s = sort.value;

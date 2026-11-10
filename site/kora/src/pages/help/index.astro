@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 const nav = [['delivery', 'Delivery'], ['returns', 'Returns and exchanges'], ['size', 'Size guide'], ['care', 'Care'], ['faq', 'Questions'], ['contact', 'Contact']];
 const tops = [['XS', 50, 64, 56], ['S', 53, 66, 58], ['M', 56, 68, 60], ['L', 59, 70, 62], ['XL', 62, 72, 64], ['2XL', 65, 74, 66], ['3XL', 68, 76, 68]];
+const shoes = [['36', 23], ['37', 23.7], ['38', 24.3], ['39', 25], ['40', 25.7], ['41', 26.3], ['42', 27], ['43', 27.7], ['44', 28.3], ['45', 29]];
 const pants = [['XS', 70, 31, 70], ['S', 74, 31.5, 72], ['M', 78, 32, 74], ['L', 82, 32.5, 76], ['XL', 86, 33, 78], ['2XL', 92, 33.5, 80], ['3XL', 98, 34, 82]];
 const faq = [
   ['Is KORA a real shop yet?', 'Not yet. This is a concept preview. Prices are examples, the model imagery is AI-generated, and checkout opens at launch. The newsletter on the home page is the way to hear first.'],
@@ -47,7 +48,7 @@ const faq = [
       <section class="blk" id="size">
         <h2 data-split>Size <em>guide</em></h2>
         <p>Everything is cut boxy with a dropped shoulder. The measurements are of the garment laid flat, in centimetres. If you are between sizes, go down for a closer fit, up for more room.</p>
-        <div class="tabs" role="tablist"><button type="button" class="on" data-t="tops" role="tab" aria-selected="true">Tops</button><button type="button" data-t="pants" role="tab" aria-selected="false">Bottoms</button></div>
+        <div class="tabs" role="tablist"><button type="button" class="on" data-t="tops" role="tab" aria-selected="true">Tops</button><button type="button" data-t="pants" role="tab" aria-selected="false">Bottoms</button><button type="button" data-t="shoes" role="tab" aria-selected="false">Shoes</button></div>
         <div class="tbl" id="tbl-tops">
           <table><thead><tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th></tr></thead>
           <tbody>{tops.map((r) => <tr>{r.map((c, i) => i ? <td>{c}</td> : <th scope="row">{c}</th>)}</tr>)}</tbody></table>
@@ -58,7 +59,12 @@ const faq = [
           <tbody>{pants.map((r) => <tr>{r.map((c, i) => i ? <td>{c}</td> : <th scope="row">{c}</th>)}</tr>)}</tbody></table>
           <span class="label">Waist is the full relaxed circumference. Inseam is in inches, as denim usually is. Hem to a shorter length on request.</span>
         </div>
-        <p class="fit">Our models wear M. The man in Night Shift is 184 cm, the woman in Market Run is 171 cm.</p>
+        <div class="tbl" id="tbl-shoes" hidden>
+          <table><thead><tr><th>EU</th><th>Foot length, cm</th><th>AU women</th><th>AU men</th></tr></thead>
+          <tbody>{shoes.map(([eu, cm], i) => <tr><th scope="row">{eu}</th><td>{cm}</td><td>{i + 5}</td><td>{i + 3}</td></tr>)}</tbody></table>
+          <span class="label">Measure heel to longest toe, standing, in the evening. Pick the EU size whose length is at least 0.5 cm more.</span>
+        </div>
+        <p class="fit">Dresses and shirts follow the tops table. Our models wear M. The man in Night Shift is 184 cm, the woman in Market Run is 171 cm.</p>
       </section>
 
       <section class="blk" id="care">
@@ -143,6 +149,7 @@ tbody th{font-weight:400}
       root.querySelectorAll('.tabs button').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-selected', String(x === b)); });
       (document.getElementById('tbl-tops') as HTMLElement).hidden = b.dataset.t !== 'tops';
       (document.getElementById('tbl-pants') as HTMLElement).hidden = b.dataset.t !== 'pants';
+      (document.getElementById('tbl-shoes') as HTMLElement).hidden = b.dataset.t !== 'shoes';
     }));
     const links = root.querySelectorAll<HTMLAnchorElement>('.hp-nav a');
     const io = new IntersectionObserver((en) => en.forEach((e) => { if (e.isIntersecting) links.forEach((a) => a.classList.toggle('on', a.dataset.sec === e.target.id)); }), { rootMargin: '-30% 0px -60% 0px' });

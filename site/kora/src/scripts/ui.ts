@@ -21,7 +21,7 @@ function renderBag() {
   items.innerHTML = bag.map((l, i) => {
     const p = P.find((x) => x.id === l.id)!;
     return `<div class="item" style="animation-delay:${i * 0.06}s">
-      <img src="/models/look${p.look}.webp" alt="" width="72" height="96">
+      <img src="${p.img || `/models/look${p.look}.webp`}" alt="" width="72" height="96">
       <div><div class="nm">${p.name}</div><div class="mt">${p.cols[0][0]} · Size ${l.size}</div>
         <div><span class="q"><button type="button" data-d="-1" data-i="${i}" aria-label="Less">−</button><span>${l.qty}</span><button type="button" data-d="1" data-i="${i}" aria-label="More">+</button></span><button type="button" class="rm" data-rm="${i}">Remove</button></div></div>
       <div class="pr">${money(p.price * l.qty)}</div></div>`;
