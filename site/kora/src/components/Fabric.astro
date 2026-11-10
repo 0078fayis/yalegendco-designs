@@ -1,0 +1,58 @@
+---
+const rows = [
+  { n: '280', u: 'gsm', t: 'Heavy enough to hold a boxy shape, soft enough for summer. Most high-street tees are 150 to 180.', img: '/img/fabric.webp', alt: 'Charcoal 280 gsm cotton jersey, close' },
+  { n: '01', u: 'label', t: 'No prints, no slogans. One plain woven label at the neck, flat seams, a slightly dropped shoulder.', img: '/img/label.webp', alt: 'Plain woven label at the neck of a charcoal tee' },
+  { n: '12', u: 'pieces', t: 'Six tops, six bottoms, one palette. Any top goes with any bottom, which is the whole idea.', img: '/img/flatlay.webp', alt: 'Tee, knit and denim folded on linen' },
+];
+---
+<section class="fab wrap" id="fabric">
+  <div class="fab-sticky">
+    <span class="label r-fade">04 · The cloth</span>
+    <h2 data-split>Made of<br><em>less.</em></h2>
+    <div class="fab-nums">
+      {rows.map((r, i) => <div class="num" data-k={i}><span class="big">{r.n}</span><span class="label">{r.u}</span></div>)}
+    </div>
+  </div>
+  <div class="fab-rows">
+    {rows.map((r, i) => (
+      <article class="fab-row" data-k={i}>
+        <div class="r-img" data-depth="0.07"><img src={r.img} alt={r.alt} width="1024" height="1024" loading="lazy" /></div>
+        <p class="measure r-fade">{r.t}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+.fab{padding-block:var(--section) 0;display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:start}
+.fab-sticky{position:sticky;top:110px;display:grid;gap:28px}
+.fab-nums{display:grid;gap:4px;margin-top:20px}
+.num{display:flex;gap:12px;align-items:baseline;opacity:.28;transition:opacity .6s}
+.num.on{opacity:1}
+.num .big{font-family:var(--serif);font-size:48px;line-height:1;letter-spacing:-.02em;min-width:2.2ch}
+.fab-rows{display:grid;gap:14vh}
+.fab-row{display:grid;gap:18px}
+.fab-row .r-img{aspect-ratio:4/5;max-width:100%}
+.fab-row img{width:100%;height:100%;object-fit:cover}
+.fab-row:nth-child(2){margin-left:18%}
+.fab-row:nth-child(3){margin-right:18%}
+.fab-row p{color:var(--mute)}
+@media (max-width:760px){
+  .fab{grid-template-columns:1fr;gap:28px}
+  .fab-sticky{position:static}
+  .fab-nums{display:flex;gap:24px;margin-top:4px}
+  .num .big{font-size:36px}
+  .fab-rows{gap:48px}
+  .fab-row:nth-child(2),.fab-row:nth-child(3){margin:0}
+}
+</style>
+
+<script>
+  function wire() {
+    const rows = document.querySelectorAll<HTMLElement>('.fab-row'); if (!rows.length) return;
+    const nums = document.querySelectorAll<HTMLElement>('.fab .num');
+    const io = new IntersectionObserver((en) => en.forEach((e) => { if (e.isIntersecting) nums.forEach((n) => n.classList.toggle('on', n.dataset.k === (e.target as HTMLElement).dataset.k)); }), { rootMargin: '-40% 0px -40% 0px' });
+    rows.forEach((r) => io.observe(r));
+  }
+  wire(); document.addEventListener('astro:page-load', wire);
+</script>

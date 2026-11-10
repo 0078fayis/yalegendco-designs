@@ -1,0 +1,52 @@
+---
+---
+<section class="ws" id="workshop">
+  <div class="ws-pic r-img" data-depth="0.12">
+    <img src="/img/workshop.webp" alt="Hands guiding charcoal cotton through an overlock machine" width="1600" height="1067" loading="lazy" />
+  </div>
+  <div class="ws-copy wrap">
+    <span class="label r-fade">05 · How it is made</span>
+    <h2 data-split>One workshop.<br><em>Small</em> batches.</h2>
+    <p class="measure r-fade" data-delay="0.15">Every piece is knitted, dyed and sewn under one roof by a single workshop we know by name. We make 50 to 80 of each style. When they are gone, the next drop is a new colour, not a restock.</p>
+    <div class="r-fade" data-delay="0.3"><a class="btn" href="/story/">Read the story</a></div>
+  </div>
+</section>
+
+<section class="news wrap" id="news">
+  <div class="news-in rule">
+    <div><span class="label r-fade">Next drop</span><h2 data-split>Be first to<br>the <em>next</em> six.</h2></div>
+    <form class="news-form r-fade" id="news-form" novalidate>
+      <label class="label" for="email">Email</label>
+      <div class="field"><input id="email" type="email" placeholder="you@example.com" autocomplete="email" required /><button class="btn solid" type="submit">Notify me</button></div>
+      <span class="label" id="news-msg">One email per drop. No newsletters.</span>
+    </form>
+  </div>
+</section>
+
+<style>
+.ws{margin-top:var(--section);position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:center;background:var(--mist)}
+.ws-pic{aspect-ratio:4/5;max-height:92vh;max-width:100%}
+.ws-pic img{width:100%;height:100%;object-fit:cover}
+.ws-copy{display:grid;gap:22px;padding-block:60px}
+.ws-copy p{color:var(--mute)}
+.news{padding-block:var(--section) 0}
+.news-in{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;padding-top:48px}
+.news-in .label{display:block;margin-bottom:18px}
+.news-form{display:grid;gap:10px}
+.field{display:flex;gap:10px;border-bottom:1px solid var(--ink);padding-bottom:8px}
+.field input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:16px;padding:10px 0;outline:none;color:var(--ink)}
+.field input::placeholder{color:var(--mute)}
+@media (max-width:760px){.ws{grid-template-columns:1fr}.ws-pic{aspect-ratio:4/5;max-height:70vh}.news-in{grid-template-columns:1fr;gap:24px}.field{flex-wrap:wrap}.field .btn{width:100%;justify-content:center}}
+</style>
+
+<script>
+  function wire() {
+    const f = document.getElementById('news-form') as HTMLFormElement | null; if (!f || f.dataset.ready) return; f.dataset.ready = '1';
+    f.addEventListener('submit', (e) => {
+      e.preventDefault(); const i = f.querySelector('input')!; const m = document.getElementById('news-msg')!;
+      if (!i.validity.valid) { m.textContent = 'That email does not look right.'; return; }
+      m.textContent = 'Thanks. You are on the list for Drop 02.'; i.value = '';
+    });
+  }
+  wire(); document.addEventListener('astro:page-load', wire);
+</script>
