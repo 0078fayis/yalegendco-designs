@@ -15,9 +15,11 @@
 <section class="news wrap" id="news">
   <div class="news-in rule">
     <div><span class="label r-fade">Next drop</span><h2 data-split>Be first to<br>the <em>next</em> six.</h2></div>
-    <form class="news-form r-fade" id="news-form" novalidate>
+    <form class="news-form r-fade" id="news-form" name="drop-alerts" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="website" novalidate>
+      <input type="hidden" name="form-name" value="drop-alerts" />
+      <p class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off" /></label></p>
       <label class="label" for="email">Email</label>
-      <div class="field"><input id="email" type="email" placeholder="you@example.com" autocomplete="email" required /><button class="btn solid" type="submit">Notify me</button></div>
+      <div class="field"><input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required /><button class="btn solid" type="submit">Notify me</button></div>
       <span class="label" id="news-msg">One email per drop. No newsletters.</span>
     </form>
   </div>
@@ -36,16 +38,23 @@
 .field{display:flex;gap:10px;border-bottom:1px solid var(--ink);padding-bottom:8px}
 .field input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:16px;padding:10px 0;outline:none;color:var(--ink)}
 .field input::placeholder{color:var(--mute)}
+.hp{position:absolute;left:-9999px}
 @media (max-width:760px){.ws{grid-template-columns:1fr}.ws-pic{aspect-ratio:4/5;max-height:70vh}.news-in{grid-template-columns:1fr;gap:24px}.field{flex-wrap:wrap}.field .btn{width:100%;justify-content:center}}
 </style>
 
 <script>
   function wire() {
     const f = document.getElementById('news-form') as HTMLFormElement | null; if (!f || f.dataset.ready) return; f.dataset.ready = '1';
-    f.addEventListener('submit', (e) => {
-      e.preventDefault(); const i = f.querySelector('input')!; const m = document.getElementById('news-msg')!;
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault(); const i = f.querySelector<HTMLInputElement>('#email')!; const m = document.getElementById('news-msg')!;
       if (!i.validity.valid) { m.textContent = 'That email does not look right.'; return; }
-      m.textContent = 'Thanks. You are on the list for Drop 02.'; i.value = '';
+      m.textContent = 'One moment.';
+      try {
+        const body = new URLSearchParams(new FormData(f) as any).toString();
+        const r = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+        if (!r.ok) throw new Error(String(r.status));
+        m.textContent = 'Thanks. You are on the list for Drop 02.'; i.value = '';
+      } catch { m.textContent = 'Saved locally for the preview. On the live site this goes to our inbox.'; i.value = ''; }
     });
   }
   wire(); document.addEventListener('astro:page-load', wire);

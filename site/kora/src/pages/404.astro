@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="KORA — Not found" description="That page is not here.">
+  <section class="nf wrap">
+    <span class="label r-fade">404</span>
+    <h1 data-split>Nothing<br>here <em>yet.</em></h1>
+    <p class="measure r-fade" data-delay="0.2">The page moved, or never existed. Twelve pieces are one tap away.</p>
+    <div class="r-fade" data-delay="0.3"><a class="btn" href="/shop/">Shop Drop 01</a> <a class="btn" href="/">Home</a></div>
+  </section>
+</Base>
+<style>
+.nf{min-height:80svh;display:grid;align-content:end;gap:24px;padding-block:120px 80px}
+.nf p{color:var(--mute)}
+.nf div{display:flex;gap:10px;flex-wrap:wrap}
+</style>
