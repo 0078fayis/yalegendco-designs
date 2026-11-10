@@ -5,6 +5,7 @@ gsap.registerPlugin(ScrollTrigger);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let firstLoad = true;
 let rotate: number | undefined;
+let cur = 0;
 
 function init() {
   const loader = document.getElementById('loader');
@@ -34,8 +35,19 @@ function init() {
   firstLoad = false;
 
   const shots = Array.from(frame.querySelectorAll<HTMLElement>('.shot')).filter((s) => getComputedStyle(s).display !== 'none');
-  let i = 0;
-  rotate = window.setInterval(() => { i = (i + 1) % shots.length; shots.forEach((s, k) => s.classList.toggle('on', k === i)); }, 7000);
+  const dots = document.getElementById('shot-dots');
+  if (dots) dots.innerHTML = shots.map((_, k) => `<i class="${k === 0 ? 'on' : ''}"></i>`).join('');
+  cur = 0;
+  const show = (n: number) => { cur = (n + shots.length) % shots.length; shots.forEach((s, k) => s.classList.toggle('on', k === cur)); dots?.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k === cur)); };
+  const arm = () => { clearInterval(rotate); rotate = window.setInterval(() => show(cur + 1), 5000); };
+  arm();
+  const prev = document.getElementById('shot-prev'), next = document.getElementById('shot-next');
+  const noFocus = (e: Event) => e.preventDefault(); // focusing inside the sticky hero makes phones scroll-jump
+  if (prev) { prev.onclick = () => { show(cur - 1); arm(); }; prev.onmousedown = noFocus; }
+  if (next) { next.onclick = () => { show(cur + 1); arm(); }; next.onmousedown = noFocus; }
+  let x0 = 0, y0 = 0;
+  frame.onpointerdown = (e) => { x0 = e.clientX; y0 = e.clientY; };
+  frame.onpointerup = (e) => { const dx = e.clientX - x0, dy = e.clientY - y0; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) { show(dx < 0 ? cur + 1 : cur - 1); arm(); } };
 
   const mq = matchMedia('(max-width: 760px)').matches;
   const inset = mq ? 'inset(10vh 16px 14vh 16px)' : 'inset(8vh 8vw 10vh 8vw)';

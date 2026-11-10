@@ -18,10 +18,16 @@
         <source media="(max-width: 760px)" srcset="/img/portrait2.webp" />
         <img src="/img/hero2.webp" alt="" width="2048" height="1152" loading="lazy" />
       </picture>
-      <picture class="shot m-only">
-        <img src="/img/portrait3.webp" alt="" width="1152" height="1536" loading="lazy" />
-      </picture>
+      <picture class="shot"><img src="/img/portrait3.webp" alt="" width="1152" height="1536" loading="lazy" /></picture>
+      <picture class="shot"><img src="/img/portrait4.webp" alt="" width="1152" height="1536" loading="lazy" /></picture>
+      <picture class="shot"><img src="/img/portrait5.webp" alt="" width="900" height="1200" loading="lazy" /></picture>
+      <picture class="shot"><img src="/img/portrait6.webp" alt="" width="900" height="1200" loading="lazy" /></picture>
       <div class="frame-meta label"><span>Drop 01</span><span>Melbourne · Nov 2026</span></div>
+      <div class="shot-nav" id="shot-nav">
+        <button type="button" id="shot-prev" aria-label="Previous image">←</button>
+        <div class="shot-dots" id="shot-dots" aria-hidden="true"></div>
+        <button type="button" id="shot-next" aria-label="Next image">→</button>
+      </div>
     </div>
     <div class="hero-copy wrap">
       <span class="label r-hero">Drop 01 · Six looks</span>
@@ -42,17 +48,25 @@
 .loader-n span{display:block}
 .hero{position:relative;height:200vh}
 .hero-pin{position:sticky;top:0;height:100svh;overflow:hidden}
-.frame{position:absolute;inset:0;overflow:hidden;background:var(--mist);transform-origin:50% 40%}
+.frame{position:absolute;inset:0;overflow:hidden;background:var(--mist);transform-origin:50% 40%;touch-action:pan-y;user-select:none}
 .shot{position:absolute;inset:0;opacity:0;transition:opacity 1.8s var(--ease)}
 .shot.on{opacity:1}
 .m-only{display:none}
-.shot img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;transform:scale(1.08);will-change:transform;animation:drift 18s ease-in-out infinite alternate}
+.shot img{-webkit-user-drag:none;pointer-events:none;width:100%;height:100%;object-fit:cover;object-position:50% 30%;transform:scale(1.08);will-change:transform;animation:drift 18s ease-in-out infinite alternate}
 .shot:nth-child(2) img{animation-delay:-9s;object-position:78% 30%}
+.shot:nth-child(n+3) img{object-position:50% 14%}
+.shot-nav{position:absolute;right:24px;top:max(84px,10vh);display:flex;align-items:center;gap:10px;z-index:2}
+.shot-nav button{width:40px;height:40px;border:1px solid rgba(20,20,20,.25);border-radius:50%;background:rgba(244,241,234,.6);backdrop-filter:blur(6px);font-size:14px;transition:background .4s,color .4s}
+.shot-nav button:hover{background:var(--ink);color:var(--bone)}
+.shot-dots{display:flex;gap:5px}
+.shot-dots i{width:16px;height:2px;background:rgba(20,20,20,.25);transition:background .4s}
+.shot-dots i.on{background:var(--ink)}
 .frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(244,241,234,.92) 0%,rgba(244,241,234,.55) 28%,rgba(244,241,234,0) 52%)}
 @keyframes drift{from{transform:scale(1.04) translate3d(0,0,0)}to{transform:scale(1.1) translate3d(-1%,-1.2%,0)}}
 .frame-meta{position:absolute;left:24px;right:24px;bottom:20px;display:flex;justify-content:space-between;color:var(--ink);opacity:0;transition:opacity 1s}
 .frame.inset .frame-meta{opacity:1}
-.hero-copy{position:absolute;left:0;right:0;bottom:0;padding-bottom:max(36px,6vh);display:grid;gap:22px;color:var(--ink)}
+.hero-copy{position:absolute;left:0;right:0;bottom:0;padding-bottom:max(36px,6vh);display:grid;gap:22px;color:var(--ink);pointer-events:none}
+.hero-copy a{pointer-events:auto}
 .hero-h{font-size:clamp(48px,9vw,150px)}
 .hero-row{display:grid;grid-template-columns:1fr;gap:22px;justify-items:start;max-width:46ch}
 .hero-row p{color:#3d3a35}
@@ -68,6 +82,9 @@
   .scroll-hint{display:none}
   .hero-h{font-size:clamp(44px,13vw,80px)}
   .frame-meta{left:16px;right:16px}
+  .shot-nav{right:16px;top:auto;bottom:calc(max(36px,6vh) + 230px)}
+  .shot-nav button{width:36px;height:36px}
+  .shot:nth-child(n+3) img{object-position:50% 0}
   .frame::after{background:linear-gradient(180deg,rgba(244,241,234,0) 42%,rgba(244,241,234,.75) 68%,rgba(244,241,234,.96) 100%)}
   .shot img{object-position:50% 0;transform-origin:50% 0;animation-name:driftm}
   @keyframes driftm{from{transform:scale(1.02) translate3d(0,0,0)}to{transform:scale(1.06) translate3d(-1.2%,0,0)}}
