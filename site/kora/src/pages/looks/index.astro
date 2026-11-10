@@ -1,15 +1,83 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { P, money } from '../../data/products';
+import { LOOKS } from '../../data/looks';
+const rows = LOOKS.map((l, i) => { const t = P.find((p) => p.id === l.top)!, b = P.find((p) => p.id === l.bottom)!; return { l, t, b, i, total: t.price + b.price, pair: Math.round((t.price + b.price) * 0.9) }; });
 ---
-<Base title="KORA — Looks">
-  <section class="sec wrap hold">
-    <span class="label r-fade">Looks</span>
-    <h1 data-split>Looks.<br><em>Coming</em> in a later step.</h1>
-    <p class="measure r-fade" data-delay="0.2">Six looks, styled head to toe. The reel arrives in step 5.</p>
-    <div class="r-fade" data-delay="0.3"><a class="btn" href="/">Back home</a></div>
+<Base title="KORA — Six looks" description="Six looks styled head to toe from Drop 01. Add the pair and save 10%.">
+  <section class="lk-head wrap">
+    <span class="label r-fade">Drop 01 · Looks</span>
+    <h1 data-split>Six looks.<br>Any top,<br>any <em>bottom.</em></h1>
+    <p class="measure r-fade" data-delay="0.2">Each look is one top and one bottom from the same palette. Buy the pair and take 10% off. Or mix them. They all go.</p>
+  </section>
+
+  {rows.map(({ l, t, b, i, total, pair }) => (
+    <article class={`look wrap ${i % 2 ? 'flip' : ''}`} id={`look-${i + 1}`}>
+      <div class="look-pic r-img" data-depth="0.08">
+        <img src={l.img} alt={`${l.name}: ${t.name} with ${b.name}`} width="1024" height="1536" loading={i ? 'lazy' : 'eager'} />
+      </div>
+      <div class="look-copy">
+        <span class="label r-fade">Look {String(i + 1).padStart(2, '0')} of 06</span>
+        <h2 data-split>{l.name.split(' ')[0]}<br><em>{l.name.split(' ').slice(1).join(' ')}.</em></h2>
+        <ul class="pieces r-fade" data-delay="0.15">
+          {[t, b].map((p) => (
+            <li>
+              <a href={`/p/${p.id}/`}><span class="label">{p.type === 'pant' ? 'Bottom' : 'Top'}</span><span class="nm">{p.name}</span><span class="pr">{money(p.price)}</span></a>
+              <button type="button" class="mini" data-add={p.id} data-size="M" aria-label={`Add ${p.name} in M`}>Add · M</button>
+            </li>
+          ))}
+        </ul>
+        <div class="look-cta r-fade" data-delay="0.3">
+          <button class="btn solid" type="button" data-addlook={`${t.id},${b.id}`}>Add the look · {money(pair)}</button>
+          <span class="label">Was {money(total)} · 10% off the pair · sizes M, change in bag</span>
+        </div>
+      </div>
+    </article>
+  ))}
+
+  <section class="lk-foot wrap rule">
+    <h2 data-split>Or build<br>your <em>own.</em></h2>
+    <div class="r-fade"><a class="btn" href="/shop/">Shop all twelve</a></div>
   </section>
 </Base>
+
 <style>
-.hold{min-height:80svh;display:grid;align-content:end;gap:24px;padding-top:120px}
-.hold p{color:var(--mute)}
+.lk-head{padding-top:140px;display:grid;gap:24px}
+.lk-head p{color:var(--mute)}
+.look{margin-top:var(--section);display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center}
+.look.flip .look-pic{order:2}
+.look-pic{aspect-ratio:2/3;max-height:88vh;max-width:100%;background:var(--mist)}
+.look-pic img{width:100%;height:100%;object-fit:cover}
+.look-copy{display:grid;gap:26px;max-width:460px}
+.look.flip .look-copy{justify-self:end}
+.pieces{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.pieces li{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.pieces a{display:grid;grid-template-columns:70px 1fr auto;gap:14px;align-items:baseline;flex:1;min-width:0}
+.pieces a:hover .nm{color:var(--clay)}
+.pieces .pr{color:var(--mute);font-size:13px}
+.mini{font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);padding:8px 10px;white-space:nowrap;transition:border-color .4s,background .4s,color .4s}
+.mini:hover{border-color:var(--ink);background:var(--ink);color:var(--bone)}
+.look-cta{display:grid;gap:12px;justify-items:start}
+.lk-foot{margin-top:var(--section);padding-block:48px var(--section);display:flex;justify-content:space-between;align-items:end;gap:24px}
+@media (max-width:760px){
+  .lk-head{padding-top:110px}
+  .look{grid-template-columns:1fr;gap:24px;margin-top:72px}
+  .look.flip .look-pic{order:0}
+  .look-pic{aspect-ratio:3/4;max-height:70vh}
+  .look-copy{max-width:none}
+  .pieces a{grid-template-columns:52px 1fr auto;gap:10px}
+  .look-cta .btn{width:100%;justify-content:center}
+  .lk-foot{flex-direction:column;align-items:start}
+}
 </style>
+
+<script>
+  import { addToBag } from '../../scripts/ui';
+  function wire() {
+    document.querySelectorAll<HTMLButtonElement>('[data-addlook]').forEach((b) => {
+      if (b.dataset.ready) return; b.dataset.ready = '1';
+      b.addEventListener('click', () => { const [t, m] = b.dataset.addlook!.split(','); addToBag(t, 'M'); addToBag(m, 'M'); });
+    });
+  }
+  wire(); document.addEventListener('astro:page-load', wire);
+</script>

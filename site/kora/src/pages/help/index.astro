@@ -1,15 +1,152 @@
 ---
 import Base from '../../layouts/Base.astro';
+const nav = [['delivery', 'Delivery'], ['returns', 'Returns and exchanges'], ['size', 'Size guide'], ['care', 'Care'], ['faq', 'Questions'], ['contact', 'Contact']];
+const tops = [['XS', 50, 64, 56], ['S', 53, 66, 58], ['M', 56, 68, 60], ['L', 59, 70, 62], ['XL', 62, 72, 64], ['2XL', 65, 74, 66], ['3XL', 68, 76, 68]];
+const pants = [['XS', 70, 31, 70], ['S', 74, 31.5, 72], ['M', 78, 32, 74], ['L', 82, 32.5, 76], ['XL', 86, 33, 78], ['2XL', 92, 33.5, 80], ['3XL', 98, 34, 82]];
+const faq = [
+  ['Is KORA a real shop yet?', 'Not yet. This is a concept preview. Prices are examples, the model imagery is AI-generated, and checkout opens at launch. The newsletter on the home page is the way to hear first.'],
+  ['Why no discounts?', 'Because the price is already the price. We would rather make 60 of something good than 600 of something we have to clear.'],
+  ['Do you ship outside Australia?', 'Not for the first drop. New Zealand is next. Elsewhere depends on demand.'],
+  ['Will sold-out colours come back?', 'Usually not. Each drop brings a new colour in the same shape, so what you buy next year still fits with what you buy now.'],
+  ['Where is it made?', 'In one workshop, in small batches, by people we know by name. More on the story page.'],
+  ['Are the fabrics organic?', 'The cotton is combed ringspun, not certified organic. We will say so clearly when that changes.'],
+];
 ---
-<Base title="KORA — Help">
-  <section class="sec wrap hold">
+<Base title="KORA — Help" description="Delivery, returns, size guide, care and contact for KORA.">
+  <section class="hp-head wrap">
     <span class="label r-fade">Help</span>
-    <h1 data-split>Help.<br><em>Coming</em> in a later step.</h1>
-    <p class="measure r-fade" data-delay="0.2">Delivery, returns, size guide and care arrive in step 7.</p>
-    <div class="r-fade" data-delay="0.3"><a class="btn" href="/">Back home</a></div>
+    <h1 data-split>Straight<br><em>answers.</em></h1>
   </section>
+
+  <div class="hp wrap">
+    <nav class="hp-nav" aria-label="Help sections">
+      {nav.map(([id, t]) => <a href={`#${id}`} data-sec={id}>{t}</a>)}
+    </nav>
+
+    <div class="hp-body">
+      <section class="blk" id="delivery">
+        <h2 data-split>Delivery</h2>
+        <dl class="kv">
+          <div><dt>Australia</dt><dd>Free, tracked. Dispatched from Melbourne within 1 business day. Metro 2 to 4 business days, regional 4 to 7.</dd></div>
+          <div><dt>Express</dt><dd>A$12 flat. Next business day to most metro addresses if ordered before 12 pm AEDT.</dd></div>
+          <div><dt>Packaging</dt><dd>A paper band and a recycled mailer. No plastic bag, no tissue, no thank-you card.</dd></div>
+          <div><dt>Elsewhere</dt><dd>Australia only for Drop 01. New Zealand is next.</dd></div>
+        </dl>
+      </section>
+
+      <section class="blk" id="returns">
+        <h2 data-split>Returns and <em>exchanges</em></h2>
+        <dl class="kv">
+          <div><dt>Window</dt><dd>30 days from delivery. Unworn, unwashed, label attached.</dd></div>
+          <div><dt>Exchanges</dt><dd>Free, both ways. Email us the size you want and we send a prepaid label.</dd></div>
+          <div><dt>Refunds</dt><dd>To the original payment method within 5 business days of the parcel arriving back. First return on each order is free; after that, A$9 is deducted for the label.</dd></div>
+          <div><dt>Faults</dt><dd>If a seam lets go in the first year, we repair or replace it. Send a photo.</dd></div>
+        </dl>
+      </section>
+
+      <section class="blk" id="size">
+        <h2 data-split>Size <em>guide</em></h2>
+        <p>Everything is cut boxy with a dropped shoulder. The measurements are of the garment laid flat, in centimetres. If you are between sizes, go down for a closer fit, up for more room.</p>
+        <div class="tabs" role="tablist"><button type="button" class="on" data-t="tops" role="tab" aria-selected="true">Tops</button><button type="button" data-t="pants" role="tab" aria-selected="false">Bottoms</button></div>
+        <div class="tbl" id="tbl-tops">
+          <table><thead><tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th></tr></thead>
+          <tbody>{tops.map((r) => <tr>{r.map((c, i) => i ? <td>{c}</td> : <th scope="row">{c}</th>)}</tr>)}</tbody></table>
+          <span class="label">Chest is measured flat, pit to pit. Double it for the full circumference.</span>
+        </div>
+        <div class="tbl" id="tbl-pants" hidden>
+          <table><thead><tr><th>Size</th><th>Waist</th><th>Inseam</th><th>Hip</th></tr></thead>
+          <tbody>{pants.map((r) => <tr>{r.map((c, i) => i ? <td>{c}</td> : <th scope="row">{c}</th>)}</tr>)}</tbody></table>
+          <span class="label">Waist is the full relaxed circumference. Inseam is in inches, as denim usually is. Hem to a shorter length on request.</span>
+        </div>
+        <p class="fit">Our models wear M. The man in Night Shift is 184 cm, the woman in Market Run is 171 cm.</p>
+      </section>
+
+      <section class="blk" id="care">
+        <h2 data-split>Care</h2>
+        <dl class="kv">
+          <div><dt>Wash</dt><dd>Cold, inside out, with like colours. Everything is garment washed already, so it will not shrink again.</dd></div>
+          <div><dt>Dry</dt><dd>Line dry in the shade. Heavy cotton holds water, so give it time. Skip the dryer and the shape stays boxy, not short.</dd></div>
+          <div><dt>Denim</dt><dd>Wash rarely, cold, inside out. Rigid denim softens and fades to you over a year or two.</dd></div>
+          <div><dt>Knits</dt><dd>Hand wash or wool cycle, lay flat to dry. Fold, do not hang.</dd></div>
+        </dl>
+      </section>
+
+      <section class="blk" id="faq">
+        <h2 data-split>Questions</h2>
+        <div class="acc">
+          {faq.map(([q, a]) => <details><summary>{q}</summary><div class="body">{a}</div></details>)}
+        </div>
+      </section>
+
+      <section class="blk" id="contact">
+        <h2 data-split>Contact</h2>
+        <p>One inbox, read by a person, answered within one business day. No chatbot, no phone queue.</p>
+        <div class="ct">
+          <div><span class="label">Email</span><span class="big">hello@kora.example</span></div>
+          <div><span class="label">Hours</span><span>Monday to Friday, 9 to 5 AEDT</span></div>
+          <div><span class="label">Post</span><span>Melbourne, Victoria. Street address on the returns label.</span></div>
+        </div>
+      </section>
+    </div>
+  </div>
 </Base>
+
 <style>
-.hold{min-height:80svh;display:grid;align-content:end;gap:24px;padding-top:120px}
-.hold p{color:var(--mute)}
+.hp-head{padding-top:140px;display:grid;gap:24px}
+.hp{margin-top:60px;display:grid;grid-template-columns:1fr 2.4fr;gap:40px;align-items:start}
+.hp-nav{position:sticky;top:110px;display:grid;gap:2px;border-top:1px solid var(--line);padding-top:14px}
+.hp-nav a{padding:8px 0;font-size:13px;color:var(--mute);transition:color .3s,padding-left .4s var(--ease)}
+.hp-nav a:hover,.hp-nav a.on{color:var(--ink);padding-left:10px}
+.hp-body{display:grid;gap:0;max-width:680px}
+.blk{padding-block:48px;border-top:1px solid var(--line);display:grid;gap:22px;scroll-margin-top:100px}
+.blk:first-child{padding-top:14px}
+.blk p{color:var(--mute);max-width:56ch}
+.kv{margin:0;display:grid;gap:0}
+.kv div{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.kv div:last-child{border-bottom:0}
+.kv dt{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);padding-top:3px}
+.kv dd{margin:0;max-width:52ch}
+.tabs{display:flex;gap:4px}
+.tabs button{padding:8px 14px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;border:1px solid transparent}
+.tabs button.on{border-color:var(--ink)}
+.tbl{display:grid;gap:12px;overflow-x:auto}
+.tbl[hidden]{display:none}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;min-width:360px}
+th,td{text-align:left;padding:12px 10px 12px 0;border-bottom:1px solid var(--line)}
+thead th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);font-weight:400}
+tbody th{font-weight:400}
+.fit{font-size:13px}
+.acc details{border-bottom:1px solid var(--line)}
+.acc summary{list-style:none;cursor:pointer;padding:16px 0;display:flex;justify-content:space-between;gap:16px;font-size:16px}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"+";font-family:var(--serif);font-size:22px;line-height:1;color:var(--mute)}
+.acc details[open] summary::after{content:"–"}
+.acc .body{padding-bottom:18px;color:var(--mute);max-width:56ch}
+.ct{display:grid;gap:14px}
+.ct div{display:grid;gap:4px}
+.ct .big{font-family:var(--serif);font-size:28px;letter-spacing:-.01em}
+@media (max-width:760px){
+  .hp-head{padding-top:110px}
+  .hp{grid-template-columns:1fr;gap:20px;margin-top:40px}
+  .hp-nav{position:static;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-top:0;border-top:0;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .hp-nav a{white-space:nowrap;padding:6px 10px;border:1px solid var(--line)}
+  .hp-nav a:hover,.hp-nav a.on{padding-left:10px;border-color:var(--ink)}
+  .kv div{grid-template-columns:1fr;gap:4px}
+  .blk{padding-block:36px}
+}
 </style>
+
+<script>
+  function wire() {
+    const root = document.querySelector<HTMLElement>('.hp'); if (!root || root.dataset.ready) return; root.dataset.ready = '1';
+    root.querySelectorAll<HTMLButtonElement>('.tabs button').forEach((b) => b.addEventListener('click', () => {
+      root.querySelectorAll('.tabs button').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-selected', String(x === b)); });
+      (document.getElementById('tbl-tops') as HTMLElement).hidden = b.dataset.t !== 'tops';
+      (document.getElementById('tbl-pants') as HTMLElement).hidden = b.dataset.t !== 'pants';
+    }));
+    const links = root.querySelectorAll<HTMLAnchorElement>('.hp-nav a');
+    const io = new IntersectionObserver((en) => en.forEach((e) => { if (e.isIntersecting) links.forEach((a) => a.classList.toggle('on', a.dataset.sec === e.target.id)); }), { rootMargin: '-30% 0px -60% 0px' });
+    root.querySelectorAll('.blk').forEach((s) => io.observe(s));
+  }
+  wire(); document.addEventListener('astro:page-load', wire);
+</script>

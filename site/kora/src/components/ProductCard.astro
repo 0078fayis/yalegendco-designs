@@ -1,0 +1,37 @@
+---
+import { money, type Product } from '../data/products';
+import { LOOKS } from '../data/looks';
+interface Props { p: Product; i?: number; reveal?: boolean }
+const { p, i = 0, reveal = true } = Astro.props;
+const l = LOOKS[p.look - 1]; const top = p.type !== 'pant';
+---
+<a class={`pcard ${reveal ? 'r-fade' : ''}`} href={`/p/${p.id}/`} data-delay={(i % 4) * 0.08} data-type={p.type} data-price={p.price} data-tag={p.tag || ''} data-i={i}>
+  <div class="pcard-pic">
+    <img class="a" src={l.img} alt={`${p.name} on model`} style={`object-position:50% ${top ? 18 : 82}%`} width="600" height="1200" loading="lazy" />
+    <img class="b" src={l.cut} alt="" width="340" height="1000" loading="lazy" />
+    {p.tag && <span class="tag label">{p.tag}</span>}
+    <button class="quick" type="button" data-add={p.id} data-size="M" aria-label={`Add ${p.name} in M`}>Quick add · M</button>
+  </div>
+  <div class="pcard-meta"><span>{p.name}</span><span class="pr">{money(p.price)}</span></div>
+  <div class="pcard-sub"><span class="label">{p.fab}</span><span class="sw">{p.cols.map((c) => <i style={`background:${c[1]}`} title={c[0]}></i>)}</span></div>
+</a>
+
+<style>
+.pcard{display:grid;gap:10px;min-width:0;align-content:start}
+.pcard-pic{position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--mist);max-width:100%}
+.pcard-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .8s var(--ease),transform 1.4s var(--ease)}
+.pcard-pic .b{opacity:0;object-fit:contain;padding:8% 10% 0;transform:scale(1.04)}
+.pcard:hover .pcard-pic .a{opacity:0;transform:scale(1.04)}
+.pcard:hover .pcard-pic .b{opacity:1;transform:none}
+.tag{position:absolute;left:12px;top:12px;background:var(--bone);padding:5px 8px;color:var(--ink)}
+.quick{position:absolute;left:12px;right:12px;bottom:12px;padding:12px;background:var(--bone);font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s var(--ease)}
+.pcard:hover .quick{opacity:1;transform:none}
+.quick:hover{background:var(--ink);color:var(--bone)}
+.pcard-meta{display:flex;justify-content:space-between;gap:12px;font-size:13px}
+.pcard-meta .pr{color:var(--mute)}
+.pcard-sub{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pcard-sub .label{font-size:9px;letter-spacing:.12em}
+.sw{display:flex;gap:6px}
+.sw i{width:10px;height:10px;border-radius:50%;border:1px solid rgba(20,20,20,.12)}
+@media (max-width:760px){.quick{opacity:1;transform:none;padding:10px;font-size:10px}.pcard-sub .label{display:none}}
+</style>

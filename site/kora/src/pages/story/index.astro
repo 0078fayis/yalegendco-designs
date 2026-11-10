@@ -1,15 +1,111 @@
 ---
 import Base from '../../layouts/Base.astro';
+const cost = [
+  ['Cloth', '280 gsm combed cotton, 1.1 m per tee', 11],
+  ['Making', 'Cut, sew, wash and press, paid per piece', 14],
+  ['Label and pack', 'Woven label, paper band, recycled mailer', 3],
+  ['Delivery', 'Tracked, Australia-wide, built into the price', 9],
+  ['GST', 'One eleventh of the price goes to the ATO', 6.27],
+  ['KORA', 'Design, photography, returns, the next drop', 25.73],
+];
+const total = cost.reduce((s, r) => s + (r[2] as number), 0);
 ---
-<Base title="KORA — Story">
-  <section class="sec wrap hold">
-    <span class="label r-fade">Story</span>
-    <h1 data-split>Story.<br><em>Coming</em> in a later step.</h1>
-    <p class="measure r-fade" data-delay="0.2">The name, the fabric, the workshop and honest pricing arrive in step 7.</p>
-    <div class="r-fade" data-delay="0.3"><a class="btn" href="/">Back home</a></div>
+<Base title="KORA — The story" description="Why KORA exists: heavy cotton, quiet shapes, one workshop, honest pricing.">
+  <section class="st-head wrap">
+    <span class="label r-fade">The story</span>
+    <h1 data-split>Clothes you<br>stop <em>thinking</em><br>about.</h1>
+    <p class="measure r-fade" data-delay="0.2">KORA started with a simple complaint. Good basics were either thin and cheap, or thick and absurdly priced. We wanted the heavy cloth without the markup, in shapes that do not go out of date.</p>
+  </section>
+
+  <section class="band">
+    <div class="band-pic r-img" data-depth="0.1"><img src="/img/hero.webp" alt="Two people in charcoal and bone cotton, standing in soft light" width="1600" height="1067" loading="lazy" /></div>
+  </section>
+
+  <section class="chap wrap" id="name">
+    <div class="chap-side"><span class="label">01 · The name</span></div>
+    <div class="chap-body">
+      <h2 data-split>Four letters.<br>No <em>meaning</em> to sell.</h2>
+      <p class="r-fade">KORA is a working name. It is short, easy to say in any accent, and it does not pretend to be heritage. The clothes carry one plain woven label at the neck and nothing else. If the name changes before launch, the label changes with it. The cloth will not.</p>
+    </div>
+  </section>
+
+  <section class="chap wrap" id="fabric">
+    <div class="chap-side"><span class="label">02 · The cloth</span></div>
+    <div class="chap-body">
+      <h2 data-split>Heavy, so it<br><em>holds</em> its shape.</h2>
+      <p class="r-fade">Most high-street tees are 150 to 180 grams per square metre. Ours are 280. Fleece is 400 gsm loopback. Denim is 12 oz rigid, rinsed once. Heavy cloth drapes instead of clinging, hides what thin cloth shows, and lasts long enough to fade properly.</p>
+      <div class="specs r-fade" data-delay="0.15">
+        {[['280', 'gsm jersey', 'Tees'], ['400', 'gsm fleece', 'Hoodies and crews'], ['12', 'oz denim', 'Wide jeans'], ['0', 'prints', 'Ever']].map(([n, u, t]) => <div><span class="big">{n}</span><span class="label">{u}</span><span class="what">{t}</span></div>)}
+      </div>
+      <div class="pics r-fade" data-delay="0.2">
+        <img src="/img/fabric.webp" alt="Charcoal cotton jersey, close" width="1024" height="1024" loading="lazy" />
+        <img src="/img/yarn.webp" alt="Cones of undyed cotton yarn" width="1024" height="1024" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section class="chap wrap" id="workshop">
+    <div class="chap-side"><span class="label">03 · The workshop</span></div>
+    <div class="chap-body">
+      <h2 data-split>One roof.<br><em>Small</em> batches.</h2>
+      <p class="r-fade">Every piece is knitted, dyed, cut and sewn under one roof by a single workshop we know by name. We make 50 to 80 of each style. That is small enough to check every batch and large enough to keep the price sane. We visit, we pay on time, and we do not chase the cheapest quote each season.</p>
+      <div class="pics one r-fade" data-delay="0.15"><img src="/img/workshop.webp" alt="Hands guiding charcoal cotton through an overlock machine" width="1600" height="1067" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section class="chap wrap" id="pricing">
+    <div class="chap-side"><span class="label">04 · Honest pricing</span></div>
+    <div class="chap-body">
+      <h2 data-split>Where the<br><em>A$69</em> goes.</h2>
+      <p class="r-fade">A charcoal boxy tee is A$69, delivered. Here is roughly how that splits. The numbers are our working estimates for the first drop and will move as volumes change. We will keep this table updated.</p>
+      <table class="cost r-fade" data-delay="0.15">
+        <tbody>
+          {cost.map(([k, d, n]) => <tr><th scope="row">{k}<span>{d}</span></th><td>A${(n as number).toFixed(2)}</td></tr>)}
+        </tbody>
+        <tfoot><tr><th scope="row">You pay</th><td>A${total.toFixed(2)}</td></tr></tfoot>
+      </table>
+      <p class="r-fade small" data-delay="0.2">Example figures for a concept preview. No sales, no discount codes, no "was" prices. When a style sells out it is gone, and the next drop is a new colour.</p>
+    </div>
+  </section>
+
+  <section class="st-foot wrap rule">
+    <h2 data-split>Twelve pieces.<br>Start <em>anywhere.</em></h2>
+    <div class="r-fade"><a class="btn solid" href="/shop/">Shop Drop 01</a></div>
   </section>
 </Base>
+
 <style>
-.hold{min-height:80svh;display:grid;align-content:end;gap:24px;padding-top:120px}
-.hold p{color:var(--mute)}
+.st-head{padding-top:140px;display:grid;grid-template-columns:1.3fr 1fr;gap:24px 40px;align-items:end}
+.st-head .label{grid-column:1/-1}
+.st-head p{color:var(--mute)}
+.band{margin-top:var(--section);padding-inline:var(--gutter)}
+.band-pic{aspect-ratio:3/2;max-height:80vh;max-width:100%;background:var(--mist)}
+.band-pic img{width:100%;height:100%;object-fit:cover}
+.chap{padding-top:var(--section);display:grid;grid-template-columns:1fr 2fr;gap:30px}
+.chap-side{position:sticky;top:110px;align-self:start}
+.chap-body{display:grid;gap:28px;max-width:640px}
+.chap-body p{color:var(--mute);max-width:52ch}
+.chap-body .small{font-size:13px}
+.specs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;border-top:1px solid var(--line);padding-top:20px}
+.specs div{display:grid;gap:4px}
+.specs .big{font-family:var(--serif);font-size:44px;line-height:1;letter-spacing:-.02em}
+.specs .what{font-size:12px;color:var(--mute)}
+.pics{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pics img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--mist)}
+.pics.one{grid-template-columns:1fr}
+.pics.one img{aspect-ratio:3/2}
+.cost{width:100%;border-collapse:collapse;font-size:14px}
+.cost th{text-align:left;font-weight:400;padding:14px 0;border-bottom:1px solid var(--line);display:grid}
+.cost th span{font-size:12px;color:var(--mute);margin-top:2px}
+.cost td{text-align:right;padding:14px 0;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap;font-variant-numeric:tabular-nums}
+.cost tfoot th,.cost tfoot td{border-bottom:0;border-top:1px solid var(--ink);font-family:var(--serif);font-size:22px}
+.st-foot{margin-top:var(--section);padding-block:48px var(--section);display:flex;justify-content:space-between;align-items:end;gap:24px}
+@media (max-width:760px){
+  .st-head{grid-template-columns:1fr;padding-top:110px}
+  .chap{grid-template-columns:1fr;gap:16px;padding-top:80px}
+  .chap-side{position:static}
+  .specs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .specs .big{font-size:36px}
+  .st-foot{flex-direction:column;align-items:start}
+}
 </style>
