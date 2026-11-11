@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { makeRipple } from './ripple';
 
 gsap.registerPlugin(ScrollTrigger);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -38,7 +39,8 @@ function init() {
   const dots = document.getElementById('shot-dots');
   if (dots) dots.innerHTML = shots.map((_, k) => `<i class="${k === 0 ? 'on' : ''}"></i>`).join('');
   cur = 0;
-  const show = (n: number) => { cur = (n + shots.length) % shots.length; shots.forEach((s, k) => s.classList.toggle('on', k === cur)); dots?.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k === cur)); };
+  frame.querySelector('canvas.ripple')?.remove(); const ripple = makeRipple(frame);
+  const show = (n: number) => { const was = cur; cur = (n + shots.length) % shots.length; if (ripple && was !== cur) ripple(shots[was].querySelector('img')!, shots[cur].querySelector('img')!); shots.forEach((s, k) => s.classList.toggle('on', k === cur)); dots?.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k === cur)); };
   const arm = () => { clearInterval(rotate); rotate = window.setInterval(() => show(cur + 1), 5000); };
   arm();
   const prev = document.getElementById('shot-prev'), next = document.getElementById('shot-next');

@@ -59,9 +59,9 @@ const by = (id: string) => P.find((p) => p.id === id)!;
 .stl-head p{color:var(--mute)}
 .stl-grid{display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start}
 .stage-wrap{min-width:0;position:relative}
-.stage{position:relative;height:clamp(440px,62vh,660px);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;overflow:hidden;outline:none}
+.stage{position:relative;height:clamp(440px,62vh,660px);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;overflow:hidden;outline:none;perspective:1300px;perspective-origin:50% 42%}
 .stage.drag{cursor:grabbing}
-.fig{position:absolute;left:50%;bottom:34px;margin:0;transform-origin:50% 100%;will-change:transform,opacity,filter;transition:transform .9s var(--ease),opacity .7s,filter .7s;border:0;background:none;padding:0;cursor:pointer}
+.fig{position:absolute;left:50%;bottom:34px;margin:0;transform-origin:50% 100%;will-change:transform,opacity,filter;transition:opacity .25s,filter .25s;border:0;background:none;padding:0;cursor:pointer}
 .fig img{display:block;height:100%;width:auto;pointer-events:none}
 .fig .shadow{position:absolute;left:50%;bottom:-14px;width:120%;height:28px;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 50%,rgba(20,20,20,.2),rgba(20,20,20,0) 70%);pointer-events:none}
 .pin{position:absolute;z-index:3;left:0;top:0;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:rgba(244,241,234,.96);box-shadow:0 1px 6px rgba(0,0,0,.25);opacity:0;transform:scale(.6);transition:opacity .4s,transform .4s;pointer-events:none}
@@ -70,7 +70,7 @@ const by = (id: string) => P.find((p) => p.id === id)!;
 .pin.hot::after{background:var(--clay)}
 @media (prefers-reduced-motion:no-preference){.fig.on .pin::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(20,20,20,.35);animation:pulse 2.2s ease-out infinite}}
 @keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.5);opacity:0}}
-.floor{position:absolute;left:0;right:0;bottom:34px;height:1px;background:linear-gradient(90deg,transparent,var(--line) 20%,var(--line) 80%,transparent)}
+.floor{position:absolute;left:50%;bottom:-2px;width:min(92%,980px);height:150px;transform:translateX(-50%) rotateX(72deg);transform-origin:50% 100%;border-radius:50%;border:1px solid var(--line);background:radial-gradient(50% 50% at 50% 50%,rgba(20,20,20,.07),rgba(20,20,20,0) 72%);pointer-events:none}
 .idx-row{position:relative;display:flex;align-items:center;gap:16px;padding-block:14px;border-top:1px solid var(--line)}
 .arrow{font-size:16px;padding:6px 8px}
 .idx{display:flex;gap:18px;overflow:auto;scrollbar-width:none;flex:1;font-size:12px;letter-spacing:.06em}
