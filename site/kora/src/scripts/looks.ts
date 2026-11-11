@@ -7,9 +7,9 @@ const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let raf = 0;
 
 function init() {
-  cancelAnimationFrame(raf);
   const stage = document.getElementById('stage');
-  if (!stage || stage.dataset.ready) return;
+  if (!stage || stage.dataset.ready) return; // page-load fires after the first run; do not kill the running loop
+  cancelAnimationFrame(raf);
   stage.dataset.ready = '1';
   const figs = Array.from(stage.querySelectorAll<HTMLElement>('.fig'));
   const idx = document.getElementById('idx')!, bar = document.getElementById('bar')!;
@@ -80,6 +80,7 @@ function init() {
   const io = new IntersectionObserver((en) => { visible = en[0].isIntersecting; }, { threshold: 0.3 });
   let visible = false; io.observe(stage);
   function tick() {
+    if (!stage!.isConnected) return; // page changed; a fresh init will start its own loop
     const el = Date.now() - last;
     if (Math.abs(target - ang) > 0.0005) { ang += (target - ang) * (down ? 0.35 : 0.075); layout(); } else if (ang !== target) { ang = target; layout(); } bar.style.width = Math.min(100, (el / hold) * 100) + '%';
     if (!still && visible && el > hold && !document.documentElement.classList.contains('lock')) { last = Date.now(); hold = 5600; setLook(cur + 1); }
