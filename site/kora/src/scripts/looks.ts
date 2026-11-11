@@ -16,7 +16,9 @@ function init() {
   let cur = 0, last = Date.now(), hold = 5600;
 
   // 3D turntable: figures stand on a ring, the ring turns to bring the chosen look to the front.
-  const n = LOOKS.length; let ang = 0, target = 0;
+  const n = LOOKS.length; let ang = 0, target = 0, lastLand = -1;
+  const floor = stage.querySelector<HTMLElement>('.floor');
+  const replay = (el: Element | null, cls: string) => { if (!el) return; el.classList.remove(cls); void (el as HTMLElement).offsetWidth; el.classList.add(cls); };
   function layout() {
     const W = stage!.clientWidth, H = stage!.clientHeight, narrow = W < 640; if (!W) return;
     const h = Math.round(H * (narrow ? 0.8 : 0.86)), R = narrow ? W * 0.5 : Math.min(W * 0.36, 470);
@@ -27,6 +29,9 @@ function init() {
       el.style.height = h + 'px'; el.style.transform = `translate3d(calc(-50% + ${x.toFixed(1)}px),0,${z.toFixed(1)}px)`;
       el.style.opacity = (0.18 + 0.82 * k * k).toFixed(3); el.style.filter = depth < 0.9 ? `blur(${((1 - k) * 2.2).toFixed(2)}px)` : 'none'; el.style.zIndex = String(Math.round(k * 20));
       const front = Math.abs(d) < 0.5; el.classList.toggle('on', front); el.setAttribute('aria-hidden', String(!front));
+      if (front && Math.abs(d) < 0.08 && lastLand !== i && !still) { // the model has arrived at the front: land, sweep, pop the pins
+        lastLand = i; replay(el, 'land'); replay(floor, 'pulse'); setTimeout(() => el.classList.remove('land'), 1300);
+      }
     });
   }
   const nearest = (from: number, to: number) => { let d = ((to - from) % n + n) % n; if (d > n / 2) d -= n; return from + d; }; // shortest way round
@@ -40,7 +45,7 @@ function init() {
     cur = (i + LOOKS.length) % LOOKS.length; target = nearest(target, cur);
     const l = LOOKS[cur], total = by(l.top).price + by(l.bottom).price;
     document.getElementById('lk-no')!.textContent = `In this look · ${String(cur + 1).padStart(2, '0')} / ${String(LOOKS.length).padStart(2, '0')}`;
-    document.getElementById('lk-name')!.textContent = l.name;
+    const nm = document.getElementById('lk-name')!; nm.textContent = l.name; if (!still) replay(nm, 'swap');
     document.getElementById('pieces')!.innerHTML = pieceRow(l, l.top, 0) + pieceRow(l, l.bottom, 1);
     document.getElementById('lk-total')!.textContent = money(total * 0.9);
     document.getElementById('lk-cta')!.textContent = money(total * 0.9) + ' →';

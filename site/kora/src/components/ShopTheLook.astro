@@ -16,8 +16,8 @@ const by = (id: string) => P.find((p) => p.id === id)!;
     <div class="stage-wrap r-fade">
       <div class="stage" id="stage" tabindex="0" aria-roledescription="carousel" aria-label="Looks">
         {LOOKS.map((l, i) => (
-          <button type="button" class="fig" data-i={i} aria-label={l.name}>
-            <span class="shadow"></span>
+          <button type="button" class="fig" data-i={i} aria-label={l.name} style={`--cut:url(${l.cut})`}>
+            <span class="shadow"></span><span class="sweep" aria-hidden="true"></span>
             <img src={l.cut} alt="" draggable="false" width="340" height="1000" loading={i === 0 ? 'eager' : 'lazy'} />
             <span class="pin" data-id={l.top} style={`left:${l.pins[0][0] * 100}%;top:${l.pins[0][1] * 100}%`} aria-hidden="true"></span>
             <span class="pin" data-id={l.bottom} style={`left:${l.pins[1][0] * 100}%;top:${l.pins[1][1] * 100}%`} aria-hidden="true"></span>
@@ -70,6 +70,20 @@ const by = (id: string) => P.find((p) => p.id === id)!;
 .pin.hot::after{background:var(--clay)}
 @media (prefers-reduced-motion:no-preference){.fig.on .pin::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(20,20,20,.35);animation:pulse 2.2s ease-out infinite}}
 @keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+/* arrival at the front: settle, light sweep across the figure, pins pop, floor rings, name slides up */
+.fig.land img{animation:land 1.1s var(--ease) both}
+@keyframes land{0%{transform:none;filter:brightness(1)}40%{transform:translateY(-10px) scale(1.035);filter:brightness(1.07)}75%{transform:translateY(0) scale(.995)}100%{transform:none;filter:brightness(1)}}
+.fig.land .shadow{animation:shadowland 1.1s var(--ease) both}
+@keyframes shadowland{40%{transform:translateX(-50%) scale(.78);opacity:.55}}
+.sweep{position:absolute;inset:0;pointer-events:none;opacity:0;-webkit-mask:var(--cut) center/100% 100% no-repeat;mask:var(--cut) center/100% 100% no-repeat;background:linear-gradient(100deg,transparent 38%,rgba(255,255,255,.75) 50%,transparent 62%);background-size:300% 100%;background-position:120% 0}
+.fig.land .sweep{animation:sweep 1s .2s var(--ease) both}
+@keyframes sweep{0%{opacity:.9;background-position:120% 0}100%{opacity:.9;background-position:-20% 0}}
+.fig.land .pin{animation:pop .7s .45s var(--ease) both}
+@keyframes pop{0%{transform:scale(.3)}55%{transform:scale(1.3)}100%{transform:scale(1)}}
+.floor.pulse{animation:floorpulse 1s var(--ease)}
+@keyframes floorpulse{35%{border-color:var(--ink);background:radial-gradient(50% 50% at 50% 50%,rgba(20,20,20,.14),rgba(20,20,20,0) 72%)}}
+#lk-name.swap{animation:nameup .7s var(--ease) both}
+@keyframes nameup{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}
 .floor{position:absolute;left:50%;bottom:-2px;width:min(92%,980px);height:150px;transform:translateX(-50%) rotateX(72deg);transform-origin:50% 100%;border-radius:50%;border:1px solid var(--line);background:radial-gradient(50% 50% at 50% 50%,rgba(20,20,20,.07),rgba(20,20,20,0) 72%);pointer-events:none}
 .idx-row{position:relative;display:flex;align-items:center;gap:16px;padding-block:14px;border-top:1px solid var(--line)}
 .arrow{font-size:16px;padding:6px 8px}
