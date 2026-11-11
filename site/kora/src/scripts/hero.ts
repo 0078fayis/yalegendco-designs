@@ -45,6 +45,15 @@ function init() {
   const noFocus = (e: Event) => e.preventDefault(); // focusing inside the sticky hero makes phones scroll-jump
   if (prev) { prev.onclick = () => { show(cur - 1); arm(); }; prev.onmousedown = noFocus; }
   if (next) { next.onclick = () => { show(cur + 1); arm(); }; next.onmousedown = noFocus; }
+  // Depth: the photo drifts a little against the mouse (or the phone's tilt) while the headline goes the other way
+  const pin = frame.parentElement as HTMLElement;
+  const depth = (x: number, y: number) => { pin.style.setProperty('--px', x.toFixed(3)); pin.style.setProperty('--py', y.toFixed(3)); };
+  frame.onpointermove = (e) => { if (e.pointerType !== 'mouse') return; depth((e.clientX / innerWidth - 0.5) * -2, (e.clientY / innerHeight - 0.5) * -2); };
+  frame.onpointerleave = () => depth(0, 0);
+  if (!matchMedia('(hover:hover)').matches && typeof (DeviceOrientationEvent as any)?.requestPermission !== 'function') {
+    let b0: number | null = null;
+    window.ondeviceorientation = (e) => { if (e.gamma == null || e.beta == null) return; if (b0 == null) b0 = e.beta; depth(Math.max(-1, Math.min(1, -e.gamma / 25)), Math.max(-1, Math.min(1, (e.beta - b0) / 25))); };
+  }
   let x0 = 0, y0 = 0;
   frame.onpointerdown = (e) => { x0 = e.clientX; y0 = e.clientY; };
   frame.onpointerup = (e) => { const dx = e.clientX - x0, dy = e.clientY - y0; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) { show(dx < 0 ? cur + 1 : cur - 1); arm(); } };
@@ -54,7 +63,7 @@ function init() {
   gsap.timeline({ scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom bottom', scrub: 0.6,
       onUpdate(self) { frame.classList.toggle('inset', self.progress > 0.35); } } })
     .fromTo(frame, { clipPath: 'inset(0px 0px 0px 0px)' }, { clipPath: inset, ease: 'none' }, 0)
-    .to(frame.querySelectorAll('.shot img'), { scale: 1.0, ease: 'none' }, 0)
+    .to(frame.querySelectorAll('.shot img'), { scale: 1.0, yPercent: 7, ease: 'none' }, 0)
     .to('.hero-copy', { yPercent: 30, opacity: 0, ease: 'none' }, 0)
     .to('.scroll-hint', { opacity: 0, ease: 'none' }, 0);
 }

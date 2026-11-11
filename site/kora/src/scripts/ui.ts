@@ -1,6 +1,7 @@
 // Header behaviour, menu, bag drawer, page-transition wipe. Persisted elements survive view transitions,
 // so these bindings are made once per full load and re-synced on every astro:page-load.
 import { P, money } from '../data/products';
+import { flyToBag } from './fx';
 
 type Line = { id: string; size: string; qty: number };
 const KEY = 'kora-bag';
@@ -30,10 +31,11 @@ function renderBag() {
   $('bag-sub')!.textContent = money(sub);
   $('bag-gst')!.textContent = money(sub / 11);
 }
-export function addToBag(id: string, size: string, qty = 1) {
+export function addToBag(id: string, size: string, qty = 1, from: HTMLElement | null = null) {
   const f = bag.find((l) => l.id === id && l.size === size);
   if (f) f.qty += qty; else bag.push({ id, size, qty });
-  save(bag); renderBag(); openBag();
+  save(bag); renderBag();
+  flyToBag(from).then(openBag);
   const c = $('bag-count'); c?.parentElement?.classList.add('bump'); setTimeout(() => c?.parentElement?.classList.remove('bump'), 400);
 }
 function openBag() { $('bag')?.classList.add('open'); $('bag-veil')?.classList.add('on'); $('bag')?.setAttribute('aria-hidden', 'false'); $('bag-btn')?.setAttribute('aria-expanded', 'true'); }
@@ -69,13 +71,17 @@ function wipe(dir: 'in' | 'out') {
 let bound = false;
 function bindOnce() {
   if (bound) return; bound = true;
+  // Quick-add buttons sit inside product-card links: catch them in the capture phase, before the view-transition router sees the click
+  document.addEventListener('click', (e) => {
+    const add = (e.target as HTMLElement).closest<HTMLElement>('[data-add]'); if (!add) return;
+    e.preventDefault(); e.stopPropagation(); addToBag(add.dataset.add!, add.dataset.size || 'M', 1, add);
+  }, true);
   document.addEventListener('click', (e) => {
     const t = e.target as HTMLElement;
     if (t.closest('#bag-btn')) { e.preventDefault(); openBag(); }
     if (t.closest('#bag-x') || t.closest('#bag-veil')) closeBag();
     if (t.closest('#menu-btn')) setMenu(!$('menu')?.classList.contains('open'));
     if (t.closest('#menu a')) setMenu(false);
-    const add = t.closest<HTMLElement>('[data-add]'); if (add) { e.preventDefault(); addToBag(add.dataset.add!, add.dataset.size || 'M'); }
     const q = t.closest<HTMLElement>('.item .q button'); if (q) { const i = +q.dataset.i!; bag[i].qty = Math.max(1, bag[i].qty + +q.dataset.d!); save(bag); renderBag(); }
     const rm = t.closest<HTMLElement>('[data-rm]'); if (rm) { bag.splice(+rm.dataset.rm!, 1); save(bag); renderBag(); }
     if (t.closest('#bag-checkout')) { const b = t.closest('#bag-checkout') as HTMLElement; b.textContent = 'Checkout opens at launch'; setTimeout(() => (b.innerHTML = 'Checkout <span>→</span>'), 1800); }

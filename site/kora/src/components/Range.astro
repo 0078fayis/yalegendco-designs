@@ -21,7 +21,7 @@ const groups = [
       <div class="rail">
         {RANGE(t).map((p, i) => (
           <a class="hang r-fade" href={`/p/${p.id}/`} data-delay={i * 0.08}>
-            <div class="hang-pic"><img src={p.img} alt={p.name} width="900" height="1200" loading="lazy" /></div>
+            <div class="hang-pic tilt" data-tilt><img src={p.img} alt={p.name} width="900" height="1200" loading="lazy" /></div>
             <div class="hang-meta"><span>{p.name}</span><span class="pr">{money(p.price)}</span></div>
           </a>
         ))}
@@ -43,6 +43,9 @@ const groups = [
 .hang{display:grid;gap:10px;min-width:0}
 .hang-pic{aspect-ratio:3/4;overflow:hidden;background:var(--mist);max-width:100%}
 .hang-pic img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.hang .hang-pic{transform-origin:50% -20%}
+.hang.in .hang-pic{animation:sway 2.6s var(--ease) both}
+@keyframes sway{0%{rotate:-3deg}35%{rotate:2deg}65%{rotate:-.8deg}100%{rotate:0deg}}
 .hang:hover .hang-pic img{transform:scale(1.05)}
 .hang-meta{display:flex;justify-content:space-between;gap:10px;font-size:13px}
 .hang-meta .pr{color:var(--mute)}

@@ -29,6 +29,7 @@ const rows = [
 .fab-nums{display:grid;gap:4px;margin-top:20px}
 .num{display:flex;gap:12px;align-items:baseline;opacity:.28;transition:opacity .6s}
 .num.on{opacity:1}
+.num .big{font-variant-numeric:tabular-nums}
 .num .big{font-family:var(--serif);font-size:48px;line-height:1;letter-spacing:-.02em;min-width:2.2ch}
 .fab-rows{display:grid;gap:14vh}
 .fab-row{display:grid;gap:18px}
@@ -48,10 +49,11 @@ const rows = [
 </style>
 
 <script>
+  import { countUp } from '../scripts/fx';
   function wire() {
     const rows = document.querySelectorAll<HTMLElement>('.fab-row'); if (!rows.length) return;
     const nums = document.querySelectorAll<HTMLElement>('.fab .num');
-    const io = new IntersectionObserver((en) => en.forEach((e) => { if (e.isIntersecting) nums.forEach((n) => n.classList.toggle('on', n.dataset.k === (e.target as HTMLElement).dataset.k)); }), { rootMargin: '-40% 0px -40% 0px' });
+    const io = new IntersectionObserver((en) => en.forEach((e) => { if (e.isIntersecting) nums.forEach((n) => { const on = n.dataset.k === (e.target as HTMLElement).dataset.k; n.classList.toggle('on', on); if (on) countUp(n.querySelector('.big')!); }); }), { rootMargin: '-40% 0px -40% 0px' });
     rows.forEach((r) => io.observe(r));
   }
   wire(); document.addEventListener('astro:page-load', wire);

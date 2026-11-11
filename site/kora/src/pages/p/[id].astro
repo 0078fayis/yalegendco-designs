@@ -33,7 +33,7 @@ const care = isShoe ? 'Brush dry dirt off. Canvas: cold hand wash, air dry. Sued
     <div class="galwrap">
     <div class="gal" id="gal">
       {gallery.map((g, i) => (
-        <figure class={`g ${g.cut ? 'cut' : ''}`} data-i={i}>
+        <figure class={`g tilt ${g.cut ? 'cut' : ''}`} data-i={i} data-tilt>
           <img src={g.src} alt={g.alt} style={`object-position:${g.pos}`} width="1200" height="1500" loading={i ? 'lazy' : 'eager'} fetchpriority={i ? undefined : 'high'} />
           <figcaption class="label">{g.alt}</figcaption>
         </figure>
@@ -68,7 +68,7 @@ const care = isShoe ? 'Brush dry dirt off. Canvas: cold hand wash, air dry. Sued
       </div>
 
       <div class="pairbox">
-        <div class="pair-pic"><img src={mate.img || l.img} alt={mate.img ? mate.name : `${mate.name} on model`} style={`object-position:50% ${top ? 82 : 18}%`} width="300" height="400" loading="lazy" /></div>
+        <div class="pair-pic tilt" data-tilt><img src={mate.img || l.img} alt={mate.img ? mate.name : `${mate.name} on model`} style={`object-position:50% ${top ? 82 : 18}%`} width="300" height="400" loading="lazy" /></div>
         <div>
           <span class="label">Complete the look · {l.name}</span>
           <h3>{mate.name}</h3>

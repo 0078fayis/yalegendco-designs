@@ -6,7 +6,7 @@ const { p, i = 0, reveal = true } = Astro.props;
 const l = LOOKS[p.look - 1]; const top = p.type !== 'pant';
 ---
 <a class={`pcard ${reveal ? 'r-fade' : ''}`} href={`/p/${p.id}/`} data-delay={(i % 4) * 0.08} data-type={p.type} data-price={p.price} data-tag={p.tag || ''} data-i={i}>
-  <div class="pcard-pic">
+  <div class="pcard-pic tilt" data-tilt>
     {p.img ? <img class="a solo" src={p.img} alt={p.name} width="900" height="1200" loading="lazy" /> : <>
     <img class="a" src={l.img} alt={`${p.name} on model`} style={`object-position:50% ${top ? 18 : 82}%`} width="600" height="1200" loading="lazy" />
     <img class="b" src={l.cut} alt="" width="340" height="1000" loading="lazy" /></>}

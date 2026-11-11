@@ -1,0 +1,19 @@
+---
+// Slow marquee strip under the opening. Pure CSS transform, duplicated so the loop is seamless.
+const items = ['280 gsm combed cotton', 'Any top, any bottom', 'Made in small batches by one workshop', 'Free delivery in Australia', 'Drop 01 · Melbourne', 'No prints, no slogans', 'One palette'];
+---
+<div class="tick" aria-hidden="true">
+  <div class="tick-track">
+    {[0, 1].map(() => items.map((t) => <span class="tick-i label">{t}<i></i></span>))}
+  </div>
+</div>
+
+<style>
+.tick{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-block:14px;margin-top:-1px;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.tick-track{display:flex;width:max-content;animation:tick 48s linear infinite;will-change:transform}
+.tick-i{display:inline-flex;align-items:center;gap:28px;padding-right:28px;white-space:nowrap;font-size:11px;letter-spacing:.18em}
+.tick-i i{width:4px;height:4px;border-radius:50%;background:var(--ink);opacity:.5}
+.tick:hover .tick-track{animation-play-state:paused}
+@keyframes tick{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.tick-track{animation:none}}
+</style>
