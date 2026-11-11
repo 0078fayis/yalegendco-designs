@@ -1,6 +1,5 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { makeRipple } from './ripple';
 
 gsap.registerPlugin(ScrollTrigger);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -39,14 +38,22 @@ function init() {
   const dots = document.getElementById('shot-dots');
   if (dots) dots.innerHTML = shots.map((_, k) => `<i class="${k === 0 ? 'on' : ''}"></i>`).join('');
   cur = 0;
-  frame.querySelector('canvas.ripple')?.remove(); const ripple = makeRipple(frame);
-  const show = (n: number) => { const was = cur; cur = (n + shots.length) % shots.length; if (ripple && was !== cur) ripple(shots[was].querySelector('img')!, shots[cur].querySelector('img')!); shots.forEach((s, k) => s.classList.toggle('on', k === cur)); dots?.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k === cur)); };
-  const arm = () => { clearInterval(rotate); rotate = window.setInterval(() => show(cur + 1), 5000); };
+  // Cinematic push: the new photo slides in a touch oversized and settles, the old one eases away and dims
+  const show = (n: number, dir = 1) => {
+    const was = cur; cur = (n + shots.length) % shots.length; if (was === cur) return;
+    const out = shots[was], inn = shots[cur];
+    dots?.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k === cur));
+    gsap.killTweensOf([out, inn]);
+    inn.classList.add('on'); inn.style.zIndex = '2';
+    gsap.fromTo(inn, { xPercent: 7 * dir, scale: 1.08, opacity: 0 }, { xPercent: 0, scale: 1, opacity: 1, duration: 1.6, ease: 'power3.out', onComplete() { inn.style.zIndex = ''; } });
+    gsap.to(out, { xPercent: -6 * dir, scale: 0.97, opacity: 0, filter: 'brightness(.85)', duration: 1.2, ease: 'power2.inOut', onComplete() { out.classList.remove('on'); gsap.set(out, { clearProps: 'all' }); } });
+  };
+  const arm = () => { clearInterval(rotate); rotate = window.setInterval(() => show(cur + 1, 1), 5000); };
   arm();
   const prev = document.getElementById('shot-prev'), next = document.getElementById('shot-next');
   const noFocus = (e: Event) => e.preventDefault(); // focusing inside the sticky hero makes phones scroll-jump
-  if (prev) { prev.onclick = () => { show(cur - 1); arm(); }; prev.onmousedown = noFocus; }
-  if (next) { next.onclick = () => { show(cur + 1); arm(); }; next.onmousedown = noFocus; }
+  if (prev) { prev.onclick = () => { show(cur - 1, -1); arm(); }; prev.onmousedown = noFocus; }
+  if (next) { next.onclick = () => { show(cur + 1, 1); arm(); }; next.onmousedown = noFocus; }
   // Depth: the photo drifts a little against the mouse (or the phone's tilt) while the headline goes the other way
   const pin = frame.parentElement as HTMLElement;
   const depth = (x: number, y: number) => { pin.style.setProperty('--px', x.toFixed(3)); pin.style.setProperty('--py', y.toFixed(3)); };
@@ -58,7 +65,7 @@ function init() {
   }
   let x0 = 0, y0 = 0;
   frame.onpointerdown = (e) => { x0 = e.clientX; y0 = e.clientY; };
-  frame.onpointerup = (e) => { const dx = e.clientX - x0, dy = e.clientY - y0; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) { show(dx < 0 ? cur + 1 : cur - 1); arm(); } };
+  frame.onpointerup = (e) => { const dx = e.clientX - x0, dy = e.clientY - y0; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) { show(dx < 0 ? cur + 1 : cur - 1, dx < 0 ? 1 : -1); arm(); } };
 
   const mq = matchMedia('(max-width: 760px)').matches;
   const inset = mq ? 'inset(10vh 16px 14vh 16px)' : 'inset(8vh 8vw 10vh 8vw)';
