@@ -6,21 +6,24 @@ const by = (id: string) => P.find((p) => p.id === id)!;
 <section class="stl wrap" id="looks">
   <div class="stl-head">
     <div>
-      <span class="label r-fade">02 · Shop the look</span>
-      <h2 data-split>Six looks,<br>styled <em>head to toe.</em></h2>
+      <span class="label r-fade">02 · Try the look</span>
+      <h2 data-split>Try the <em>Look.</em></h2>
     </div>
-    <p class="measure r-fade" data-delay="0.2">Drag through the looks. Tap a pin to see the piece, or add the whole outfit in one go and change sizes in the bag.</p>
+    <p class="measure r-fade" data-delay="0.2">Six looks, styled head to toe. Tap a model to step in, tap a pin to see the piece, or add the whole outfit in one go.</p>
   </div>
 
   <div class="stl-grid">
     <div class="stage-wrap r-fade">
       <div class="stage" id="stage" tabindex="0" aria-roledescription="carousel" aria-label="Looks">
+        <div class="lk-tag" aria-hidden="true"><span class="label" id="lk-tagno">Look 01</span><strong id="lk-tagname">{LOOKS[0].name}</strong></div>
+        <button class="lk-close" id="lk-close" type="button" aria-label="Back to all looks">Close <span>×</span></button>
         {LOOKS.map((l, i) => (
           <button type="button" class="fig" data-i={i} aria-label={l.name} style={`--cut:url(${l.cut})`}>
             <span class="shadow"></span><span class="sweep" aria-hidden="true"></span>
             <img src={l.cut} alt="" draggable="false" width="340" height="1000" loading={i === 0 ? 'eager' : 'lazy'} />
             <span class="pin" data-id={l.top} style={`left:${l.pins[0][0] * 100}%;top:${l.pins[0][1] * 100}%`} aria-hidden="true"></span>
             <span class="pin" data-id={l.bottom} style={`left:${l.pins[1][0] * 100}%;top:${l.pins[1][1] * 100}%`} aria-hidden="true"></span>
+            <span class="view" aria-hidden="true">View</span>
           </button>
         ))}
         <span class="floor" aria-hidden="true"></span>
@@ -59,32 +62,44 @@ const by = (id: string) => P.find((p) => p.id === id)!;
 .stl-head p{color:var(--mute)}
 .stl-grid{display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start}
 .stage-wrap{min-width:0;position:relative}
-.stage{position:relative;height:clamp(440px,62vh,660px);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;overflow:hidden;outline:none;perspective:1300px;perspective-origin:50% 42%}
+/* the studio: a flat line-up on a white floor, like a lookbook wall */
+.stage{position:relative;height:clamp(440px,62vh,660px);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;overflow:hidden;outline:none;background:linear-gradient(180deg,#fbfaf7 0%,#f3f1ec 72%,#ebe8e1 100%)}
 .stage.drag{cursor:grabbing}
-.fig{position:absolute;left:50%;bottom:34px;margin:0;transform-origin:50% 100%;will-change:transform,opacity,filter;transition:opacity .25s,filter .25s;border:0;background:none;padding:0;cursor:pointer}
+.stage.focus{cursor:default}
+.fig{position:absolute;left:50%;bottom:30px;margin:0;transform-origin:50% 100%;will-change:transform,opacity,filter;transition:opacity .25s,filter .25s;border:0;background:none;padding:0;cursor:pointer}
+.stage.focus .fig{transition:opacity .7s var(--ease),filter .7s var(--ease)}
 .fig img{display:block;height:100%;width:auto;pointer-events:none}
-.fig .shadow{position:absolute;left:50%;bottom:-14px;width:120%;height:28px;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 50%,rgba(20,20,20,.2),rgba(20,20,20,0) 70%);pointer-events:none}
+.fig .shadow{position:absolute;left:50%;bottom:-12px;width:110%;height:24px;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 50%,rgba(20,20,20,.22),rgba(20,20,20,0) 70%);pointer-events:none}
+.fig .view{position:absolute;left:50%;top:58%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;border:1px solid rgba(20,20,20,.45);background:rgba(244,241,234,.55);backdrop-filter:blur(6px);display:grid;place-items:center;font-size:9px;letter-spacing:.2em;text-transform:uppercase;opacity:0;transform:scale(.7);transition:opacity .5s,transform .5s var(--ease);pointer-events:none}
+.fig.on .view{opacity:1;transform:none}
+.stage.focus .fig.on .view,.fig.on:has(.pin:hover) .view{opacity:0;transform:scale(.7)}
 .pin{position:absolute;z-index:3;left:0;top:0;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:rgba(244,241,234,.96);box-shadow:0 1px 6px rgba(0,0,0,.25);opacity:0;transform:scale(.6);transition:opacity .4s,transform .4s;pointer-events:none}
-.fig.on .pin{opacity:1;transform:scale(1);pointer-events:auto;cursor:pointer}
+.stage.focus .fig.on .pin{opacity:1;transform:scale(1);pointer-events:auto;cursor:pointer}
 .pin::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--ink)}
 .pin.hot::after{background:var(--clay)}
-@media (prefers-reduced-motion:no-preference){.fig.on .pin::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(20,20,20,.35);animation:pulse 2.2s ease-out infinite}}
+@media (prefers-reduced-motion:no-preference){.stage.focus .fig.on .pin::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(20,20,20,.35);animation:pulse 2.2s ease-out infinite}}
 @keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.5);opacity:0}}
-/* arrival at the front: settle, light sweep across the figure, pins pop, floor rings, name slides up */
+/* arrival in the middle: settle, light sweep across the figure, name slides up */
 .fig.land img{animation:land 1.1s var(--ease) both}
-@keyframes land{0%{transform:none;filter:brightness(1)}40%{transform:translateY(-10px) scale(1.035);filter:brightness(1.07)}75%{transform:translateY(0) scale(.995)}100%{transform:none;filter:brightness(1)}}
+@keyframes land{0%{transform:none;filter:brightness(1)}40%{transform:translateY(-8px) scale(1.025);filter:brightness(1.06)}75%{transform:translateY(0) scale(.997)}100%{transform:none;filter:brightness(1)}}
 .fig.land .shadow{animation:shadowland 1.1s var(--ease) both}
-@keyframes shadowland{40%{transform:translateX(-50%) scale(.78);opacity:.55}}
+@keyframes shadowland{40%{transform:translateX(-50%) scale(.8);opacity:.6}}
 .sweep{position:absolute;inset:0;pointer-events:none;opacity:0;-webkit-mask:var(--cut) center/100% 100% no-repeat;mask:var(--cut) center/100% 100% no-repeat;background:linear-gradient(100deg,transparent 38%,rgba(255,255,255,.75) 50%,transparent 62%);background-size:300% 100%;background-position:120% 0}
 .fig.land .sweep{animation:sweep 1s .2s var(--ease) both}
 @keyframes sweep{0%{opacity:.9;background-position:120% 0}100%{opacity:.9;background-position:-20% 0}}
-.fig.land .pin{animation:pop .7s .45s var(--ease) both}
+.stage.focus .fig.on .pin{animation:pop .7s .35s var(--ease) both}
 @keyframes pop{0%{transform:scale(.3)}55%{transform:scale(1.3)}100%{transform:scale(1)}}
-.floor.pulse{animation:floorpulse 1s var(--ease)}
-@keyframes floorpulse{35%{border-color:var(--ink);background:radial-gradient(50% 50% at 50% 50%,rgba(20,20,20,.14),rgba(20,20,20,0) 72%)}}
 #lk-name.swap{animation:nameup .7s var(--ease) both}
 @keyframes nameup{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}
-.floor{position:absolute;left:50%;bottom:-2px;width:min(92%,980px);height:150px;transform:translateX(-50%) rotateX(72deg);transform-origin:50% 100%;border-radius:50%;border:1px solid var(--line);background:radial-gradient(50% 50% at 50% 50%,rgba(20,20,20,.07),rgba(20,20,20,0) 72%);pointer-events:none}
+.floor{position:absolute;left:0;right:0;bottom:30px;height:1px;background:linear-gradient(90deg,transparent,rgba(20,20,20,.18) 20%,rgba(20,20,20,.18) 80%,transparent);pointer-events:none}
+.floor.pulse{animation:floorpulse 1s var(--ease)}
+@keyframes floorpulse{35%{background:linear-gradient(90deg,transparent,rgba(20,20,20,.5) 30%,rgba(20,20,20,.5) 70%,transparent)}}
+/* focus mode chrome */
+.lk-tag{position:absolute;left:22px;top:20px;z-index:5;display:grid;gap:6px;opacity:0;transform:translateY(8px);transition:opacity .6s .2s,transform .6s .2s var(--ease);pointer-events:none}
+.lk-tag strong{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1}
+.lk-close{position:absolute;right:16px;top:14px;z-index:5;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 10px;display:inline-flex;gap:8px;align-items:center;opacity:0;pointer-events:none;transition:opacity .5s .2s}
+.lk-close span{font-size:16px;line-height:1}
+.stage.focus .lk-tag,.stage.focus .lk-close{opacity:1;transform:none;pointer-events:auto}
 .idx-row{position:relative;display:flex;align-items:center;gap:16px;padding-block:14px;border-top:1px solid var(--line)}
 .arrow{font-size:16px;padding:6px 8px}
 .idx{display:flex;gap:18px;overflow:auto;scrollbar-width:none;flex:1;font-size:12px;letter-spacing:.06em}
@@ -111,5 +126,5 @@ const by = (id: string) => P.find((p) => p.id === id)!;
 .tot b{color:var(--ink);font-weight:400}
 .btn.wide{width:100%;justify-content:space-between}
 @media (max-width:980px){.stl-grid{grid-template-columns:1fr}.panel{position:static}}
-@media (max-width:760px){.stl-head{grid-template-columns:1fr;gap:20px;margin-bottom:24px}.stage{height:clamp(400px,56vh,560px)}.panel h3{font-size:28px}}
+@media (max-width:760px){.stl-head{grid-template-columns:1fr;gap:20px;margin-bottom:24px}.stage{height:clamp(400px,56vh,560px);margin-inline:calc(-1 * var(--gutter));width:auto}.panel h3{font-size:28px}.lk-tag{left:var(--gutter)}.lk-tag strong{font-size:22px}}
 </style>
