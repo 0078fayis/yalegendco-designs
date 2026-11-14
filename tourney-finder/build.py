@@ -171,6 +171,7 @@ def head(title, desc, path, ld=None):
 
 FOOT = """</main><footer><div class="in"><p>Carnival Finder lists junior and community sports carnivals and tournaments across Australia. Dates come from organisers' own websites. Always confirm with the organiser before you book travel.</p>
 <p>Spotted a mistake or a missing tournament? <a href="/add/">Tell us</a>. © 2026 Carnival Finder · Made in Australia by YaLegendCo.</p></div></footer>
+<script>if("serviceWorker" in navigator)addEventListener("load",function(){navigator.serviceWorker.register("/sw.js")});</script>
 </body></html>"""
 
 
@@ -430,7 +431,7 @@ def main():
     w("shop/index.html", shop_page())
     for f in os.listdir(os.path.join(ROOT, "brand")):
         shutil.copy(os.path.join(ROOT, "brand", f), os.path.join(DIST, f))
-    w("site.webmanifest", json.dumps({"name": "Carnival Finder", "short_name": "Carnival Finder", "start_url": "/", "display": "standalone",
+    w("site.webmanifest", json.dumps({"name": "Carnival Finder", "short_name": "Carnival Finder", "start_url": "/", "display": "standalone", "scope": "/", "id": "/",
                                       "background_color": "#070b1f", "theme_color": "#070b1f",
                                       "icons": [{"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
                                                 {"src": "/logo-512.png", "sizes": "512x512", "type": "image/png"}]}))
@@ -446,6 +447,7 @@ def main():
     w("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
       + "".join(f"<url><loc>{u}</loc><lastmod>{today}</lastmod></url>" for u in urls) + "</urlset>")
     w("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
+    w("sw.js", SW_JS)
     w("_headers", "/*.ics\n  Content-Type: text/calendar; charset=utf-8\n")
     zp = os.path.join(ROOT, "carnivalfinder.zip")
     if os.path.exists(zp):
@@ -456,6 +458,13 @@ def main():
                 z.write(os.path.join(dp, f), os.path.relpath(os.path.join(dp, f), DIST))
     print(f"{len(evs)} tournaments, {len(urls)} URLs, zip {os.path.getsize(zp)//1024} KB")
 
+
+SW_JS = r"""const C="cf-v1";
+self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(["/","/icon-192.png","/logo-512.png"])))});
+self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
+self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET"||new URL(r.url).origin!==location.origin)return;
+e.respondWith(fetch(r).then(res=>{if(res.ok){const cp=res.clone();caches.open(C).then(c=>c.put(r,cp))}return res}).catch(()=>caches.match(r).then(m=>m||caches.match("/"))))});
+"""
 
 if __name__ == "__main__":
     main()
